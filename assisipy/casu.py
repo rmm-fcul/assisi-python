@@ -29,6 +29,7 @@ class Casu:
             #self.__stop_thread = False
             self.__comm_thread = threading.Thread(target=self.__update_readings)
             self.__comm_thread.daemon = True
+            self.__lock =treading.Lock()
             self.__comm_thread.start()
 
     def __update_readings(self):
@@ -40,8 +41,11 @@ class Casu:
         
         while True:
             [name, dev, cmd, data] = self.__sub.recv_multipart()
-            print((name,dev,cmd,data))
-            print("Threadin' like craaaazy!")
+            # Protect the copying operation with a lock
+            # to make sure all of the data has been copied
+            # before it's accessed
+            with self.__lock:
+                print((name,dev,cmd,data))
 
 
 if __name__ == '__main__':

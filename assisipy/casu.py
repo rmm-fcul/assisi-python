@@ -29,7 +29,7 @@ class Casu:
             #self.__stop_thread = False
             self.__comm_thread = threading.Thread(target=self.__update_readings)
             self.__comm_thread.daemon = True
-            self.__lock =treading.Lock()
+            self.__lock =threading.Lock()
             self.__comm_thread.start()
 
     def __update_readings(self):

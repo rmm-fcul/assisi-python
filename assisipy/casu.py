@@ -51,7 +51,7 @@ class Casu:
 
             # Bind the publisher socket
             self.__pub = self.__context.socket(zmq.PUB)
-            self.__pub.bind(self.__pub_addr)
+            self.__pub.connect(self.__pub_addr)
 
             # Wait for the connection
             while not self.__connected:

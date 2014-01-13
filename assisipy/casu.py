@@ -83,7 +83,8 @@ class Casu:
 
     def get_range(self, id):
         """ Returns the range reading corresponding to sensor id. """
-        return self.__ir_range_readings.range[id]
+        with self.__lock:
+            return self.__ir_range_readings.range[id]
 
     def set_diagnostic_led_rgb(self, id, r, g, b):
         """ Set the diagnostic LED light color. """

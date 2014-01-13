@@ -11,15 +11,11 @@ from msg import base_msgs_pb2
 # Device ID definitions (for convenience)
 
 # IR range sensors
-IR_BACK_RIGHT = 0
-IR_RIGHT_BACK = 1
-IR_RIGHT_FRONT = 2
-IR_FRONT_RIGHT = 3
-IR_FRONT_CENTER = 4
-IR_FRONT_LEFT = 5
-IR_LEFT_FRONT = 6
-IR_LEFT_BACK = 7
-IR_BACK_LEFT = 8
+IR_SIDE_RIGHT = 0
+IR_RIGHT_FRONT = 1
+IR_FRONT = 2
+IR_LEFT_FRONT = 3
+IR_SIDE_LEFT = 4
 
 class Bee:
     """ The low-level interface to Bee 'robots'. """
@@ -87,7 +83,8 @@ class Bee:
 
     def get_range(self, id):
         """ Returns the range reading corresponding to sensor id. """
-        return self.__ir_range_readings.range[id]
+        with self.__lock:
+            return self.__ir_range_readings.range[id]
 
     def set_vel(self, vel_left, vel_right):
         """ Set wheel velocities."""

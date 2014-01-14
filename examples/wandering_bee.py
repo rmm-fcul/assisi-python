@@ -12,8 +12,8 @@ class BeeController:
         This is only an example of using the Bee-API.
     """
 
-    def __init__(self, bee):
-        self.__bee = bee
+    def __init__(self, bee_name):
+        self.__bee = bee.Bee(name = bee_name)
 
     def go_straight(self):
         self.__bee.set_vel(0.5,0.5)
@@ -63,7 +63,6 @@ if __name__ == '__main__':
 
     # Spawn the bee
     simctrl.spawn('Bee', 'bee1', (0,0,0))
-    bee1 = bee.Bee(name='bee1')
-    bc = BeeController(bee1)
+    bc = BeeController('bee1')
     bc.wander()
 

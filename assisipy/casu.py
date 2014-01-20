@@ -1,4 +1,4 @@
-# The Casu API implementation
+""" The CASU API implementation. """
 
 import threading
 import time

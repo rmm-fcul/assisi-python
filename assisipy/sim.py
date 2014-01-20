@@ -32,25 +32,20 @@ class Control:
               color = (),
               height = 1,
               mass = -1):
-        """ Spawn an object in the simulated world.
-            
-            Parameters
-            ----------
-            obj_type : Type of object to spawn. Currently supported types are
-                       'Casu', 'EPuck' and 'Physical'
-            name : Name of the object. Must be unique in the world.
-            pose : An (x,y,yaw) tuple.
-            polygon : A tuple of vertex coordinates ((x1,y1),(x2,y2),...).
-                      If obj_type is 'Physical', this defines the shape of the
-                      object.
-            radius : Radius of a cylindrical 'Physical' object. 
-            color : Color of a 'Physical' object.
-            height : 'Physical' object height.
-            mass : 'Physical' object mass.
+        """ 
 
-            Returns
-            -------
-            Nothing
+        Spawn an object in the simulated world.
+            
+        :param str obj_type: Type of object to spawn. Currently supported types are 'Casu', 'EPuck' and 'Physical'
+        :param str name: Name of the object. Must be unique in the world.
+        :param tuple pose: An (x,y,yaw) tuple.
+        :param tuple polygon: A tuple of vertex coordinates ((x1,y1),(x2,y2),...). If obj_type is 'Physical', this defines the shape of the object.
+        :param radius: Radius of a cylindrical 'Physical' object. 
+        :param color: Color of a 'Physical' object.
+        :param float height: 'Physical' object height.
+        :param mass: 'Physical' object mass.
+        :return:  Nothing
+
         """
         data = sim_msgs_pb2.Spawn()
         data.pose.position.x = pose[0]

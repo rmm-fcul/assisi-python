@@ -44,17 +44,18 @@ V_W = 3
 V_ACT = 0
 
 class Casu:
-    """ The low-level interface to Casu devices. """
+    """ 
+    The low-level interface to Casu devices.
+
+    Initializes the object and starts listening for data. 
+    The fully constructed object is returned only after
+    the data connection has been established.
+
+    :param string rtc_file_name: Name of the run-time configuration (RTC) file. If no file is provided, the default configuration is used.
+    :param string name: Casu name (if a RTC file is provided, this value is overridden).
+    """
     
     def __init__(self, rtc_file_name='', name = 'Casu'):
-        """ 
-        Initializes the object and starts listening for data. 
-        The fully constructed object is returned only after
-        the data connection has been established.
-
-        :param string rtc_file_name: Name of the run-time configuration (RTC) file. If no file is provided, the default configuration is used.
-        :param string name: Casu name (if a RTC file is provided, this value is overridden).
-        """
         
         if rtc_file_name:
             # Parse the rtc file

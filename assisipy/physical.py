@@ -12,15 +12,16 @@ from msg import base_msgs_pb2
 class Object:
     """ 
     Interface to simulated physical objects. 
+
+    Connects to the simulated physical object. 
+
+    :param string rtc_file_name: Name of the RTC file.
+    :param string name: Unique name of the spawned physical object.
+
     """
     
     def __init__(self, rtc_file_name='', name = 'object'):
-        """ 
-        Connect to the simulated physical object. 
 
-        :param string rtc_file_name: Name of the RTC file.
-        :param string name: Unique name of the spawned physical object.
-        """
         
         if rtc_file_name:
             # Parse the rtc file

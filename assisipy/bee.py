@@ -24,16 +24,15 @@ class Bee:
     """ 
     The low-level interface to Bee 'robots'. 
     This clas provides an api for programming bee behaviors.
+    It creates a connection to the data source, i.e., the simulated bee.
+    Waits for the bee of specified by 'name' to be spawned into the simulator.
+
+    :param string rtc_file_name: Name of the run-time-configuration (RTC) file. This file specifies the simulation connection parameters and the name of the simulated bee object.
+    :param string name: The name of the bee (if not specified in the RTC file).
     """
     
     def __init__(self, rtc_file_name='', name = 'Bee'):
-        """ 
-        Creates a connection to the data source, i.e., the simulated bee.
-        Waits for the bee of specified by 'name' to be spawned into the simulator.
-
-        :param string rtc_file_name: Name of the run-time-configuration (RTC) file. This file specifies the simulation connection parameters and the name of the simulated bee object.
-        :param string name: The name of the bee (if not specified in the RTC file).
-        """
+        
         
         if rtc_file_name:
             # Parse the rtc file

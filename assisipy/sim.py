@@ -13,14 +13,14 @@ from msg import sim_msgs_pb2
 class Control:
     """ 
     Simulator control API. 
+
+    Creates a command publisher and connects it to the simulator. 
+        
+    :param string rtc_file_name: Name of the run-time configuraiton file. This file specifies the parameters for connecting to the simulator.
+
     """
 
     def __init__(self, rtc_file_name=''):
-        """ 
-        Creates a command publisher and connects it to the simulator. 
-        
-        :param string rtc_file_name: Name of the run-time configuraiton file. This file specifies the parameters for connecting to the simulator.
-        """
 
         if rtc_file_name:
             # Parse the rtc file

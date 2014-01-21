@@ -122,10 +122,14 @@ class Bee:
 
     def set_vel(self, vel_left, vel_right):
         """ 
-        Set wheel velocities.
+        Set wheel velocities. 
+
+        Bee body velocities depend on wheel velocities in the following way:
         
-        .. math:: v = \frac{v_{left}+v_{right}}{2}
-        .. math:: \omega = \frac{v_{right}-v_{left}}{d}
+        .. math:: v = \\frac{v_{left}+v_{right}}{2}
+        .. math:: \\omega = \\frac{v_{right}-v_{left}}{d}
+
+        where d is the distance between the wheels ("axle length").
 
         :param float vel_left: Left wheel velocity.
         :param float vel_right: Right wheel velocity.

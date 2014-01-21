@@ -1,4 +1,7 @@
-""" The CASU API implementation. """
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" Python interface to CASU functionality. """
 
 import threading
 import time
@@ -10,22 +13,48 @@ from msg import base_msgs_pb2
 
 # Device ID definitions (for convenience)
 
-# IR range sensors
-IR_N = 0
+""" IR range sensors """
+IR_N = 0 #: Range sensor pointing to 0° (NORTH)
 IR_NE = 1
+""" Range sensor pointing to 135° """
 IR_SE = 2
 IR_S = 3
 IR_SW = 4
 IR_NW = 5
 
-# Diagnostic LEDs
+#: Top diagnostic LED
 DLED_TOP = 0
+
+""" Temperature sensors """
+T_N = 0 #: Temperature sensor at 0°
+T_E = 1
+T_S = 2
+T_W = 3
+
+""" Temperature actuator """
+T_ACT = 0
+
+""" Vibration sensors """
+V_N = 0
+V_E = 1
+V_S = 2
+V_W = 3
+
+""" Vibration actuator """
+V_ACT = 0
 
 class Casu:
     """ The low-level interface to Casu devices. """
     
     def __init__(self, rtc_file_name='', name = 'Casu'):
-        """ Connect to the data source. """
+        """ 
+        Initializes the object and starts listening for data. 
+        The fully constructed object is returned only after
+        the data connection has been established.
+
+        :param string rtc_file_name: Name of the run-time configuration (RTC) file. If no file is provided, the default configuration is used.
+        :param string name: Casu name (if a RTC file is provided, this value is overridden).
+        """
         
         if rtc_file_name:
             # Parse the rtc file
@@ -86,6 +115,47 @@ class Casu:
         with self.__lock:
             return self.__ir_range_readings.range[id]
 
+    def get_temp(self, id):
+        """
+        Returns the temperature reading of sensor id. 
+        """
+        pass
+
+    def set_temp(self, id, temp):
+        """
+        Sets the temperature reference of actuator id to temp.
+        """
+        pass
+
+    def temp_standby(self, id):
+        """
+        Turn the temperature actuator off.
+        """
+        pass
+
+    def set_vibration_freq(self, id, f):
+        """
+        Sets the vibration frequency of actuator id to f.
+        """
+        pass
+
+    def get_vibration_freq(self, id):
+        """
+        Returns the vibration frequency of actuator id.
+        """
+        pass
+
+    def get_vibration_amplitude(self, id):
+        """ 
+        Returns the vibration amplitude of actuator id.
+        """
+        pass
+
+    def vibration_standby(self, id):
+        """
+        Turn the vibration actuator id off.
+        """
+
     def set_diagnostic_led_rgb(self, id, r, g, b):
         """ Set the diagnostic LED light color. """
         light = base_msgs_pb2.ColorStamped();
@@ -96,14 +166,16 @@ class Casu:
                                    light.SerializeToString()])
 
     def get_diagnostic_led_rgb(self, id):
-        """ Get the diagnostic light rgb value. 
+        """ 
+        Get the diagnostic light RGB value. 
 
-            returns an (r,g,b) tuple
+        :return: An (r,g,b) tuple.
         """
         pass
 
     def diagnostic_led_standby(self, id):
-        """ Turn the diagnostic LED off.
+        """ 
+        Turn the diagnostic LED off.
         """
         light = base_msgs_pb2.ColorStamped();
         light.color.red = 0

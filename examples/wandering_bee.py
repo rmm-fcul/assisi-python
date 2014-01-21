@@ -1,5 +1,9 @@
-# A simple demo app demonstrating the "Wander" behavio
-# with a bee model
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+A simple demo app demonstrating the "Wander" behavio with a bee model
+"""
 
 from assisipy import sim
 from assisipy import physical

@@ -1,4 +1,7 @@
-# The Casu API implementation
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" Python interface to simulated bees. """
 
 import threading
 import time
@@ -10,18 +13,27 @@ from msg import base_msgs_pb2
 
 # Device ID definitions (for convenience)
 
-# IR range sensors
-IR_SIDE_RIGHT = 0
+""" IR range sensors """
+IR_SIDE_RIGHT = 0 #: Sensor at 90°
 IR_RIGHT_FRONT = 1
 IR_FRONT = 2
 IR_LEFT_FRONT = 3
 IR_SIDE_LEFT = 4
 
 class Bee:
-    """ The low-level interface to Bee 'robots'. """
+    """ 
+    The low-level interface to Bee 'robots'. 
+    This clas provides an api for programming bee behaviors.
+    """
     
     def __init__(self, rtc_file_name='', name = 'Bee'):
-        """ Connect to the data source. """
+        """ 
+        Creates a connection to the data source, i.e., the simulated bee.
+        Waits for the bee of specified by 'name' to be spawned into the simulator.
+
+        :param string rtc_file_name: Name of the run-time-configuration (RTC) file. This file specifies the simulation connection parameters and the name of the simulated bee object.
+        :param string name: The name of the bee (if not specified in the RTC file).
+        """
         
         if rtc_file_name:
             # Parse the rtc file
@@ -55,7 +67,9 @@ class Bee:
             time.sleep(1)
 
     def __update_readings(self):
-        """ Get message from Bee and update data. """
+        """ 
+        Get a message from Bee and update data. 
+        """
         self.__sub = self.__context.socket(zmq.SUB)
         self.__sub.connect(self.__sub_addr)
         self.__sub.setsockopt(zmq.SUBSCRIBE, self.__name)
@@ -82,18 +96,45 @@ class Bee:
 
 
     def get_range(self, id):
-        """ Returns the range reading corresponding to sensor id. """
+        """ 
+        Returns the range reading corresponding to sensor id. 
+        """
         with self.__lock:
             return self.__ir_range_readings.range[id]
 
+    def get_temp(self, id):
+        """
+        Returns the temperature reading of sensor id.
+        """
+        pass
+
+    def get_vibration_frequency(self, id):
+        """
+        Returns the vibration frequency of sensor id.
+        """
+        pass
+
+    def get_vibration_amplitude(self, id):
+        """
+        Returns the vibration amplitude of sensor id.
+        """
+        pass
+
     def set_vel(self, vel_left, vel_right):
-        """ Set wheel velocities."""
+        """ 
+        Set wheel velocities.
+        
+        .. math:: v = \frac{v_{left}+v_{right}}{2}
+        .. math:: \omega = \frac{v_{right}-v_{left}}{d}
+
+        :param float vel_left: Left wheel velocity.
+        :param float vel_right: Right wheel velocity.
+        """
         vel = dev_msgs_pb2.DiffDrive();
         vel.vel_left = vel_left
         vel.vel_right = vel_right
         self.__pub.send_multipart([self.__name, "base", "vel", 
                                    vel.SerializeToString()])
-
 
 if __name__ == '__main__':
     

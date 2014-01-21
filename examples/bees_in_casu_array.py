@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # A demo of bee casu interaction featuring 36 casus and 24 bees.
 
 from assisipy import sim, bee, casu

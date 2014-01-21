@@ -1,4 +1,7 @@
-# Simulator control API
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" Pyton interface to the simulated world. """
 
 import threading
 import time
@@ -8,10 +11,16 @@ import zmq
 from msg import sim_msgs_pb2
 
 class Control:
-    """ Simulator control API. """
+    """ 
+    Simulator control API. 
+    """
 
     def __init__(self, rtc_file_name=''):
-        """ Bind the command publisher. """
+        """ 
+        Creates a command publisher and connects it to the simulator. 
+        
+        :param string rtc_file_name: Name of the run-time configuraiton file. This file specifies the parameters for connecting to the simulator.
+        """
 
         if rtc_file_name:
             # Parse the rtc file
@@ -74,6 +83,9 @@ class Control:
                                    data.SerializeToString()])
 
     def kill(self, obj_name):
+        """
+        Kill an object in the simulated world.
+        """
         pass
 
 if __name__ == '__main__':

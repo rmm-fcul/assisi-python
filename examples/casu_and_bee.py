@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # A simple demo of bee-casu interaction
 
 from assisipy import sim

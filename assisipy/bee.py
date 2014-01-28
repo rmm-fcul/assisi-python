@@ -14,11 +14,15 @@ from msg import base_msgs_pb2
 # Device ID definitions (for convenience)
 
 """ IR range sensors """
+""" Right range sensor """
 IR_SIDE_RIGHT = 0 #: Sensor at 90°
 IR_RIGHT_FRONT = 1
 IR_FRONT = 2
 IR_LEFT_FRONT = 3
 IR_SIDE_LEFT = 4
+
+""" Light sensor """
+LIGHT_SENSOR = 0
 
 class Bee:
     """ 
@@ -44,6 +48,7 @@ class Bee:
             self.__name = name
             self.__ir_range_readings = dev_msgs_pb2.RangeArray()
             self.__encoder_readings = dev_msgs_pb2.DiffDrive()
+            self.__light_readings = base_msgs_pb2.ColorStamped()
 
             # Create the data update thread
             self.__connected = False
@@ -89,9 +94,15 @@ class Bee:
                     with self.__lock:
                         self.__encoder_readings.ParseFromString(data)
                 else:
-                    print('Unknown command {0} for {1}'.format(cmd, self.__name))
+                    print('Unknown command {0} for Bee {1}'.format(cmd, self.__name))
+            elif dev == 'Light':
+                if cmd == 'Readings':
+                    with self.__lock:
+                        self.__light_readings.ParseFromString(data)
+                else:
+                    print('Unknown command {0} for Bee {1}'.format(cmd, self.__name))
             else:
-                print('Unknown device ir for {0}'.format(self.__name))
+                print('Unknown device {0} for Bee {1}'.format(dev, self.__name))
 
 
     def get_range(self, id):
@@ -118,6 +129,17 @@ class Bee:
         Returns the vibration amplitude of sensor id.
         """
         pass
+
+    def get_light_rgb(self, id):
+        """
+        :return: (r,g,b) tuple, representing the light intensities at
+                 red, green and blue wavelengths (currently, the sensor
+                 reports only blue intensity, r and g are always 0).
+        """
+        with self.__lock:
+            return (self.__light_readings.color.red,
+                    self.__light_readings.color.green,
+                    self.__light_readings.color.blue)
 
     def set_vel(self, vel_left, vel_right):
         """ 

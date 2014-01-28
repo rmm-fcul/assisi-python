@@ -48,6 +48,7 @@ class Bee:
             self.__name = name
             self.__ir_range_readings = dev_msgs_pb2.RangeArray()
             self.__encoder_readings = dev_msgs_pb2.DiffDrive()
+            self.__true_pose = base_msgs_pb2.PoseStamped()
             self.__light_readings = base_msgs_pb2.ColorStamped()
 
             # Create the data update thread
@@ -81,20 +82,28 @@ class Bee:
         while True:
             [name, dev, cmd, data] = self.__sub.recv_multipart()
             self.__connected = True
-            if dev == 'ir':
-                if cmd == 'ranges':
+            
+            ### Range readings ###
+            if dev == 'IR':
+                if cmd == 'Ranges':
                     # Protect write with a lock
                     # to make sure all data is written before access
                     with self.__lock:
                         self.__ir_range_readings.ParseFromString(data)
                 else:
                     print('Unknown command {0} for {1}'.format(cmd, self.__name))
-            elif dev == 'base':
-                if cmd == 'enc':
+
+            ### Base data ###
+            elif dev == 'Base':
+                if cmd == 'Enc':
                     with self.__lock:
                         self.__encoder_readings.ParseFromString(data)
+                elif cmd == 'GroundTruth':
+                    with self.__lock:
+                        self.__true_pose.ParseFromString(data)
                 else:
                     print('Unknown command {0} for Bee {1}'.format(cmd, self.__name))
+            ### Light sensors ###
             elif dev == 'Light':
                 if cmd == 'Readings':
                     with self.__lock:
@@ -141,6 +150,16 @@ class Bee:
                     self.__light_readings.color.green,
                     self.__light_readings.color.blue)
 
+    def get_true_pose(self):
+        """ 
+        :return: (x,y,yaw) tuple, representing te true pose of the bee
+                 in the world.
+        """
+        with self.__lock:
+            return (self.__true_pose.pose.position.x,
+                    self.__true_pose.pose.position.y,
+                    self.__true_pose.pose.orientation.z)
+    
     def set_vel(self, vel_left, vel_right):
         """ 
         Set wheel velocities. 

@@ -177,7 +177,7 @@ class Bee:
         vel = dev_msgs_pb2.DiffDrive();
         vel.vel_left = vel_left
         vel.vel_right = vel_right
-        self.__pub.send_multipart([self.__name, "base", "vel", 
+        self.__pub.send_multipart([self.__name, "Base", "Vel", 
                                    vel.SerializeToString()])
 
 if __name__ == '__main__':

@@ -9,6 +9,7 @@ import time
 import zmq
 
 from msg import sim_msgs_pb2
+from msg import base_msgs_pb2
 
 class Control:
     """ 
@@ -79,7 +80,18 @@ class Control:
             data.polygon.height = height
             data.polygon.mass = mass
             data.type = 'Polygon'
-        self.__pub.send_multipart(['sim', 'spawn', obj_type, 
+        self.__pub.send_multipart(['Sim', 'Spawn', obj_type, 
+                                   data.SerializeToString()])
+
+    def teleport(self, obj_name, pose):
+        """
+        Teleport object to pose.
+        """
+        data = base_msgs_pb2.PoseStamped()
+        data.pose.position.x = pose[0]
+        data.pose.position.y = pose[1]
+        data.pose.orientation.z = pose[2]
+        self.__pub.send_multipart(['Sim', 'Teleport', obj_name,
                                    data.SerializeToString()])
 
     def kill(self, obj_name):

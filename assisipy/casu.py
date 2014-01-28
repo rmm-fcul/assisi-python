@@ -105,8 +105,8 @@ class Casu:
         while True:
             [name, dev, cmd, data] = self.__sub.recv_multipart()
             self.__connected = True
-            if dev == 'ir':
-                if cmd == 'ranges':
+            if dev == 'IR':
+                if cmd == 'Ranges':
                     # Protect write with a lock
                     # to make sure all data is written before access
                     with self.__lock:

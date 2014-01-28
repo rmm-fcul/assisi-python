@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-A simple demo app demonstrating the "Wander" behavio with a bee model
+A simple demo app demonstrating the "Wander" behavior with a bee model
 """
 
 from assisipy import sim
@@ -12,8 +12,9 @@ from assisipy import bee
 from math import pi
 
 class BeeController:
-    """ A demo bee controller. 
-        This is only an example of using the Bee-API.
+    """ 
+    A demo bee controller. 
+    An simple example of using the Bee-API.
     """
 
     def __init__(self, bee_name):
@@ -29,7 +30,9 @@ class BeeController:
         self.__bee.set_vel(0.1,-0.1)
 
     def wander(self):
-        """ Wander around and avoid obstacles. """
+        """ 
+        Wander around and avoid obstacles. 
+        """
         while True:
             self.go_straight()
             while ((self.__bee.get_range(bee.IR_FRONT) < 3)
@@ -43,7 +46,7 @@ if __name__ == '__main__':
     
     simctrl = sim.Control()
 
-    # Spawn some obstacles into the world
+    # Spawn some obstacles into the world.
     l = 5
     w = 2
     wall = ((-l,-w/2),(l,-w/2),(l,w/2),(-l,w/2))
@@ -65,8 +68,10 @@ if __name__ == '__main__':
                   polygon = wall,
                   color = blue, height = 1)
 
-    # Spawn the bee
+    # Spawn the bee.
     simctrl.spawn('Bee', 'bee1', (0,0,0))
     bc = BeeController('bee1')
+    
+    # Start the wander behavior.
     bc.wander()
 

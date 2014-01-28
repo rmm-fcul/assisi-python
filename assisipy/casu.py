@@ -14,15 +14,20 @@ from msg import base_msgs_pb2
 # Device ID definitions (for convenience)
 
 """ IR range sensors """
-IR_N = 0 #: Range sensor pointing to 0° (NORTH)
+""" Range sensor pointing to 0° (NORTH) """
+IR_N = 0 
 IR_NE = 1
-""" Range sensor pointing to 135° """
+""" Range sensor pointing to 135° (SOUTH-EAST)"""
 IR_SE = 2
+""" Range sensor pointing to 180° (SOUTH) """
 IR_S = 3
 IR_SW = 4
 IR_NW = 5
 
-#: Top diagnostic LED
+""" Light actuator """
+LIGHT = 0
+
+""" Top diagnostic LED """
 DLED_TOP = 0
 
 """ Temperature sensors """
@@ -156,10 +161,39 @@ class Casu:
         """
         Turn the vibration actuator id off.
         """
+        pass
 
+    def set_light_rgb(self, id, r, g, b):
+        """
+        Set the color and intensity of the light actuator.
+        Automatically turns the actuator on.
+
+        :param float r: Red component intensity, between 0 and 1.
+        :param float g: Green component intensity, between 0 and 1.
+        :param float b: Blue component intensity, between 0 and 1.
+        """
+        light = base_msgs_pb2.ColorStamped()
+        light.color.red = r
+        light.color.green = g
+        light.color.blue = b
+        self.__pub.send_multipart([self.__name, "Light", "On",
+                                   light.SerializeToString()])
+
+    def light_standby(self, id):
+        """
+        Turn the light actuator off.
+        """
+        light = base_msgs_pb2.ColorStamped()
+        light.color.red = 0
+        light.color.green = 0
+        light.color.blue = 0
+        self.__pub.send_multipart([self.__name, "Light", "Off",
+                                   light.SerializeToString()])
+
+        self.__pub
     def set_diagnostic_led_rgb(self, id, r, g, b):
         """ Set the diagnostic LED light color. """
-        light = base_msgs_pb2.ColorStamped();
+        light = base_msgs_pb2.ColorStamped()
         light.color.red = r
         light.color.green = g
         light.color.blue = b

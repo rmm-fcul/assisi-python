@@ -41,4 +41,8 @@ assisipy Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`examples` Module
+----------------------
 
+.. literalinclude:: ../../examples/wandering_bee.py
+.. literalinclude:: ../../examples/bees_in_casu_array.py

@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# A demo of bee casu interaction featuring 36 casus and 24 bees.
+"""
+A demo of bee casu interaction featuring 36 casus and 24 bees.
+"""
 
 from assisipy import sim, bee, casu
 
@@ -10,8 +12,9 @@ from random import random
 import threading
 
 class CasuController:
-    """ A demo Casu controller.
-        Implements a simple bee-detecting behavior.
+    """ 
+    A demo Casu controller.
+    Implements a simple bee-detecting behavior.
     """
 
     def __init__(self, casu_name):
@@ -22,8 +25,9 @@ class CasuController:
 
     def react_to_bees(self):
         """ 
-            Changes Casu color to red, when a bee is detected in front of the Casu,
-            and to Green, when a bee is detected behind a Casu.
+        Changes Casu color to red, when a bee is detected 
+        in front of the Casu, and to Green, when a bee is 
+        detected behind a Casu.
         """
         while True:
             if self.__casu.get_range(casu.IR_N) < 2:
@@ -34,8 +38,9 @@ class CasuController:
                 self.__casu.diagnostic_led_standby(casu.DLED_TOP)
 
 class BeeController:
-    """ A demo bee controller. 
-        This is only an example of using the Bee-API.
+    """ 
+    A demo bee controller. 
+    An example of using the Bee-API.
     """
 
     def __init__(self, bee_name):
@@ -54,7 +59,9 @@ class BeeController:
         self.__bee.set_vel(0.1,-0.1)
 
     def wander(self):
-        """ Wander around and avoid obstacles. """
+        """ 
+        Wander around and avoid obstacles. 
+        """
         while True:
             self.go_straight()
             while ((self.__bee.get_range(bee.IR_FRONT) < 3)
@@ -68,6 +75,7 @@ if __name__ == '__main__':
 
     simctrl = sim.Control()
 
+    # Parameters of the CASU array.
     casu_rows = 6
     casu_cols = 6
     casu_dist = 10

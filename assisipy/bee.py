@@ -77,8 +77,9 @@ class Bee:
         """
         self.__sub = self.__context.socket(zmq.SUB)
         self.__sub.connect(self.__sub_addr)
+        #self.__sub.setsockopt(zmq.HWM, 1)
         self.__sub.setsockopt(zmq.SUBSCRIBE, self.__name)
-        
+                    
         while True:
             [name, dev, cmd, data] = self.__sub.recv_multipart()
             self.__connected = True

@@ -125,7 +125,7 @@ class Casu:
                 print('Unknown device ir for {0}'.format(self.__name))
 
     def get_range(self, id):
-        """ Returns the range reading corresponding to sensor id. """
+        """ Returns the range reading (in cm) corresponding to sensor id. """
         with self.__lock:
             return self.__ir_range_readings.range[id]
 
@@ -200,7 +200,13 @@ class Casu:
 
         self.__pub
     def set_diagnostic_led_rgb(self, id, r, g, b):
-        """ Set the diagnostic LED light color. """
+        """ 
+        Set the diagnostic LED light color. Automatically turns the actuator on.
+
+        :param float r: Red component intensity, between 0 and 1.
+        :param float g: Green component intensity, between 0 and 1.
+        :param float b: Blue component intensity, between 0 and 1.
+        """
         light = base_msgs_pb2.ColorStamped()
         light.color.red = r
         light.color.green = g
@@ -212,7 +218,7 @@ class Casu:
         """ 
         Get the diagnostic light RGB value. 
 
-        :return: An (r,g,b) tuple.
+        :return: An (r,g,b) tuple (values between 0 and 1).
         """
         pass
 

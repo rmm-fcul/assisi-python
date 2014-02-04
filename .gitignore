@@ -45,3 +45,4 @@ assisipy/msg/*pb2.py
 
 # Doc output folder
 doc/latex
+doc/html

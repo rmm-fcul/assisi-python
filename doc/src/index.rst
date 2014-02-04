@@ -12,7 +12,8 @@ Contents:
    :maxdepth: 4
 
    assisipy
-
+   install
+   protocol
 
 Indices and tables
 ==================

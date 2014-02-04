@@ -8,6 +8,8 @@ import time
 
 import zmq
 
+import yaml
+
 from msg import dev_msgs_pb2
 from msg import base_msgs_pb2
 
@@ -64,37 +66,43 @@ class Casu:
         
         if rtc_file_name:
             # Parse the rtc file
-            pass
+            f_rtc = open(rtc_file_name)
+            rtc = yaml.safe_load(f_rtc)
+            f_rtc.close()
+            self.__name = rtc['name']
+            self.__pub_addr = rtc['pub_addr']
+            self.__sub_addr = rtc['sub_addr']
         else:
             # Use default values
             self.__pub_addr = 'tcp://127.0.0.1:5556'
             self.__sub_addr = 'tcp://127.0.0.1:5555'
             self.__name = name
-            self.__ir_range_readings = dev_msgs_pb2.RangeArray()
-            self.__temp_readings = 4*[0]
-            self.__diagnostic_led = [0,0,0,0]
-            self.__accel_freq = 4*[0]
-            self.__accel_ampl = 4*[0]
+        
+        self.__ir_range_readings = dev_msgs_pb2.RangeArray()
+        self.__temp_readings = 4*[0]
+        self.__diagnostic_led = [0,0,0,0]
+        self.__accel_freq = 4*[0]
+        self.__accel_ampl = 4*[0]
 
-            # Create the data update thread
-            self.__connected = False
-            self.__context = zmq.Context(1)
-            self.__comm_thread = threading.Thread(target=self.__update_readings)
-            self.__comm_thread.daemon = True
-            self.__lock =threading.Lock()
-            self.__comm_thread.start()
-
-            # Bind the publisher socket
-            self.__pub = self.__context.socket(zmq.PUB)
-            self.__pub.connect(self.__pub_addr)
-
-            # Wait for the connection
-            while not self.__connected:
-                pass
-            print('{0} connected!'.format(self.__name))
-
-            # Wait one more second to get all the data
-            time.sleep(1)
+        # Create the data update thread
+        self.__connected = False
+        self.__context = zmq.Context(1)
+        self.__comm_thread = threading.Thread(target=self.__update_readings)
+        self.__comm_thread.daemon = True
+        self.__lock =threading.Lock()
+        self.__comm_thread.start()
+        
+        # Bind the publisher socket
+        self.__pub = self.__context.socket(zmq.PUB)
+        self.__pub.connect(self.__pub_addr)
+        
+        # Wait for the connection
+        while not self.__connected:
+            pass
+        print('{0} connected!'.format(self.__name))
+            
+        # Wait one more second to get all the data
+        time.sleep(1)
 
     def __update_readings(self):
         """ Get message from Casu and update data. """

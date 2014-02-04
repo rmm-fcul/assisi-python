@@ -125,31 +125,56 @@ class Casu:
                 print('Unknown device ir for {0}'.format(self.__name))
 
     def get_range(self, id):
-        """ Returns the range reading (in cm) corresponding to sensor id. """
+        """ 
+        Returns the range reading (in cm) corresponding to sensor id. 
+
+        .. note::
+           
+           This API call might become deprecated in favor of get_raw_value,
+           to better reflect actual sensor capabilities.
+        """
         with self.__lock:
             return self.__ir_range_readings.range[id]
 
     def get_temp(self, id):
         """
         Returns the temperature reading of sensor id. 
+
+        .. note::
+           
+           NOT implemented!
         """
         pass
 
     def set_temp(self, id, temp):
         """
         Sets the temperature reference of actuator id to temp.
+
+        .. note::
+           
+           NOT implemented!
+
         """
         pass
 
     def temp_standby(self, id):
         """
         Turn the temperature actuator off.
+
+        .. note::
+           
+           NOT implemented!
+
         """
         pass
 
     def set_vibration_freq(self, id, f):
         """
         Sets the vibration frequency of actuator id to f.
+
+        .. note::
+           
+           NOT implemented!
         """
         pass
 

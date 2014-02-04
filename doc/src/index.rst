@@ -13,6 +13,7 @@ Contents:
 
    assisipy
    install
+   deploy
    protocol
 
 Indices and tables

@@ -69,7 +69,7 @@ class Bee:
             print('{0} connected!'.format(self.__name))
 
             # Wait one more second to get all the data
-            time.sleep(1)
+            time.sleep(0.5)
 
     def __update_readings(self):
         """ 

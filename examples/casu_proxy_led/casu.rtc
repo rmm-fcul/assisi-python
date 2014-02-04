@@ -1,0 +1,6 @@
+# Run-Time Configuration file for Casu 01-01
+# Suitable for local simulation and Casu deployment
+
+name     : Casu-01-01
+pub_addr : tcp://127.0.0.1:5556
+sub_addr : tcp://127.0.0.1:5555

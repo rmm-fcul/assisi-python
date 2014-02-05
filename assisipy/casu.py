@@ -181,6 +181,10 @@ class Casu:
     def get_vibration_freq(self, id):
         """
         Returns the vibration frequency of actuator id.
+
+        .. note::
+
+           NOT implemented!
         """
         pass
 

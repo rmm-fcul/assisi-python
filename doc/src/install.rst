@@ -127,10 +127,42 @@ To test the software, you will first need to start the simulator:
 
 Take note of the onscreen instructions for manipulating the camera view.
 
-Try running the demos in the ``python/examples`` folder, e.g.:
+Try running the demos in the ``python/examples`` folder.
+
+The wandering bee example
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: console
 
-  cd ~/assisi/python/examples
-  python wandering_bee.py
+  cd ~/assisi/python/examples/wandering_bee
+  ./bee_in_maze.py
+  ./bee_wander.py
+  
 
+The single Casu and Bee example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If the simulator is running, restart it.
+
+.. code-block:: console
+
+  cd ~/assisi/python/examples/casu_proxy_led
+  ./casu_and_bee.py
+  ./casu_proxy_led.py
+
+The Bees in Casu array example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If the simulator is running, restart it.
+
+.. code-block:: console
+
+  cd ~/assisi/python/examples/bees_in_casu_array
+  ./bees_in_casu_array.py
+  ./bees_wander.py
+
+In a new terminal window:
+
+.. code-block:: console
+
+  ./casus_proxy_led.py

@@ -170,13 +170,17 @@ class Casu:
 
     def set_vibration_freq(self, id, f):
         """
-        Sets the vibration frequency of actuator id to f.
-
-        .. note::
-           
-           NOT implemented!
+        Sets the vibration frequency of the pwm motor.
+        
+        :param float f: Vibration frequency, between 0 and 500 Hz.
         """
-        pass
+        
+        vibration = dev_msgs_pb2.Vibration()
+        vibration.freq = f
+        vibration.amplitude = 0
+        self.__pub.send_multipart([self.__name, "VibeMotor", "On",
+                                   vibration.SerializeToString()])
+        
 
     def get_vibration_freq(self, id):
         """
@@ -194,7 +198,12 @@ class Casu:
         """
         Turn the vibration actuator id off.
         """
-        pass
+        
+        vibration = dev_msgs_pb2.Vibration()
+        vibration.freq = 0
+        vibration.amplitude = 0
+        self.__pub.send_multipart([self.__name, "VibeMotor", "Off",
+                                   vibration.SerializeToString()])
 
     def set_light_rgb(self, id, r, g, b):
         """

@@ -18,6 +18,8 @@ Assisi communication protocol
     "...", "...", "Off", "ColorStamped"
     "...", "Light", "On", "ColorStamped"
     "...", "...", "Off", "ColorStamped"
+    "...", "VibeMotor", "On", "Vibration"
+    "...", "...", "Off", "Vibration"
 
 .. csv-table:: Messages published by the Simulator
    :header: "Name", "Device", "Command", "Data Message Type"

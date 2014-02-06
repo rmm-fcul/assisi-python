@@ -135,6 +135,14 @@ class Casu:
         """
         with self.__lock:
             return self.__ir_range_readings.range[id]
+        
+    def get_ir_raw_value(self, id):
+        """ 
+        Returns the raw value from the IR proximity sensor corresponding to sensor id. 
+        
+        """
+        with self.__lock:
+            return self.__ir_range_readings.raw_value[id]
 
     def get_temp(self, id):
         """
@@ -236,7 +244,6 @@ class Casu:
         self.__pub.send_multipart([self.__name, "Light", "Off",
                                    light.SerializeToString()])
 
-        self.__pub
     def set_diagnostic_led_rgb(self, id, r, g, b):
         """ 
         Set the diagnostic LED light color. Automatically turns the actuator on.

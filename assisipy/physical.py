@@ -81,17 +81,6 @@ class Object:
             else:
                 print('Unknown device ir for {0}'.format(self.__name))
 
-    def set_pose(self, x, y, yaw = 0):
-        """ 
-        Set the object pose.
-        """
-        pose = base_msgs_pb2.PoseStamped();
-        pose.pose.position.x = x
-        pose.pose.position.y = y
-        pose.pose.orientation.z = yaw
-        self.__pub.send_multipart([self.__name, "Pos", "Set", 
-                                   pose.SerializeToString()])
-
 if __name__ == '__main__':
     
     pass

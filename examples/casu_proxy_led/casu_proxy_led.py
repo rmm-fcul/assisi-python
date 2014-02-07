@@ -13,8 +13,6 @@ BeagleBone and run it.
 
 from assisipy import casu
 
-from math import pi
-
 class CasuController:
     """ 
     A demo Casu controller.

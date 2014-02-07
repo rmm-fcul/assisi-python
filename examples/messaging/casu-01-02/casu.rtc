@@ -1,10 +1,10 @@
-# Run-Time Configuration file for Casu 01-01
-# Suitable for local simulation and Casu deployment
+# Run-Time Configuration file for Casu 01-02
+# Messaging example
 
 # Name of the Casu to connect to
 # Casu naming convention is Casu-rr-cc, where rr denotes the row,
 # and cc denotes the column where the Casu is located
-name     : Casu-01-01
+name     : Casu-01-02
 
 # Address at which the Casu listens for incoming commands
 # (i.e., the address to which the controller publishes
@@ -21,4 +21,22 @@ pub_addr : tcp://127.0.0.1:5556
 # Default value (local simulator and on-Casu deployment):
 # tcp://127.0.0.1:5555
 sub_addr : tcp://127.0.0.1:5555
+
+# Messaging socket address
+# This will work for both simulation and deployment
+msg_addr : tcp://*:50102
+
+# Neighbor specification for simulation
+# Comment this block for deployment on Casus
+neighbors:
+    south :
+        name    : Casu-02-02
+        address : tcp://127.0.0.1:50202
+
+# Neighbor specification for on-Casu deployment
+# Comment this block for simulation
+#neighbors:
+#    south :
+#        name    : Casu-02-02
+#        address : tcp://Casu-02-02:50202
 

@@ -66,18 +66,23 @@ class Casu:
         
         if rtc_file_name:
             # Parse the rtc file
-            f_rtc = open(rtc_file_name)
-            rtc = yaml.safe_load(f_rtc)
-            f_rtc.close()
+            with open(rtc_file_name) as rtc_file:
+                rtc = yaml.safe_load(rtc_file)
             self.__name = rtc['name']
             self.__pub_addr = rtc['pub_addr']
             self.__sub_addr = rtc['sub_addr']
+            self.__msg_pub_addr = rtc['msg_addr']
+            self.__neighbors = rtc['neighbors']
         else:
             # Use default values
             self.__pub_addr = 'tcp://127.0.0.1:5556'
             self.__sub_addr = 'tcp://127.0.0.1:5555'
             self.__name = name
-        
+            self.__neighbors = None
+            self.__msg_pub_addr = None
+
+        # TODO: Fill range_readings with fake data
+        #       to prevent program crashes.
         self.__ir_range_readings = dev_msgs_pb2.RangeArray()
         self.__temp_readings = 4*[0]
         self.__diagnostic_led = [0,0,0,0]
@@ -90,12 +95,23 @@ class Casu:
         self.__comm_thread = threading.Thread(target=self.__update_readings)
         self.__comm_thread.daemon = True
         self.__lock =threading.Lock()
-        self.__comm_thread.start()
+
+        # Create inter-casu communication sockets
+        self.__msg_queue = []
+        if self.__msg_pub_addr:
+            self.__msg_pub = self.__context.socket(zmq.PUB)
+            self.__msg_pub.bind(self.__msg_pub_addr)
+            self.__msg_sub = self.__context.socket(zmq.SUB)
+            for direction in self.__neighbors:
+                self.__msg_sub.connect(self.__neighbors[direction]['address'])
+            self.__msg_sub.setsockopt(zmq.SUBSCRIBE, self.__name)
         
-        # Bind the publisher socket
+        
+        # Connect the control publisher socket
         self.__pub = self.__context.socket(zmq.PUB)
         self.__pub.connect(self.__pub_addr)
         
+        self.__comm_thread.start()
         # Wait for the connection
         while not self.__connected:
             pass
@@ -105,7 +121,9 @@ class Casu:
         time.sleep(0.5)
 
     def __update_readings(self):
-        """ Get message from Casu and update data. """
+        """ 
+        Get data from Casu and update local data. 
+        """
         self.__sub = self.__context.socket(zmq.SUB)
         self.__sub.connect(self.__sub_addr)
         self.__sub.setsockopt(zmq.SUBSCRIBE, self.__name)
@@ -123,6 +141,15 @@ class Casu:
                     print('Unknown command {0} for {1}'.format(ranges, self.__name))
             else:
                 print('Unknown device ir for {0}'.format(self.__name))
+            
+            try:
+                [name, msg, sender, data] = self.__msg_sub.recv_multipart(zmq.NOBLOCK)
+                # Protect the message queue update with a lock
+                with self.__lock:
+                    self.__msg_queue.append({'sender':sender, 'data':data})
+            except zmq.ZMQError:
+                # Nobody is sending us a message. No biggie.
+                pass
 
     def get_range(self, id):
         """ 
@@ -277,6 +304,32 @@ class Casu:
         light.color.blue = 0
         self.__pub.send_multipart([self.__name, "DiagnosticLed", "Off",
                                   light.SerializeToString()])
+
+    def send_message(self, direction, msg):
+        """
+        Send a simple string message to one of the neighbors.
+        """
+        success = False
+        if direction in self.__neighbors:
+            self.__msg_pub.send_multipart([self.__neighbors[direction]['name'], 'Message', 
+                                           self.__name, msg])
+            success = True
+        
+        return success
+
+    def read_message(self):
+        """
+        Retrieve the latest message from the buffer.
+        
+        Returns a dictionary with sender(string), and data (string) fields.
+        """
+        msg = []
+        if self.__msg_queue:
+            with self.__lock:
+                msg = self.__msg_queue.pop()
+        
+        return msg
+
 
 if __name__ == '__main__':
     

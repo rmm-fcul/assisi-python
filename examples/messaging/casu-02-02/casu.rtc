@@ -1,0 +1,59 @@
+# Run-Time Configuration file for Casu 02-02
+# Messaging example
+
+# Name of the Casu to connect to
+# Casu naming convention is Casu-rr-cc, where rr denotes the row,
+# and cc denotes the column where the Casu is located
+name     : Casu-02-02
+
+# Address at which the Casu listens for incoming commands
+# (i.e., the address to which the controller publishes
+# control commands).
+# 
+# Default value (local simulator and on-Casu deployment):
+# tcp://127.0.0.1:5556
+pub_addr : tcp://127.0.0.1:5556
+
+# Address to which the Casu publishes sensor data
+# (i.e., address from which the controller
+# reads sensor data).
+#
+# Default value (local simulator and on-Casu deployment):
+# tcp://127.0.0.1:5555
+sub_addr : tcp://127.0.0.1:5555
+
+# Messaging socket address
+# This will work for both simulation and deployment
+msg_addr : tcp://*:50202
+
+# Neighbor specification for simulation
+# Comment this block for deployment on Casus
+neighbors:
+    north : 
+        name    : Casu-01-02
+        address : tcp://127.0.0.1:50102
+    east  : 
+        name    : Casu-02-03
+        address : tcp://127.0.0.1:50203
+    south :
+        name    : Casu-03-02
+        address : tcp://127.0.0.1:50302
+    west  : 
+        name    : Casu-02-01
+        address : tcp://126.0.0.1:50201
+
+# Neighbor specification for on-Casu deployment
+# Comment this block for simulation
+#neighbors:
+#    north : 
+#        name    : Casu-01-02
+#        address : tcp://Casu-01-02:50102
+#    east  : 
+#        name    : Casu-02-03
+#        address : tcp:/Casu-02-03:50203
+#    south :
+#        name    : Casu-03-02
+#        address : tcp://Casu-03-02:50302
+#    west  : 
+#        name    : Casu-02-01
+#        address : tcp://Casu-02-01:50201

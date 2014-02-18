@@ -135,7 +135,7 @@ The wandering bee example
 .. code-block:: console
 
   cd ~/assisi/python/examples/wandering_bee
-  ./bee_in_maze.py
+  ./spawn_bee_in_maze.py
   ./bee_wander.py
   
 
@@ -147,7 +147,7 @@ If the simulator is running, restart it.
 .. code-block:: console
 
   cd ~/assisi/python/examples/casu_proxy_led
-  ./casu_and_bee.py
+  ./spawn_casu_and_bee.py
   ./casu_proxy_led.py
 
 The Bees in Casu array example
@@ -158,7 +158,7 @@ If the simulator is running, restart it.
 .. code-block:: console
 
   cd ~/assisi/python/examples/bees_in_casu_array
-  ./bees_in_casu_array.py
+  ./spawn_bees_in_casu_array.py
   ./bees_wander.py
 
 In a new terminal window:

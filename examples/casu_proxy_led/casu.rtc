@@ -22,3 +22,15 @@ pub_addr : tcp://127.0.0.1:5556
 # tcp://127.0.0.1:5555
 sub_addr : tcp://127.0.0.1:5555
 
+# Messaging socket address
+# This will work for both simulation and deployment
+msg_addr : tcp://*:50102
+
+# Neighbor specification for simulation
+# Comment this block for deployment on Casus
+neighbors:
+    south :
+        name    : Casu-02-02
+        address : tcp://127.0.0.1:50202
+
+

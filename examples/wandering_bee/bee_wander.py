@@ -7,8 +7,6 @@ A simple bee wander behavior.
 
 from assisipy import bee
 
-from math import pi
-
 class BeeWander:
     """ 
     A demo bee controller. 

@@ -149,9 +149,9 @@ class Casu:
                     # Protect the message queue update with a lock
                     with self.__lock:
                         self.__msg_queue.append({'sender':sender, 'data':data})
-                    except zmq.ZMQError:
-                        # Nobody is sending us a message. No biggie.
-                        pass
+                except zmq.ZMQError:
+                    # Nobody is sending us a message. No biggie.
+                    pass
 
     def get_range(self, id):
         """ 

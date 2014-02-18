@@ -5,8 +5,6 @@
 
 from assisipy import bee
 
-from math import pi
-
 if __name__ == '__main__':
 
     # Connect to the bee

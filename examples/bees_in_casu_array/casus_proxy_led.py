@@ -49,6 +49,8 @@ if __name__ == '__main__':
     for i in range(casu_rows):
         for j in range(casu_cols):
             casus.append(CasuController('Casu-0{0}-0{1}'.format(i,j)))
+
+    print('All Casus connected!')
     
     # Prevent the program from exiting
     while True:

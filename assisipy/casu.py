@@ -80,6 +80,7 @@ class Casu:
             self.__name = name
             self.__neighbors = None
             self.__msg_pub_addr = None
+            self.__msg_sub = None
 
         # TODO: Fill range_readings with fake data
         #       to prevent program crashes.
@@ -142,14 +143,15 @@ class Casu:
             else:
                 print('Unknown device ir for {0}'.format(self.__name))
             
-            try:
-                [name, msg, sender, data] = self.__msg_sub.recv_multipart(zmq.NOBLOCK)
-                # Protect the message queue update with a lock
-                with self.__lock:
-                    self.__msg_queue.append({'sender':sender, 'data':data})
-            except zmq.ZMQError:
-                # Nobody is sending us a message. No biggie.
-                pass
+            if self.__msg_sub:
+                try:
+                    [name, msg, sender, data] = self.__msg_sub.recv_multipart(zmq.NOBLOCK)
+                    # Protect the message queue update with a lock
+                    with self.__lock:
+                        self.__msg_queue.append({'sender':sender, 'data':data})
+                    except zmq.ZMQError:
+                        # Nobody is sending us a message. No biggie.
+                        pass
 
     def get_range(self, id):
         """ 

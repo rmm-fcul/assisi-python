@@ -118,9 +118,18 @@ class Bee:
     def get_range(self, id):
         """ 
         Returns the range reading corresponding to sensor id. 
+        
+        TODO: Fix the hacky correction of invalid readings
         """
         with self.__lock:
-            return self.__ir_range_readings.range[id]
+            range = self.__ir_range_readings.range[id]
+
+        # Hack to fix error of range 0.0 appearing
+        # when no obstacles are present
+        if range < 0.000001:
+            range = 10
+
+        return range
 
     def get_temp(self, id):
         """

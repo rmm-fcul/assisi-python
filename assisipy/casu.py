@@ -31,36 +31,37 @@ IR_SW = 4
 IR_NW = 5
 
 """ Light actuator """
-LIGHT = 6
+LIGHT_ACT = 6
 
 """ Top diagnostic LED """
 DLED_TOP = 7
 
 """ Temperature sensors """
-T_N = 8 #: Temperature sensor at 0°
-T_E = 9
-T_S = 10
-T_W = 11
+TEMP_N = 8 #: Temperature sensor at 0°
+TEMP_E = 9
+TEMP_S = 10
+TEMP_W = 11
+TEMP_TOP = 12
 
 """ Temperature actuator """
-PELTIER = 12
+PELTIER_ACT = 13
 
 """ Vibration sensors """
-V_N = 13
-V_E = 14
-V_S = 15
-V_W = 16
+VIBE_N = 14
+VIBE_E = 15
+VIBE_S = 16
+VIBE_W = 17
 
 """ Vibration actuator """
-V_ACT = 17
+VIBE_ACT = 18
 
 """ E-M actuator """
-EM_ACT = 18
+EM_ACT = 19
 
 """ E-M actuator modes """
-EM_ELECTRIC = 0
-EM_MAGNETIC = 1
-EM_HEAT = 2
+EM_MODE_ELECTRIC = 0
+EM_MODE_MAGNETIC = 1
+EM_MODE_HEAT = 2
 
 
 class Casu:
@@ -100,10 +101,10 @@ class Casu:
 
         self.__stop = False
 
-        # TODO: Fill range_readings with fake data
+        # TODO: Fill readings with fake data
         #       to prevent program crashes.
         self.__ir_range_readings = dev_msgs_pb2.RangeArray()
-        self.__temp_readings = 4*[0]
+        self.__temp_readings = dev_msgs_pb2.TemperatureArray()
         self.__diagnostic_led = [0,0,0,0]
         self.__accel_freq = 4*[0]
         self.__accel_ampl = 4*[0]
@@ -144,8 +145,6 @@ class Casu:
             pass
         print('{0} connected!'.format(self.__name))
             
-        # Wait one more second to get all the data
-        time.sleep(0.5)
 
     def __update_readings(self):
         """ 
@@ -166,9 +165,16 @@ class Casu:
                         self.__ir_range_readings.ParseFromString(data)
                     self.__write_to_log(['ir', time.time()] + [r for r in self.__ir_range_readings.range])
                 else:
-                    print('Unknown command {0} for {1}'.format(ranges, self.__name))
+                    print('Unknown command {0} for {1}'.format(cmd, self.__name))
+            elif dev == 'Temp':
+                if cmd == 'Temperatures':
+                    with self.__lock:
+                        self.__temp_readings.ParseFromString(data)
+                    self.__write_to_log(['temp', time.time()] + [t for t in self.__temp_readings.temp])
+                else:
+                    print('Unknown command {0} for {1}'.format(cmd, self.__name))
             else:
-                print('Unknown device ir for {0}'.format(self.__name))
+                print('Unknown device {0} for {1}'.format(dev, self.__name))
             
             if self.__msg_sub:
                 try:
@@ -202,16 +208,16 @@ class Casu:
         print('{0} disconnected!'.format(self.__name))
 
 
-    def config_em(self, id = EM_ACT, mode = EM_ELECTRIC):
+    def config_em(self, id = EM_ACT, mode = EM_MODE_ELECTRIC):
         """
         Configure the EM device mode.
         """
         config = dev_msgs_pb2.EMDeviceConfig()
-        if mode == EM_ELECTRIC:
+        if mode == EM_MODE_ELECTRIC:
             config.mode = dev_msgs_pb2.EMDeviceConfig.ELECTRIC
-        elif mode == EM_MAGNETIC:
+        elif mode == EM_MODE_MAGNETIC:
             config.mode = dev_msgs_pb2.EMDeviceConfig.MAGNETIC
-        elif mode == EM_HEAT:
+        elif mode == EM_MODE_HEAT:
             config.mode = dev_msgs_pb2.EMDeviceConfig.HEAT
         self.__pub.send_multipart([self.__name, "EM", "config",
                                    config.SerializeToString()])
@@ -227,7 +233,10 @@ class Casu:
            to better reflect actual sensor capabilities.
         """
         with self.__lock:
-            return self.__ir_range_readings.range[id]
+            if self.__ir_range_readings.range:
+                return self.__ir_range_readings.range[id]
+            else:
+                return -1
         
     def get_ir_raw_value(self, id):
         """ 
@@ -235,19 +244,23 @@ class Casu:
         
         """
         with self.__lock:
-            return self.__ir_range_readings.raw_value[id]
+            if self.__ir_range_readings.raw_value:
+                return self.__ir_range_readings.raw_value[id]
+            else:
+                return -1
 
     def get_temp(self, id):
         """
         Returns the temperature reading of sensor id. 
 
-        .. note::
-           
-           NOT implemented!
-        """
-        pass
+         """
+        with self.__lock:
+            if self.__temp_readings.temp:
+                return self.__temp_readings.temp[id - TEMP_N]
+            else:
+                return -1
 
-    def set_temp(self, id = PELTIER, temp = 36):
+    def set_temp(self, id = PELTIER_ACT, temp = 36):
         """
         Sets the temperature reference of actuator id to temp.
 
@@ -261,7 +274,7 @@ class Casu:
                                    temp_msg.SerializeToString()])
         self.__write_to_log([device + "_temp", time.time(), temp])
 
-    def temp_standby(self, id = PELTIER):
+    def temp_standby(self, id = PELTIER_ACT):
         """
         Turn the temperature actuator off.
 
@@ -275,7 +288,7 @@ class Casu:
                                    temp_msg.SerializeToString()])
         self.__write_to_log([device + "_temp", time.time(), 0])
 
-    def set_vibration_freq(self, id = V_ACT, f = 0):
+    def set_vibration_freq(self, id = VIBE_ACT, f = 0):
         """
         Sets the vibration frequency of the pwm motor.
         
@@ -289,7 +302,7 @@ class Casu:
                                    vibration.SerializeToString()])
         self.__write_to_log(["vibe_ref", time.time(), f])
 
-    def get_vibration_freq(self, id = V_ACT):
+    def get_vibration_freq(self, id = VIBE_ACT):
         """
         Returns the vibration frequency of actuator id.
 
@@ -299,13 +312,13 @@ class Casu:
         """
         pass
 
-    def get_vibration_amplitude(self, id = V_ACT):
+    def get_vibration_amplitude(self, id = VIBE_ACT):
         """ 
         Returns the vibration amplitude of actuator id.
         """
         pass
 
-    def vibration_standby(self, id  = V_ACT):
+    def vibration_standby(self, id  = VIBE_ACT):
         """
         Turn the vibration actuator id off.
         """
@@ -317,7 +330,7 @@ class Casu:
                                    vibration.SerializeToString()])
         self.__write_to_log(["vibe_ref", time.time(), 0])
 
-    def set_light_rgb(self, id = LIGHT, r = 0, g = 0, b = 0):
+    def set_light_rgb(self, id = LIGHT_ACT, r = 0, g = 0, b = 0):
         """
         Set the color and intensity of the light actuator.
         Automatically turns the actuator on.
@@ -334,7 +347,7 @@ class Casu:
                                    light.SerializeToString()])
         self.__write_to_log(["light_ref", time.time(), r, g, b])
 
-    def light_standby(self, id = LIGHT):
+    def light_standby(self, id = LIGHT_ACT):
         """
         Turn the light actuator off.
         """

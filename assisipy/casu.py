@@ -219,7 +219,7 @@ class Casu:
         """
         pass
 
-    def set_temp(self, id, temp):
+    def set_temp(self, id = T_ACT, temp = 36):
         """
         Sets the temperature reference of actuator id to temp.
 
@@ -230,7 +230,7 @@ class Casu:
         """
         pass
 
-    def temp_standby(self, id):
+    def temp_standby(self, id = T_ACT):
         """
         Turn the temperature actuator off.
 
@@ -241,7 +241,7 @@ class Casu:
         """
         pass
 
-    def set_vibration_freq(self, id, f):
+    def set_vibration_freq(self, id = V_ACT, f = 0):
         """
         Sets the vibration frequency of the pwm motor.
         
@@ -255,7 +255,7 @@ class Casu:
                                    vibration.SerializeToString()])
         self.__write_to_log(["vibe_ref", time.time(), f])
 
-    def get_vibration_freq(self, id):
+    def get_vibration_freq(self, id = V_ACT):
         """
         Returns the vibration frequency of actuator id.
 
@@ -265,13 +265,13 @@ class Casu:
         """
         pass
 
-    def get_vibration_amplitude(self, id):
+    def get_vibration_amplitude(self, id = V_ACT):
         """ 
         Returns the vibration amplitude of actuator id.
         """
         pass
 
-    def vibration_standby(self, id):
+    def vibration_standby(self, id  = V_ACT):
         """
         Turn the vibration actuator id off.
         """
@@ -283,7 +283,7 @@ class Casu:
                                    vibration.SerializeToString()])
         self.__write_to_log(["vibe_ref", time.time(), 0])
 
-    def set_light_rgb(self, id, r, g, b):
+    def set_light_rgb(self, id = LIGHT, r = 0, g = 0, b = 0):
         """
         Set the color and intensity of the light actuator.
         Automatically turns the actuator on.
@@ -300,7 +300,7 @@ class Casu:
                                    light.SerializeToString()])
         self.__write_to_log(["light_ref", time.time(), r, g, b])
 
-    def light_standby(self, id):
+    def light_standby(self, id = LIGHT):
         """
         Turn the light actuator off.
         """
@@ -312,7 +312,7 @@ class Casu:
                                    light.SerializeToString()])
         self.__write_to_log(["light_ref", time.time(), 0, 0, 0])
 
-    def set_diagnostic_led_rgb(self, id, r, g, b):
+    def set_diagnostic_led_rgb(self, id = DLED_TOP, r = 0, g = 0, b = 0):
         """ 
         Set the diagnostic LED light color. Automatically turns the actuator on.
 
@@ -328,7 +328,7 @@ class Casu:
                                    light.SerializeToString()])
         self.__write_to_log(["dled_ref", time.time(), r, g, b])
 
-    def get_diagnostic_led_rgb(self, id):
+    def get_diagnostic_led_rgb(self, id = DLED_TOP):
         """ 
         Get the diagnostic light RGB value. 
 
@@ -336,7 +336,7 @@ class Casu:
         """
         pass
 
-    def diagnostic_led_standby(self, id):
+    def diagnostic_led_standby(self, id = DLED_TOP):
         """ 
         Turn the diagnostic LED off.
         """

@@ -31,28 +31,37 @@ IR_SW = 4
 IR_NW = 5
 
 """ Light actuator """
-LIGHT = 0
+LIGHT = 6
 
 """ Top diagnostic LED """
-DLED_TOP = 0
+DLED_TOP = 7
 
 """ Temperature sensors """
-T_N = 0 #: Temperature sensor at 0°
-T_E = 1
-T_S = 2
-T_W = 3
+T_N = 8 #: Temperature sensor at 0°
+T_E = 9
+T_S = 10
+T_W = 11
 
 """ Temperature actuator """
-T_ACT = 0
+PELTIER = 12
 
 """ Vibration sensors """
-V_N = 0
-V_E = 1
-V_S = 2
-V_W = 3
+V_N = 13
+V_E = 14
+V_S = 15
+V_W = 16
 
 """ Vibration actuator """
-V_ACT = 0
+V_ACT = 17
+
+""" E-M actuator """
+EM_ACT = 18
+
+""" E-M actuator modes """
+EM_ELECTRIC = 0
+EM_MAGNETIC = 1
+EM_HEAT = 2
+
 
 class Casu:
     """ 
@@ -78,6 +87,8 @@ class Casu:
             self.__sub_addr = rtc['sub_addr']
             self.__msg_pub_addr = rtc['msg_addr']
             self.__neighbors = rtc['neighbors']
+            self.__msg_sub = None
+
         else:
             # Use default values
             self.__pub_addr = 'tcp://127.0.0.1:5556'
@@ -183,11 +194,28 @@ class Casu:
     def stop(self):
         """
         Stops the Casu interface and cleans up.
+
+        TODO: Need to disable all operations once Casu is stopped!
         """
         self.__stop = True
         self.__cleanup()
         print('{0} disconnected!'.format(self.__name))
 
+
+    def config_em(self, id = EM_ACT, mode = EM_ELECTRIC):
+        """
+        Configure the EM device mode.
+        """
+        config = dev_msgs_pb2.EMDeviceConfig()
+        if mode == EM_ELECTRIC:
+            config.mode = dev_msgs_pb2.EMDeviceConfig.ELECTRIC
+        elif mode == EM_MAGNETIC:
+            config.mode = dev_msgs_pb2.EMDeviceConfig.MAGNETIC
+        elif mode == EM_HEAT:
+            config.mode = dev_msgs_pb2.EMDeviceConfig.HEAT
+        self.__pub.send_multipart([self.__name, "EM", "config",
+                                   config.SerializeToString()])
+        self.__write_to_log(["em_config", time.time(), mode])
 
     def get_range(self, id):
         """ 
@@ -219,27 +247,33 @@ class Casu:
         """
         pass
 
-    def set_temp(self, id = T_ACT, temp = 36):
+    def set_temp(self, id = PELTIER, temp = 36):
         """
         Sets the temperature reference of actuator id to temp.
 
-        .. note::
-           
-           NOT implemented!
-
         """
-        pass
+        temp_msg = dev_msgs_pb2.Temperature()
+        temp_msg.temp = temp
+        device = "peltier"
+        if id == EM_ACT:
+            device = "EM"
+        self.__pub.send_multipart([self.__name, device, "temp",
+                                   temp_msg.SerializeToString()])
+        self.__write_to_log([device + "_temp", time.time(), temp])
 
-    def temp_standby(self, id = T_ACT):
+    def temp_standby(self, id = PELTIER):
         """
         Turn the temperature actuator off.
 
-        .. note::
-           
-           NOT implemented!
-
         """
-        pass
+        temp_msg = dev_msgs_pb2.Temperature()
+        temp_msg.temp = 0
+        device = "peltier"
+        if id == EM_ACT:
+            device = "EM"
+        self.__pub.send_multipart([self.__name, device, "Off",
+                                   temp_msg.SerializeToString()])
+        self.__write_to_log([device + "_temp", time.time(), 0])
 
     def set_vibration_freq(self, id = V_ACT, f = 0):
         """

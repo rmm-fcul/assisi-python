@@ -153,7 +153,7 @@ class Casu:
                     # to make sure all data is written before access
                     with self.__lock:
                         self.__ir_range_readings.ParseFromString(data)
-                    self.__write_to_log([time.time()] + [r for r in self.__ir_range_readings.range])
+                    self.__write_to_log(['ir', time.time()] + [r for r in self.__ir_range_readings.range])
                 else:
                     print('Unknown command {0} for {1}'.format(ranges, self.__name))
             else:
@@ -186,6 +186,7 @@ class Casu:
         """
         self.__stop = True
         self.__cleanup()
+        print('{0} disconnected!'.format(self.__name))
 
 
     def get_range(self, id):
@@ -252,7 +253,7 @@ class Casu:
         vibration.amplitude = 0
         self.__pub.send_multipart([self.__name, "VibeMotor", "On",
                                    vibration.SerializeToString()])
-        
+        self.__write_to_log(["vibe_ref", time.time(), f])
 
     def get_vibration_freq(self, id):
         """
@@ -280,6 +281,7 @@ class Casu:
         vibration.amplitude = 0
         self.__pub.send_multipart([self.__name, "VibeMotor", "Off",
                                    vibration.SerializeToString()])
+        self.__write_to_log(["vibe_ref", time.time(), 0])
 
     def set_light_rgb(self, id, r, g, b):
         """
@@ -296,6 +298,7 @@ class Casu:
         light.color.blue = b
         self.__pub.send_multipart([self.__name, "Light", "On",
                                    light.SerializeToString()])
+        self.__write_to_log(["light_ref", time.time(), r, g, b])
 
     def light_standby(self, id):
         """
@@ -307,6 +310,7 @@ class Casu:
         light.color.blue = 0
         self.__pub.send_multipart([self.__name, "Light", "Off",
                                    light.SerializeToString()])
+        self.__write_to_log(["light_ref", time.time(), 0, 0, 0])
 
     def set_diagnostic_led_rgb(self, id, r, g, b):
         """ 
@@ -322,6 +326,7 @@ class Casu:
         light.color.blue = b
         self.__pub.send_multipart([self.__name, "DiagnosticLed", "On", 
                                    light.SerializeToString()])
+        self.__write_to_log(["dled_ref", time.time(), r, g, b])
 
     def get_diagnostic_led_rgb(self, id):
         """ 
@@ -341,6 +346,7 @@ class Casu:
         light.color.blue = 0
         self.__pub.send_multipart([self.__name, "DiagnosticLed", "Off",
                                   light.SerializeToString()])
+        self.__write_to_log(["dled_ref", time.time(), 0, 0, 0])
 
     def send_message(self, direction, msg):
         """

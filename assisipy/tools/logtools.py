@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Tools for manipulating Casu logs.
 """

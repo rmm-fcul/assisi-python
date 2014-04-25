@@ -21,8 +21,9 @@ Install the tools needed to build the software:
 
 .. code-block:: console
   
-    sudo apt-get install build-essential git cmake qt4-dev-tools libboost-dev 
-    sudo apt-get python-dev python-zmq libprotobuf-dev python-protobuf
+    sudo apt-get install build-essential git cmake qt4-dev-tools
+    sudo apt-get install libboost-dev libboost-program-options-dev
+    sudo apt-get install python-dev python-zmq libprotobuf-dev python-protobuf
     python-sphinx python-yaml
   
 Create a folder for the Assisi project and position yourself there

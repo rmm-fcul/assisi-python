@@ -297,7 +297,7 @@ class Casu:
         """
         temp_msg = dev_msgs_pb2.Temperature()
         temp_msg.temp = temp
-        device = "peltier"
+        device = "Peltier"
         if id == EM_ACT:
             device = "EM"
         self.__pub.send_multipart([self.__name, device, "temp",
@@ -311,7 +311,7 @@ class Casu:
         """
         temp_msg = dev_msgs_pb2.Temperature()
         temp_msg.temp = 0
-        device = "peltier"
+        device = "Peltier"
         if id == EM_ACT:
             device = "EM"
         self.__pub.send_multipart([self.__name, device, "Off",

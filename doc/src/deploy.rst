@@ -16,24 +16,26 @@ Todo: Add more details about deployment of separate controller executables.
 Deployment to the Casus
 -----------------------
 
-In short, you need copy the controller executables to the Casu 
-controller board (BeagleBone), and run them from there. Detailed
-instructions are below.
+You have two options for controlling the Casus. The simpler option is
+**Remote deployment**, which implies running the controller on the
+*master workstation*. **Local** or **On-casu deployment** requires
+copying your code to the Casu board (Beaglebone) and running it from
+there. Either way, your network needs to be set up correctly. 
 
 Set up the network
 ~~~~~~~~~~~~~~~~~~
 
-Connect your computer to the Casu-switch by an Ethernet cable. Casus
-have IPv4 adresses in the range ``192.168.12.101 - 192.168.12.104``. You
-need to configure your network card with the following settings:
+Connect your computer (this is what we call the * master workstation*
+to the Casu-switch by an Ethernet cable). Casus have IPv4 adresses in
+the range ``192.168.12.101 - 192.168.12.104``. You need to configure
+your network card with the following settings: 
 
 .. code-block:: console
 
-      address: 192.168.12.5
+      address: 192.168.12.x
       netmask: 255.255.255.0
 
-In fact, you can use any address on the ``192.168.12.x`` subnet,
-outside of the Casu range.
+Where x can be any number outside of the Casus' range.
 
 Add the Casu IPs and names to your ``/etc/hosts`` files (you need to
 do this only once):
@@ -46,9 +48,27 @@ do this only once):
       192.168.12.103  casu-003
       192.168.12.104  casu-004
 
+Remote deployment
+~~~~~~~~~~~~~~~~~
 
-Copy the controller executables
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+For remote deployment, you need check two things:
+
+   #. you have the appropriate .rtc file (check out the `Run-Time Configuration (.rtc) file structure`_ for details)
+   #. you are connected to the Casu network and the Casu you want to control is powered; Check this by pinging the Casu:
+
+.. code-block:: console
+
+   ping casu-001
+
+**Note:** The Casu firmware is started automatically after booting the
+Beaglebone, but the startup might take up to two minutes, so be
+patient :)
+
+Local (on-Casu) deployment
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In short, you need copy the controller executables to the Casu 
+controller board (BeagleBone), and run them from there. 
 
 Copy your code (.py) to the Casu to which you want to
 deploy. Username/password for all Casus are ``assisi``/``assisi``.
@@ -67,9 +87,7 @@ copy the configuration file to the casu.
 
       scp <path to your configuration file/Casu.rtc assisi@Casu-0xy:/home/assisi/controllers
 
-
-Run the executables on the Casu
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Now you are ready to run the executables on the Casu.
 
 Connect to the casu with two ssh consoles:
 
@@ -89,7 +107,6 @@ In the second console, run your controller:
 
       chmod +x controllers <your controller name>.py
       controllers/<your controller name>.py
-
 
 .. _rtc_structure:
 

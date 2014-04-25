@@ -77,7 +77,7 @@ class Casu:
     :param bool log: A variable indicating whether to log all incoming and outgoing data. If set to true, a logfile in the form 'YYYY-MM-DD-HH-MM-SS-name.csv' is created.
     """
     
-    def __init__(self, rtc_file_name='', name = 'Casu', log = False):
+    def __init__(self, rtc_file_name='', name = 'Casu', log = False, log_folder = '.'):
         
         if rtc_file_name:
             # Parse the rtc file
@@ -121,7 +121,10 @@ class Casu:
         if log:
             now_str = datetime.now().__str__().split('.')[0]
             now_str = now_str.replace(' ','-').replace(':','-')
-            self.__logfile = open(now_str + '-' + self.__name + '.csv','wb')
+            if log_folder[-1] != '/':
+                log_folder = log_folder + '/'
+            log_path = log_folder + now_str + '-' + self.__name + '.csv'
+            self.__logfile = open(log_path,'wb')
             self.__logger = csv.writer(self.__logfile,delimiter=';')
 
         # Create inter-casu communication sockets
@@ -201,8 +204,16 @@ class Casu:
         """
         Stops the Casu interface and cleans up.
 
-        TODO: Need to disable all operations once Casu is stopped!
+        TODO: Need to disable all object access once Casu is stopped!
         """
+
+        # Stop all devices
+        self.em_standby()
+        self.temp_standby()
+        self.vibration_standby()
+        self.light_standby()
+        self.diagnostic_led_standby()
+
         self.__stop = True
         self.__cleanup()
         print('{0} disconnected!'.format(self.__name))
@@ -287,6 +298,20 @@ class Casu:
         self.__pub.send_multipart([self.__name, device, "Off",
                                    temp_msg.SerializeToString()])
         self.__write_to_log([device + "_temp", time.time(), 0])
+
+    def em_standby(self):
+        """
+        Turn the E-M device off, regardless of what mode it was in.
+        """
+        # We'll just send a dummy message, it's type and content
+        # are irrelevant
+        dummy = dev_msgs_pb2.Temperature()
+        self.__pub.send_multipart([self.__name, "EM", "Off",
+                                   dummy.SerializeToString()])
+        # For completeness, this should be logged,
+        # But it will usually just generate a meaningless
+        # one-line log file after splitting
+        #self.__write_to_log(["EM", time.time(), 0])
 
     def set_vibration_freq(self, id = VIBE_ACT, f = 0):
         """

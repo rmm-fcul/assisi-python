@@ -55,7 +55,7 @@ deploy. Username/password for all Casus are ``assisi``/``assisi``.
 
 .. code-block:: console
 
-      scp <path to your controller file>/<your controller file>.py assisi@Casu-0x-0y:/home/assisi/controllers
+      scp <path to your controller file>/<your controller file>.py assisi@Casu-0xy:/home/assisi/controllers
 
 If necessary, make changes to the .rtc file, e.g., change the ``name``
 parameter to refer to the Casu that you are deploying to. See 
@@ -65,7 +65,7 @@ copy the configuration file to the casu.
 
 .. code-block:: console
 
-      scp <path to your configuration file/Casu.rtc assisi@Casu-0x-0y:/home/assisi/controllers
+      scp <path to your configuration file/Casu.rtc assisi@Casu-0xy:/home/assisi/controllers
 
 
 Run the executables on the Casu
@@ -75,7 +75,7 @@ Connect to the casu with two ssh consoles:
 
 .. code-block:: console
 
-      ssh assisi@Casu-0x-0y
+      ssh assisi@Casu-0xy
 
 In the first console, run the Casu firmware:
 
@@ -91,32 +91,22 @@ In the second console, run your controller:
       controllers/<your controller name>.py
 
 
+.. _rtc_structure:
+
 Run-Time Configuration (.rtc) file structure
 --------------------------------------------
 
+Rtc files tell the Python controllers the necessary details about the
+Casu device they are connecting to. 
 
-.. code-block:: yaml
+Real casu .rtc file example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-      # Run-Time Configuration file for Casu 01-01
-      # Suitable for local simulation and Casu deployment
-      
-      # Name of the Casu to connect to
-      # Casu naming convention is casu-0xy, where xy denotes the
-      # ordinal number of the casu
-      name     : Casu-001
-      
-      # Address at which the Casu listens for incoming commands
-      # (i.e., the address to which the controller publishes
-      # control commands).
-      # 
-      # Default value (local simulator and on-Casu deployment):
-      # tcp://127.0.0.1:5556
-      pub_addr : tcp://127.0.0.1:5556
-      
-      # Address to which the Casu publishes sensor data
-      # (i.e., address from which the controller
-      # reads sensor data).
-      #
-      # Default value (local simulator and on-Casu deployment):
-      # tcp://127.0.0.1:5555
-      sub_addr : tcp://127.0.0.1:5555
+.. literalinclude:: ../../examples/logging/casu-004.rtc
+   :language: yaml
+
+Simulated casu .rtc file example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ../../examples/logging/casu-004_sim.rtc
+   :language: yaml

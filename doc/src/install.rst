@@ -23,6 +23,7 @@ Install the tools needed to build the software:
   
     sudo apt-get install build-essential git cmake qt4-dev-tools libboost-dev 
     sudo apt-get python-dev python-zmq libprotobuf-dev python-protobuf
+    python-sphinx python-yaml
   
 Create a folder for the Assisi project and position yourself there
 

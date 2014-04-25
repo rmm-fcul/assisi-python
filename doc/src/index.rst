@@ -14,6 +14,7 @@ Contents:
    assisipy
    install
    deploy
+   manual
    protocol
 
 Indices and tables

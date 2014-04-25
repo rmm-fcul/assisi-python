@@ -1,5 +1,5 @@
 Deployment instructions
-=========================
+=======================
 
 Below are instructions for deploying Casu controllers to the
 simulator, and to the Beaglebone boards. This manual procedure
@@ -41,10 +41,10 @@ do this only once):
 .. code-block:: console
 
       # Casus
-      192.168.12.101  Casu-01-01
-      192.168.12.102  Casu-01-02
-      192.168.12.103  Casu-02-01
-      192.168.12.104  Casu-02-02
+      192.168.12.101  casu-001
+      192.168.12.102  casu-002
+      192.168.12.103  casu-003
+      192.168.12.104  casu-004
 
 
 Copy the controller executables
@@ -101,9 +101,9 @@ Run-Time Configuration (.rtc) file structure
       # Suitable for local simulation and Casu deployment
       
       # Name of the Casu to connect to
-      # Casu naming convention is Casu-rr-cc, where rr denotes the row,
-      # and cc denotes the column where the Casu is located
-      name     : Casu-01-01
+      # Casu naming convention is casu-0xy, where xy denotes the
+      # ordinal number of the casu
+      name     : Casu-001
       
       # Address at which the Casu listens for incoming commands
       # (i.e., the address to which the controller publishes

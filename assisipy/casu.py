@@ -105,9 +105,8 @@ class Casu:
         #       to prevent program crashes.
         self.__ir_range_readings = dev_msgs_pb2.RangeArray()
         self.__temp_readings = dev_msgs_pb2.TemperatureArray()
-        self.__diagnostic_led = [0,0,0,0]
-        self.__accel_freq = 4*[0]
-        self.__accel_ampl = 4*[0]
+        self.__diagnostic_led = [0,0,0,0] # Not used!
+        self.__acc_readings = dev_msgs_pb2.VibrationArray()
 
         # Create the data update thread
         self.__connected = False
@@ -166,7 +165,8 @@ class Casu:
                     # to make sure all data is written before access
                     with self.__lock:
                         self.__ir_range_readings.ParseFromString(data)
-                    self.__write_to_log(['ir', time.time()] + [r for r in self.__ir_range_readings.range])
+                    self.__write_to_log(['ir_range', time.time()] + [r for r in self.__ir_range_readings.range])
+                    self.__write_to_log(['ir_raw', time.time()] + [r for r in self.__ir_range_readings.raw_value])
                 else:
                     print('Unknown command {0} for {1}'.format(cmd, self.__name))
             elif dev == 'Temp':
@@ -176,6 +176,12 @@ class Casu:
                     self.__write_to_log(['temp', time.time()] + [t for t in self.__temp_readings.temp])
                 else:
                     print('Unknown command {0} for {1}'.format(cmd, self.__name))
+            elif dev == 'Acc':
+                if cmd == 'Measurements':
+                    with self.__lock:
+                        self.__acc_readings.ParseFromString(data)
+                    self.__write_to_log(['acc_freq', time.time()] + [f for f in self.__acc_readings.freq])
+                    self.__write_to_log(['acc_amp', time.time()] + [a for a in self._acc_readings.amplitude])
             else:
                 print('Unknown device {0} for {1}'.format(dev, self.__name))
             
@@ -299,6 +305,28 @@ class Casu:
                                    temp_msg.SerializeToString()])
         self.__write_to_log([device + "_temp", time.time(), 0])
 
+    def set_efield_freq(self, id = EM_ACT, f = 0):
+        """
+        Set the electric field frequency.
+        """
+        efield = dev_msgs_pb2.ElectricField()
+        efield.freq = f
+        efield.intensity = 0
+        self.__pub.send_multipart([self.__name, "EM", "efield",
+                                   efield.SerializeToString()])
+        self.__write_to_log(["efield_ref", time.time(), f])
+
+    def set_mfield_freq(self, id = EM_ACT, f = 0):
+        """
+        Set the magnetic field frequency.
+        """
+        mfield = dev_msgs_pb2.MagneticField()
+        mfield.freq = f
+        mfield.intensity = 0
+        self.__pub.send_multipart([self.__name, "EM", "mfield",
+                                   mfield.SerializeToString()])
+        self.__write_to_log(["mfield_ref", time.time(), f])
+
     def em_standby(self):
         """
         Turn the E-M device off, regardless of what mode it was in.
@@ -327,7 +355,7 @@ class Casu:
                                    vibration.SerializeToString()])
         self.__write_to_log(["vibe_ref", time.time(), f])
 
-    def get_vibration_freq(self, id = VIBE_ACT):
+    def get_vibration_freq(self, id):
         """
         Returns the vibration frequency of actuator id.
 
@@ -337,11 +365,15 @@ class Casu:
         """
         pass
 
-    def get_vibration_amplitude(self, id = VIBE_ACT):
+    def get_vibration_amplitude(self, id):
         """ 
-        Returns the vibration amplitude of actuator id.
+        Returns the vibration amplitude reported by sensor id.
         """
-        pass
+        with self.__lock:
+            if self.__acc_readings.amplitude:
+                return self.__acc_readings.amplitude[id - VIBE_N]
+            else:
+                return -1
 
     def vibration_standby(self, id  = VIBE_ACT):
         """

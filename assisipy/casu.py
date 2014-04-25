@@ -20,48 +20,61 @@ from msg import base_msgs_pb2
 # Device ID definitions (for convenience)
 
 """ IR range sensors """
-""" Range sensor pointing to 0° (NORTH) """
+
 IR_N = 0 
+""" Range sensor pointing to 0° (NORTH) """
 IR_NE = 1
-""" Range sensor pointing to 135° (SOUTH-EAST)"""
+""" Range sensor pointing to 45° (NORTH-EAST) """
 IR_SE = 2
-""" Range sensor pointing to 180° (SOUTH) """
+""" Range sensor pointing to 135° (SOUTH-EAST)"""
 IR_S = 3
+""" Range sensor pointing to 180° (SOUTH) """
 IR_SW = 4
+""" Range sensor pointing to 225° (SOUTH-WEST) """
 IR_NW = 5
+""" Range sensor pointing to 270° (NORTH-WEST) """
 
-""" Light actuator """
 LIGHT_ACT = 6
+""" Light stimulus actuator """
 
-""" Top diagnostic LED """
 DLED_TOP = 7
+""" Top diagnostic LED """
 
-""" Temperature sensors """
-TEMP_N = 8 #: Temperature sensor at 0°
+TEMP_N = 8 
+""" Temperature sensor at 0° (NORTH) """
 TEMP_E = 9
+""" Temperature sensor at 90° (EAST) """
 TEMP_S = 10
+""" Temperature sensor at 180° (SOUTH) """
 TEMP_W = 11
+""" Temperature sensor at 270° (WEST) """
 TEMP_TOP = 12
+""" Top temperature sensor (Casu top) """
 
-""" Temperature actuator """
 PELTIER_ACT = 13
+""" Peltier temperature actuator """
 
-""" Vibration sensors """
-VIBE_N = 14
-VIBE_E = 15
-VIBE_S = 16
-VIBE_W = 17
+ACC_N = 14
+""" Vibration sensor at 0° (NORTH) """
+ACC_E = 15
+""" Vibration sensors 90° (EAST) """
+ACC_S = 16
+""" Vibration sensors 180° (SOUTH) """
+ACC_W = 17
+""" Vibration sensors 270° (WEST) """
 
-""" Vibration actuator """
 VIBE_ACT = 18
+""" Vibration actuator """
 
-""" E-M actuator """
 EM_ACT = 19
+""" Electro-Magnetic actuator """
 
-""" E-M actuator modes """
 EM_MODE_ELECTRIC = 0
+""" E-M actuator electric mode """
 EM_MODE_MAGNETIC = 1
+""" E-M actuator magnetic mode """
 EM_MODE_HEAT = 2
+""" E-M actuator heat mode """
 
 
 class Casu:
@@ -181,7 +194,7 @@ class Casu:
                     with self.__lock:
                         self.__acc_readings.ParseFromString(data)
                     self.__write_to_log(['acc_freq', time.time()] + [f for f in self.__acc_readings.freq])
-                    self.__write_to_log(['acc_amp', time.time()] + [a for a in self._acc_readings.amplitude])
+                    self.__write_to_log(['acc_amp', time.time()] + [a for a in self.__acc_readings.amplitude])
             else:
                 print('Unknown device {0} for {1}'.format(dev, self.__name))
             
@@ -334,6 +347,7 @@ class Casu:
         # We'll just send a dummy message, it's type and content
         # are irrelevant
         dummy = dev_msgs_pb2.Temperature()
+        dummy.temp = 0
         self.__pub.send_multipart([self.__name, "EM", "Off",
                                    dummy.SerializeToString()])
         # For completeness, this should be logged,
@@ -371,7 +385,7 @@ class Casu:
         """
         with self.__lock:
             if self.__acc_readings.amplitude:
-                return self.__acc_readings.amplitude[id - VIBE_N]
+                return self.__acc_readings.amplitude[id - ACC_N]
             else:
                 return -1
 

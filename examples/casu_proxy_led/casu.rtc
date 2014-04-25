@@ -1,10 +1,10 @@
-# Run-Time Configuration file for Casu 01-01
+# Run-Time Configuration file for Casu 001
 # Suitable for local simulation and Casu deployment
 
 # Name of the Casu to connect to
 # Casu naming convention is Casu-rr-cc, where rr denotes the row,
 # and cc denotes the column where the Casu is located
-name     : Casu-01-01
+name     : casu-001
 
 # Address at which the Casu listens for incoming commands
 # (i.e., the address to which the controller publishes
@@ -30,7 +30,7 @@ msg_addr : tcp://*:50102
 # Comment this block for deployment on Casus
 neighbors:
     south :
-        name    : Casu-02-02
+        name    : Casu-002
         address : tcp://127.0.0.1:50202
 
 

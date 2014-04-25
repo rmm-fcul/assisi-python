@@ -14,5 +14,5 @@ if __name__ == '__main__':
     simctrl = sim.Control()
     
     # Spawn the Bee and the Casu
-    simctrl.spawn('Casu','Casu-01-01',(0,0,0))
+    simctrl.spawn('Casu','casu-001',(0,0,0))
     simctrl.spawn('Bee','Bee-001',(2,0,pi/2))

@@ -44,5 +44,16 @@ assisipy Package
 :mod:`examples` Module
 ----------------------
 
-.. literalinclude:: ../../examples/wandering_bee.py
-.. literalinclude:: ../../examples/bees_in_casu_array.py
+
+Wandering bee example
+~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ../../examples/wandering_bee/spawn_bee_in_maze.py
+.. literalinclude:: ../../examples/wandering_bee/bee_wander.py
+
+Casu and bee example
+~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ../../examples/casu_proxy_led/spawn_casu_and_bee.py
+.. literalinclude:: ../../examples/casu_proxy_led/casu_proxy_led.py
+.. literalinclude:: ../../examples/casu_proxy_led/bee_circling.py

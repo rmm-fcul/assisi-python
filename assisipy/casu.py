@@ -290,11 +290,16 @@ class Casu:
             else:
                 return -1
 
-    def set_temp(self, id = PELTIER_ACT, temp = 36):
+    def set_temp(self, temp = 36, id = PELTIER_ACT):
         """
         Sets the temperature reference of actuator id to temp.
 
         """
+        if temp < 25:
+            temp = 25
+        elif temp > 40:
+            temp = 40
+        print('Temperature reference limited to {0}!'.format(temp))
         temp_msg = dev_msgs_pb2.Temperature()
         temp_msg.temp = temp
         device = "Peltier"

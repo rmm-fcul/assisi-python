@@ -297,8 +297,8 @@ class Casu:
         """
         if temp < 25:
             temp = 25
-        elif temp > 40:
-            temp = 40
+        elif temp > 45:
+            temp = 45
         print('Temperature reference limited to {0}!'.format(temp))
         temp_msg = dev_msgs_pb2.Temperature()
         temp_msg.temp = temp

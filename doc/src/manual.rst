@@ -96,7 +96,7 @@ instance, to light the top diagnostic LED red and turn on the vibration motor:
 .. code-block:: ipython
 
    In[6]: casu4.set_diagnostic_led_rgb(r=1)
-   In[7]: casu4.set_vibration_frequency(50)
+   In[7]: casu4.set_vibration_freq(50)
 
 To issue several commands simultaneously, simply write them in one
 line, separated by semicolons. For instance, let's turn off the

@@ -238,7 +238,7 @@ class Casu:
         print('{0} disconnected!'.format(self.__name))
 
 
-    def config_em(self, id = EM_ACT, mode = EM_MODE_ELECTRIC):
+    def config_em(self, mode, id = EM_ACT):
         """
         Configure the EM device mode.
         """
@@ -290,7 +290,7 @@ class Casu:
             else:
                 return -1
 
-    def set_temp(self, temp = 36, id = PELTIER_ACT):
+    def set_temp(self, temp, id = PELTIER_ACT):
         """
         Sets the temperature reference of actuator id to temp.
 
@@ -323,7 +323,7 @@ class Casu:
                                    temp_msg.SerializeToString()])
         self.__write_to_log([device + "_temp", time.time(), 0])
 
-    def set_efield_freq(self, id = EM_ACT, f = 0):
+    def set_efield_freq(self, f, id = EM_ACT):
         """
         Set the electric field frequency.
         """
@@ -334,7 +334,7 @@ class Casu:
                                    efield.SerializeToString()])
         self.__write_to_log(["efield_ref", time.time(), f])
 
-    def set_mfield_freq(self, id = EM_ACT, f = 0):
+    def set_mfield_freq(self, f, id = EM_ACT):
         """
         Set the magnetic field frequency.
         """
@@ -360,7 +360,7 @@ class Casu:
         # one-line log file after splitting
         #self.__write_to_log(["EM", time.time(), 0])
 
-    def set_vibration_freq(self, id = VIBE_ACT, f = 0):
+    def set_vibration_freq(self, f, id = VIBE_ACT):
         """
         Sets the vibration frequency of the pwm motor.
         
@@ -406,7 +406,7 @@ class Casu:
                                    vibration.SerializeToString()])
         self.__write_to_log(["vibe_ref", time.time(), 0])
 
-    def set_light_rgb(self, id = LIGHT_ACT, r = 0, g = 0, b = 0):
+    def set_light_rgb(self, r = 0, g = 0, b = 0, id = LIGHT_ACT):
         """
         Set the color and intensity of the light actuator.
         Automatically turns the actuator on.
@@ -435,7 +435,7 @@ class Casu:
                                    light.SerializeToString()])
         self.__write_to_log(["light_ref", time.time(), 0, 0, 0])
 
-    def set_diagnostic_led_rgb(self, id = DLED_TOP, r = 0, g = 0, b = 0):
+    def set_diagnostic_led_rgb(self, r = 0, g = 0, b = 0, id = DLED_TOP):
         """ 
         Set the diagnostic LED light color. Automatically turns the actuator on.
 

@@ -356,7 +356,7 @@ class Casu:
         Set the electric field frequency.
         """
         efield = dev_msgs_pb2.ElectricField()
-        if f < EM_ELECTIC_FREQ_MIN:
+        if f < EM_ELECTRIC_FREQ_MIN:
             f = EM_ELECTRIC_FREQ_MIN
             print('Electric field frequency limited to {0}!'.format(f))
         elif f > EM_ELECTRIC_FREQ_MAX:

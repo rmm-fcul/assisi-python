@@ -120,8 +120,7 @@ In a similar way, we can also control the heat actuator:
 
    In[9]: casu4.set_temp(20); casu4.set_diagnostic_led_rgb(r=1)
 
-
-TODO: Add instructions for the EM actuators
+**Note:** The allowable temperature range is between 25 and 45 °C.
 
 You can also check the current value of any sensor, e.g. for the
 "northern" proximity sensor:
@@ -132,6 +131,67 @@ You can also check the current value of any sensor, e.g. for the
 
 For a full list of available functions, and detailed explanation of
 function arguments, please consult the :py:mod:`casu` documentation.
+
+Controlling the EM actuators
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To control the EM actuators, make sure that they are properly
+connected. Note that a group of four actuators is controlled
+simultaneously, i.e. all four actuators connected to a single control
+board will have the same output.
+
+The actuator can operate **either** in the magnetic **or** in the
+electric operating mode. The appropriate mode needs to be activated
+first. Also, please note that the actuators need to be **physically
+turned over** in order to change the effective field!
+
+For the **Magnetic actuator** enable it first:
+
+.. code-block:: ipython
+
+   In[11]: casu4.config_em(casu.EM_MODE_MAGNETIC)
+
+ant then set the frequency to the desired value, e.g.:
+
+.. code-block:: ipython
+
+   In[12]: casu4.set_mfield_freq(10)
+   In[13]: casu4.set_mfield_freq(15)
+
+**Note:** The allowable frequency range for the magnetic actuator
+is between 4 and 40 Hz.
+
+For the **Electric actuator** enable it:
+
+.. code-block:: ipython
+
+   In[14]: casu4.config_em(casu.EM_MODE_ELECTRIC)
+
+and then you can provide the setpoints:
+
+.. code-block:: ipython
+
+   In[15]: casu4.set_efield_freq(200)
+   In[16]: casu4.set_efield_freq(200)
+
+**Note:** The allowable frequency range for the electric actuator is
+between 100 and 500 Hz.
+
+To turn off the actuator (regardless of the operating mode it's in), issue the command:
+
+.. code-block:: ipython
+
+   In[17]: casu4.em_standby()
+
+**Important:** If you want to activate the actuator again after
+sending it to standby mode, you have to re-issue the config command
+before any `set_*_freq` commands:
+
+.. code-block:: ipython
+
+   In[16]: casu4.config_em(casu.EM_MODE_MAGNETIC)
+   In[17]: casu4.set_mfield_freq(10)
+
 
 Controlling several Casus at once
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -144,8 +204,8 @@ start up its controller:
 
 .. code-block:: ipython
 
-   In[11]: s.spawn('Casu','casu-003_sim',(3,0,0))
-   In[12]: casu3 = casu.Casu('casu-003_sim.rtc',log = True, log_folder = 'logs')
+   In[18]: s.spawn('Casu','casu-003_sim',(3,0,0))
+   In[19]: casu3 = casu.Casu('casu-003_sim.rtc',log = True, log_folder = 'logs')
 
 If you are working with real casus, just make sure the target casu is turned on and
 connected to the network.
@@ -154,7 +214,7 @@ Now you can issue commands to both casus at once:
 
 .. code-block:: ipython
 
-   In[13]: casu4.set_diagnostic_led_rgb(g = 1); casu3.set_diagnostic_led_rgb(r = 1)
+   In[20]: casu4.set_diagnostic_led_rgb(g = 1); casu3.set_diagnostic_led_rgb(r = 1)
 
 other commands work equivalently.
 
@@ -170,8 +230,8 @@ control variables:
 
 .. code-block:: ipython
 
-   In[14]: casu3.stop(); casu4.stop()
-   In[15]: del casu3, casu4
+   In[21]: casu3.stop(); casu4.stop()
+   In[22]: del casu3, casu4
 
 Analyzing the logs
 ~~~~~~~~~~~~~~~~~~
@@ -183,6 +243,6 @@ per-device log files. It is invoked as:
 
 .. code-block:: ipython
    
-   In[16]: from assisipy.tools import logtools
-   In[17]: logtools.split('log file name')
+   In[23]: from assisipy.tools import logtools
+   In[24]: logtools.split('log file name')
 

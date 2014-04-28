@@ -77,6 +77,33 @@ EM_MODE_HEAT = 2
 """ E-M actuator heat mode """
 
 
+TEMP_MIN = 25
+"""
+Minimum allowed setpoint for the Peltier heater, in °C.
+"""
+TEMP_MAX = 45
+"""
+Maximum allowed setpoint for the peltier heater, in °C.
+"""
+
+EM_ELECTRIC_FREQ_MIN = 100
+"""
+Minimum allowed Electric field frequency in Hz.
+"""
+EM_ELECTRIC_FREQ_MAX = 500
+"""
+Maximum allowed Electric field frequency, in Hz.
+"""
+EM_MAGNETIC_FREQ_MIN = 5
+"""
+Minimum allowed Magnetic field frequency, in Hz.
+"""
+EM_MAGNETIC_FREQ_MAX = 50
+"""
+Maximum allowed Magnetic field frequency, in Hz.
+"""
+
+
 class Casu:
     """ 
     The low-level interface to Casu devices.
@@ -295,11 +322,12 @@ class Casu:
         Sets the temperature reference of actuator id to temp.
 
         """
-        if temp < 25:
-            temp = 25
-        elif temp > 45:
-            temp = 45
-        print('Temperature reference limited to {0}!'.format(temp))
+        if temp < TEMP_MIN:
+            temp = TEMP_MIN
+            print('Temperature reference limited to {0}!'.format(temp))
+        elif temp > TEMP_MAX:
+            temp = TEMP_MAX
+            print('Temperature reference limited to {0}!'.format(temp))
         temp_msg = dev_msgs_pb2.Temperature()
         temp_msg.temp = temp
         device = "Peltier"
@@ -308,7 +336,7 @@ class Casu:
         self.__pub.send_multipart([self.__name, device, "temp",
                                    temp_msg.SerializeToString()])
         self.__write_to_log([device + "_temp", time.time(), temp])
-
+ 
     def temp_standby(self, id = PELTIER_ACT):
         """
         Turn the temperature actuator off.
@@ -328,6 +356,12 @@ class Casu:
         Set the electric field frequency.
         """
         efield = dev_msgs_pb2.ElectricField()
+        if f < EM_ELECTIC_FREQ_MIN:
+            f = EM_ELECTRIC_FREQ_MIN
+            print('Electric field frequency limited to {0}!'.format(f))
+        elif f > EM_ELECTRIC_FREQ_MAX:
+            f = EM_ELECTRIC_FREQ_MAX
+            print('Electric field frequency limited to {0}!'.format(f))
         efield.freq = f
         efield.intensity = 0
         self.__pub.send_multipart([self.__name, "EM", "efield",
@@ -338,6 +372,12 @@ class Casu:
         """
         Set the magnetic field frequency.
         """
+        if f < EM_MAGNETIC_FREQ_MIN:
+            f = EM_MAGNETIC_FREQ_MIN
+            print('Magnetic field frequency limited to {0}!'.format(f))
+        elif f > EM_MAGNETIC_FREQ_MAX:
+            f = EM_MAGNETIC_FREQ_MAX
+            print('Magnetic field frequency limited to {0}!'.format(f))
         mfield = dev_msgs_pb2.MagneticField()
         mfield.freq = f
         mfield.intensity = 0

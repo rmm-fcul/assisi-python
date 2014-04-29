@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # A program for testing the heat actuator
 
 import time

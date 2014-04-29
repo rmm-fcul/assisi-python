@@ -103,6 +103,11 @@ EM_MAGNETIC_FREQ_MAX = 50
 Maximum allowed Magnetic field frequency, in Hz.
 """
 
+ARRAY = 10000
+"""
+Special value to get all sensor values from an array of sensors
+(e.g. all proximity sensors)
+"""
 
 class Casu:
     """ 
@@ -302,7 +307,10 @@ class Casu:
         """
         with self.__lock:
             if self.__ir_range_readings.raw_value:
-                return self.__ir_range_readings.raw_value[id]
+                if id == ARRAY:
+                    return [raw for raw in self.__ir_range_readings.raw_value]
+                else:
+                    return self.__ir_range_readings.raw_value[id]
             else:
                 return -1
 
@@ -455,6 +463,10 @@ class Casu:
         :param float g: Green component intensity, between 0 and 1.
         :param float b: Blue component intensity, between 0 and 1.
         """
+        # Limit values to [0,1] range
+        r = sorted([0, r, 1])[1]
+        g = sorted([0, g, 1])[1]
+        b = sorted([0, b, 1])[1]
         light = base_msgs_pb2.ColorStamped()
         light.color.red = r
         light.color.green = g
@@ -483,6 +495,12 @@ class Casu:
         :param float g: Green component intensity, between 0 and 1.
         :param float b: Blue component intensity, between 0 and 1.
         """
+
+        # Limit values to [0,1] range
+        r = sorted([0, r, 1])[1]
+        g = sorted([0, g, 1])[1]
+        b = sorted([0, b, 1])[1]
+
         light = base_msgs_pb2.ColorStamped()
         light.color.red = r
         light.color.green = g

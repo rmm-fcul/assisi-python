@@ -167,8 +167,8 @@ class Casu:
             now_str = now_str.replace(' ','-').replace(':','-')
             if log_folder[-1] != '/':
                 log_folder = log_folder + '/'
-            log_path = log_folder + now_str + '-' + self.__name + '.csv'
-            self.__logfile = open(log_path,'wb')
+            self.log_path = log_folder + now_str + '-' + self.__name + '.csv'
+            self.__logfile = open(self.log_path,'wb')
             self.__logger = csv.writer(self.__logfile,delimiter=';')
 
         # Create inter-casu communication sockets

@@ -29,6 +29,10 @@ def split(logname):
         devices[dev]['file'].close()
                 
 
+# TODO: Add join function to join several logs in a smart way
+
+# TODO: Add cleanup function to clean up unnecessary split files
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = 'Process raw Casu logs.')
     parser.add_argument('files', metavar = 'filename', nargs='+',

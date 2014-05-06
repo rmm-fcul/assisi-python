@@ -5,17 +5,29 @@ Below are instructions for installing the current version of the
 Bee-arena software. Once the softwer is finalized, automatic installer
 packages will be developed.
 
-A VirtualBox .ova image which has everything already set up is
-available at 
-
-http://larics.rasip.fer.hr/laricscloud/public.php?service=files&t=a55a3a1d7cfef34511e6a22a8c0387d3. 
-
-Username/password are ``assisi``/``assisi``.
-
 System setup
 ------------
 
 The software is known to work on Ubuntu 12.04 (Precise) 64-bit. It has not been tested on other systems.
+
+For maximum portability, it is also possible to install the simulator
+in a virtual machine. Two minimalistic virtual machines are available:
+
+`AssisiBeeCasuSim.ova
+<http://larics.rasip.fer.hr/laricscloud/public.php?service=files&t=f909f86cc3cd2c81867120c66d687679>`_
+(better image)
+
+`ASSISIsim.ova
+<http://larics.rasip.fer.hr/laricscloud/public.php?service=files&t=e8b1ac9041ee2faa52c3ce1cdd3228d9>`_
+(smaller image)
+
+The username/password for both machines are
+``assisi``/``assisi``. Just start the VM, log on, and follow the
+instructions, below.
+
+**Note:** The use of a VM is completely optional. If you are running
+an Ubuntu 12.04, or some other compatible system, (e.g. a newer Ubuntu
+version or Debian), a native install is the way to go.
 
 Install the tools needed to build the software:
 

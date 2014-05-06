@@ -5,10 +5,13 @@ Assisi communication protocol
 =============================
 
 .. csv-table:: Messages published by CASUs
-   :header: "Name", "Device", "Command", "Data Message Type"
-   :widths: 20, 20, 20, 40
+   :header: "Name", "Device", "Command", "Data Message Type", "Note"
+   :widths: 20, 20, 20, 40, 40
 
-    "<Casu Name>", "IR", "Ranges", "RangeArray"
+    
+    "<Casu Name>", "Temp", "Temperatures", "TemperatureArray",  
+    "<Casu Name>", "IR", "Ranges", "RangeArray", (Change naming)
+    "<Casu Name>", "Acc", "Measurements", "VibrationArray", (Data not valid!)
 
 .. csv-table:: Messages subscribed to by CASUs
    :header: "Name", "Device", "Command", "Data Message Type"
@@ -18,8 +21,15 @@ Assisi communication protocol
     "...", "...", "Off", "ColorStamped"
     "...", "Light", "On", "ColorStamped"
     "...", "...", "Off", "ColorStamped"
+    "<Casu Name>", "Peltier", "temp", "Temperature"
+    "<Casu Name>", "Peltier", "Off", "Temperature"
     "...", "VibeMotor", "On", "Vibration"
-    "...", "...", "Off", "Vibration"
+    "...", "VibeMotor", "Off", "Vibration"
+    "<Casu Name>", "EM", "config", "EMDeviceConfig"
+    "<Casu Name>", "EM", "temp", "Temperature"
+    "<Casu Name>", "EM", "efield", "ElectricField"
+    "<Casu Name>", "EM", "mfield", "MagneticField"
+    "<Casu Name>", "EM", "Off", "Temperature"
 
 .. csv-table:: Messages published by the Simulator
    :header: "Name", "Device", "Command", "Data Message Type"

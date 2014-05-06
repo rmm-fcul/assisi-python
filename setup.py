@@ -29,7 +29,7 @@ with codecs.open('DESCRIPTION.rst', encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name="assispy",
+    name="assisipy",
     version=find_version('assisipy', '__init__.py'),
     description="Python API for the ASSISbf project",
     long_description=long_description,

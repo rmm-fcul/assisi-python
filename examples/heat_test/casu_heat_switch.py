@@ -2,45 +2,77 @@
 # -*- coding: utf-8 -*-
 
 """
-A simple demo of Casu interaction.
-The Casu diagnostic LED lights red, when an object appears in front,
-and it lights green, when an object appears behind it.
+A simple demo of Casu for using the Casu peltier actuator.
+Every 2 minutes, the Casu switches its peltier actuator between heating (38C) and cooling (28C).
 
-This demo is suitable for deployment on the Casu hardware (BeagleBone).
-Just copy this .py file and the casu.rtc file to a folder on the 
-BeagleBone and run it.
+While heating, the status LED is lit red, while cooling, it's lit blue.
 """
+
+from __future__ import print_function
 
 from assisipy import casu
 
-class CasuController:
+from time import sleep
+from threading import Thread, Event
+
+COOLING = 0
+HEATING = 1
+
+class CasuController(Thread):
     """ 
     A demo Casu controller.
-    Implements a simple bee-detecting behavior.
+    Implements simple peltier on/off toggling.
     """
 
-    def __init__(self, rtc_file):
-        self.__casu = casu.Casu(rtc_file)
+    def __init__(self, rtc_file, event):
 
-    def react_to_bees(self):
-        """ 
-            Changes Casu color to red, when a bee is detected in front of the Casu,
-            and to Green, when a bee is detected behind a Casu.
-        """
-        while True:
-            if self.__casu.get_range(casu.IR_N) < 2:
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 1, 0, 0)
-            elif self.__casu.get_range(casu.IR_S) < 2:
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 0, 1, 0)
-            else:
-                self.__casu.diagnostic_led_standby(casu.DLED_TOP)
+        Thread.__init__(self)
+        self.stopped = event
+
+        self._casu = casu.Casu(rtc_file)
+        self.Td = 120 # Switch every two minutes
+        self.hot = 38
+        self.cold = 28
+        self._state = COOLING
+        self.toggle_heater()
+
+    def toggle_heater(self):
+        if self._state == COOLING:
+            self._casu.set_temp(self.hot)
+            self._casu.set_diagnostic_led_rgb(r = 1)
+            self._state = HEATING
+            print('Heating up to 38 degrees.')
+        else:
+            self._casu.set_temp(self.cold)
+            self._casu.set_diagnostic_led_rgb(b = 1)
+            self._state = COOLING
+            print('Cooling down to 28 degrees.')
+
+    def run(self):
+        # Toggle the heater every Td
+        while not self.stopped.wait(self.Td):
+            self.toggle_heater()
+
+        self._casu.temp_standby()
+        print('Turned off heater, exiting...')
 
 if __name__ == '__main__':
 
-    ctrl = CasuController('casu.rtc')
+    stop_flag = Event()
+    print("Press ENTER to stop the program at any time.")
 
-    # Run the Casu control program.
-    ctrl.react_to_bees()
+    ctrl = CasuController('casu.rtc', stop_flag)
+    ctrl.start()
+
+    # Python 2to3 workaround
+    try:
+        input = raw_input
+    except NameError:
+        pass
+    input("")
+
+    stop_flag.set()
+
 
 
             

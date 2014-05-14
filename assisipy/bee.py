@@ -11,18 +11,40 @@ import zmq
 from msg import dev_msgs_pb2
 from msg import base_msgs_pb2
 
+
+LENGTH = 2
+""" Bee length, in centimetres. """
+
+WIDTH = 0.8
+""" Bee width, in centimetres. """
+
+WHEEL_DISTANCE = 0.4
+""" Axle width of the underlying differential-wheeled model. """
+
 # Device ID definitions (for convenience)
-
 """ IR range sensors """
-""" Right range sensor """
-IR_SIDE_RIGHT = 0 #: Sensor at 90°
-IR_RIGHT_FRONT = 1
-IR_FRONT = 2
-IR_LEFT_FRONT = 3
-IR_SIDE_LEFT = 4
 
+IR_SIDE_RIGHT = 0 #: Sensor at 90°
+""" Right range sensor """
+
+IR_RIGHT_FRONT = 1
+""" Right-front range sensor """
+
+IR_FRONT = 2
+""" Front range sensor """
+
+IR_LEFT_FRONT = 3
+""" Left-front range sensor """
+
+IR_SIDE_LEFT = 4
+""" Left range sensor """
+
+LIGHT_SENSOR = 5
 """ Light sensor """
-LIGHT_SENSOR = 0
+
+
+TEMP_SENSOR = 6
+""" Temperature sensor """
 
 class Bee:
     """ 
@@ -50,6 +72,7 @@ class Bee:
             self.__encoder_readings = dev_msgs_pb2.DiffDrive()
             self.__true_pose = base_msgs_pb2.PoseStamped()
             self.__light_readings = base_msgs_pb2.ColorStamped()
+            self.__temp_readings = dev_msgs_pb2.TemperatureArray()
 
             # Create the data update thread
             self.__connected = False
@@ -111,6 +134,15 @@ class Bee:
                         self.__light_readings.ParseFromString(data)
                 else:
                     print('Unknown command {0} for Bee {1}'.format(cmd, self.__name))
+
+            ### Temperature sensors ###
+            elif dev == 'Temp':
+                if cmd == 'Temperatures':
+                    with self.__lock:
+                        self.__temp_readings.ParseFromString(data)
+                else:
+                    print('Unknown command {0} for Bee {1}'.format(cmd, self.__name))
+
             else:
                 print('Unknown device {0} for Bee {1}'.format(dev, self.__name))
 
@@ -131,11 +163,13 @@ class Bee:
 
         return range
 
-    def get_temp(self, id):
+    def get_temp(self, id = TEMP_SENSOR):
         """
         Returns the temperature reading of sensor id.
         """
-        pass
+        with self.__lock:
+            return self.__temp_readings.temp[id - TEMP_SENSOR]
+        
 
     def get_vibration_frequency(self, id):
         """
@@ -149,7 +183,7 @@ class Bee:
         """
         pass
 
-    def get_light_rgb(self, id):
+    def get_light_rgb(self, id = LIGHT_SENSOR):
         """
         :return: (r,g,b) tuple, representing the light intensities at
                  red, green and blue wavelengths (currently, the sensor

@@ -12,7 +12,7 @@ import base_msgs_pb2
 DESCRIPTOR = descriptor.FileDescriptor(
   name='dev_msgs.proto',
   package='AssisiMsg',
-  serialized_pb='\n\x0e\x64\x65v_msgs.proto\x12\tAssisiMsg\x1a\x0f\x62\x61se_msgs.proto\"\xe8\x01\n\nRangeArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x32\n\x04type\x18\x02 \x01(\x0e\x32 .AssisiMsg.RangeArray.SensorType:\x02IR\x12\x1d\n\rfield_of_view\x18\x03 \x01(\x02:\x06\x30.5236\x12\x14\n\tmin_range\x18\x04 \x01(\x02:\x01\x30\x12\x16\n\tmax_range\x18\x05 \x01(\x02:\x03inf\x12\r\n\x05range\x18\x06 \x03(\x02\x12\x11\n\traw_value\x18\x07 \x03(\x02\"\x14\n\nSensorType\x12\x06\n\x02IR\x10\x00\">\n\x0bTemperature\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x02(\x02\"C\n\x10TemperatureArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x03(\x02\"O\n\tVibration\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x02(\x02\x12\x11\n\tamplitude\x18\x03 \x02(\x02\"T\n\x0eVibrationArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x03(\x02\x12\x11\n\tamplitude\x18\x03 \x03(\x02\"S\n\tDiffDrive\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x10\n\x08vel_left\x18\x02 \x02(\x01\x12\x11\n\tvel_right\x18\x03 \x02(\x01\"\x9b\x01\n\x0e\x45MDeviceConfig\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x32\n\x04mode\x18\x02 \x02(\x0e\x32$.AssisiMsg.EMDeviceConfig.DeviceMode\"2\n\nDeviceMode\x12\x0c\n\x08\x45LECTRIC\x10\x00\x12\x0c\n\x08MAGNETIC\x10\x01\x12\x08\n\x04HEAT\x10\x02\"S\n\rElectricField\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x02(\x02\x12\x11\n\tintensity\x18\x03 \x02(\x02\"S\n\rMagneticField\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x02(\x02\x12\x11\n\tintensity\x18\x03 \x02(\x02')
+  serialized_pb='\n\x0e\x64\x65v_msgs.proto\x12\tAssisiMsg\x1a\x0f\x62\x61se_msgs.proto\"\xe8\x01\n\nRangeArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x32\n\x04type\x18\x02 \x01(\x0e\x32 .AssisiMsg.RangeArray.SensorType:\x02IR\x12\x1d\n\rfield_of_view\x18\x03 \x01(\x02:\x06\x30.5236\x12\x14\n\tmin_range\x18\x04 \x01(\x02:\x01\x30\x12\x16\n\tmax_range\x18\x05 \x01(\x02:\x03inf\x12\r\n\x05range\x18\x06 \x03(\x02\x12\x11\n\traw_value\x18\x07 \x03(\x02\"\x14\n\nSensorType\x12\x06\n\x02IR\x10\x00\">\n\x0bTemperature\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x02(\x02\"C\n\x10TemperatureArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x03(\x02\"O\n\tVibration\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x02(\x02\x12\x11\n\tamplitude\x18\x03 \x02(\x02\"T\n\x0eVibrationArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x03(\x02\x12\x11\n\tamplitude\x18\x03 \x03(\x02\"S\n\tDiffDrive\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x10\n\x08vel_left\x18\x02 \x02(\x01\x12\x11\n\tvel_right\x18\x03 \x02(\x01\"\x9b\x01\n\x0e\x45MDeviceConfig\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x32\n\x04mode\x18\x02 \x02(\x0e\x32$.AssisiMsg.EMDeviceConfig.DeviceMode\"2\n\nDeviceMode\x12\x0c\n\x08\x45LECTRIC\x10\x00\x12\x0c\n\x08MAGNETIC\x10\x01\x12\x08\n\x04HEAT\x10\x02\"S\n\rElectricField\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x02(\x02\x12\x11\n\tintensity\x18\x03 \x02(\x02\"S\n\rMagneticField\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x02(\x02\x12\x11\n\tintensity\x18\x03 \x02(\x02\"\x9a\x01\n\x0bObjectArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x1d\n\rfield_of_view\x18\x03 \x01(\x02:\x06\x30.5236\x12\x14\n\tmin_range\x18\x04 \x01(\x02:\x01\x30\x12\x16\n\tmax_range\x18\x05 \x01(\x02:\x03inf\x12\r\n\x05range\x18\x06 \x03(\x02\x12\x0c\n\x04type\x18\x07 \x03(\t')
 
 
 
@@ -445,6 +445,69 @@ _MAGNETICFIELD = descriptor.Descriptor(
   serialized_end=992,
 )
 
+
+_OBJECTARRAY = descriptor.Descriptor(
+  name='ObjectArray',
+  full_name='AssisiMsg.ObjectArray',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='header', full_name='AssisiMsg.ObjectArray.header', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='field_of_view', full_name='AssisiMsg.ObjectArray.field_of_view', index=1,
+      number=3, type=2, cpp_type=6, label=1,
+      has_default_value=True, default_value=0.5236,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='min_range', full_name='AssisiMsg.ObjectArray.min_range', index=2,
+      number=4, type=2, cpp_type=6, label=1,
+      has_default_value=True, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='max_range', full_name='AssisiMsg.ObjectArray.max_range', index=3,
+      number=5, type=2, cpp_type=6, label=1,
+      has_default_value=True, default_value=1e10000,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='range', full_name='AssisiMsg.ObjectArray.range', index=4,
+      number=6, type=2, cpp_type=6, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='type', full_name='AssisiMsg.ObjectArray.type', index=5,
+      number=7, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=995,
+  serialized_end=1149,
+)
+
 _RANGEARRAY.fields_by_name['header'].message_type = base_msgs_pb2._HEADER
 _RANGEARRAY.fields_by_name['type'].enum_type = _RANGEARRAY_SENSORTYPE
 _RANGEARRAY_SENSORTYPE.containing_type = _RANGEARRAY;
@@ -458,6 +521,7 @@ _EMDEVICECONFIG.fields_by_name['mode'].enum_type = _EMDEVICECONFIG_DEVICEMODE
 _EMDEVICECONFIG_DEVICEMODE.containing_type = _EMDEVICECONFIG;
 _ELECTRICFIELD.fields_by_name['header'].message_type = base_msgs_pb2._HEADER
 _MAGNETICFIELD.fields_by_name['header'].message_type = base_msgs_pb2._HEADER
+_OBJECTARRAY.fields_by_name['header'].message_type = base_msgs_pb2._HEADER
 DESCRIPTOR.message_types_by_name['RangeArray'] = _RANGEARRAY
 DESCRIPTOR.message_types_by_name['Temperature'] = _TEMPERATURE
 DESCRIPTOR.message_types_by_name['TemperatureArray'] = _TEMPERATUREARRAY
@@ -467,6 +531,7 @@ DESCRIPTOR.message_types_by_name['DiffDrive'] = _DIFFDRIVE
 DESCRIPTOR.message_types_by_name['EMDeviceConfig'] = _EMDEVICECONFIG
 DESCRIPTOR.message_types_by_name['ElectricField'] = _ELECTRICFIELD
 DESCRIPTOR.message_types_by_name['MagneticField'] = _MAGNETICFIELD
+DESCRIPTOR.message_types_by_name['ObjectArray'] = _OBJECTARRAY
 
 class RangeArray(message.Message):
   __metaclass__ = reflection.GeneratedProtocolMessageType
@@ -521,5 +586,11 @@ class MagneticField(message.Message):
   DESCRIPTOR = _MAGNETICFIELD
   
   # @@protoc_insertion_point(class_scope:AssisiMsg.MagneticField)
+
+class ObjectArray(message.Message):
+  __metaclass__ = reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _OBJECTARRAY
+  
+  # @@protoc_insertion_point(class_scope:AssisiMsg.ObjectArray)
 
 # @@protoc_insertion_point(module_scope)

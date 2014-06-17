@@ -44,7 +44,7 @@ Assisi communication protocol
 
     "<Bee Name>", "Base", "Enc", "DiffDrive"
     "...", "...", "GroundTruth","PoseStamped"
-    "...", "IR", "Ranges", "RangeArray"
+    "...", "Object", "Ranges", "ObjectArray"
     "...", "Light","Readings", "ColorStamped"
 
 .. csv-table:: Messages subscribed to by simulated Bees

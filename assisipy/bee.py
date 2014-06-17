@@ -24,20 +24,20 @@ WHEEL_DISTANCE = 0.4
 # Device ID definitions (for convenience)
 """ IR range sensors """
 
-IR_SIDE_RIGHT = 0 #: Sensor at 90°
-""" Right range sensor """
+OBJECT_SIDE_RIGHT = 0 #: Sensor at 90°
+""" Right object sensor """
 
-IR_RIGHT_FRONT = 1
-""" Right-front range sensor """
+OBJECT_RIGHT_FRONT = 1
+""" Right-front object sensor """
 
-IR_FRONT = 2
-""" Front range sensor """
+OBJECT_FRONT = 2
+""" Front object sensor """
 
-IR_LEFT_FRONT = 3
-""" Left-front range sensor """
+OBJECT_LEFT_FRONT = 3
+""" Left-front object sensor """
 
-IR_SIDE_LEFT = 4
-""" Left range sensor """
+OBJECT_SIDE_LEFT = 4
+""" Left object sensor """
 
 LIGHT_SENSOR = 5
 """ Light sensor """
@@ -45,6 +45,11 @@ LIGHT_SENSOR = 5
 
 TEMP_SENSOR = 6
 """ Temperature sensor """
+
+ARRAY = 10000
+"""
+Special value to get all sensor values from an array of sensors.
+"""
 
 class Bee:
     """ 
@@ -68,7 +73,7 @@ class Bee:
             self.__pub_addr = 'tcp://127.0.0.1:5556'
             self.__sub_addr = 'tcp://127.0.0.1:5555'
             self.__name = name
-            self.__ir_range_readings = dev_msgs_pb2.RangeArray()
+            self.__object_readings = dev_msgs_pb2.ObjectArray()
             self.__encoder_readings = dev_msgs_pb2.DiffDrive()
             self.__true_pose = base_msgs_pb2.PoseStamped()
             self.__light_readings = base_msgs_pb2.ColorStamped()
@@ -108,12 +113,12 @@ class Bee:
             self.__connected = True
             
             ### Range readings ###
-            if dev == 'IR':
+            if dev == 'Object':
                 if cmd == 'Ranges':
                     # Protect write with a lock
                     # to make sure all data is written before access
                     with self.__lock:
-                        self.__ir_range_readings.ParseFromString(data)
+                        self.__object_readings.ParseFromString(data)
                 else:
                     print('Unknown command {0} for {1}'.format(cmd, self.__name))
 
@@ -153,8 +158,13 @@ class Bee:
         
         TODO: Fix the hacky correction of invalid readings
         """
+        range = -1
         with self.__lock:
-            range = self.__ir_range_readings.range[id]
+            if self.__object_readings.range:
+                if id == ARRAY:
+                    range = [val for val in self.__object_readings.range]
+                else:
+                    range = self.__object_readings.range[id-OBJECT_SIDE_RIGHT]
 
         # Hack to fix error of range 0.0 appearing
         # when no obstacles are present
@@ -162,6 +172,43 @@ class Bee:
             range = 10
 
         return range
+
+    def get_object(self, id):
+        """ 
+        Returns the object type detected by sensor id. 
+        """
+        obj = None
+        with self.__lock:
+            if self.__object_readings.type:
+                if id == ARRAY:
+                    obj = [val for val in self.__object_readings.type]
+                else:
+                    obj = self.__object_readings.type[id-OBJECT_SIDE_RIGHT]
+
+        return obj
+
+    def get_object_with_range(self, id):
+        """
+        Returns the (object,range) pair detected by sensor id.
+        """
+        r = -1
+        obj = None
+        with self.__lock:
+            if self.__object_readings.range:
+                if id == ARRAY:
+                    r = [val for val in self.__object_readings.range]
+                    for i in range(len(r)):
+                        if r[i] < 0.000001:
+                            r[i] = self.__object_readings.max_range
+                    obj = [val for val in self.__object_readings.type]
+                else:
+                    r = self.__object_readings.range[id-OBJECT_SIDE_RIGHT]
+                    # Hack to fix range 0.0 when no obstacle is present
+                    if r < 0.000001:
+                        r = self.__object_readings.max_range
+                    obj = self.__object_readings.type[id-OBJECT_SIDE_RIGHT]
+
+        return (obj,r)
 
     def get_temp(self, id = TEMP_SENSOR):
         """

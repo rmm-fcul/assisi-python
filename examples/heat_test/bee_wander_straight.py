@@ -82,7 +82,7 @@ class WanderStraight(Thread):
         self._update_count += 1
         if self._state == WALKING:
             # Check sensors
-            if self._bee.get_range(bee.IR_FRONT) < 2:
+            if self._bee.get_range(bee.OBJECT_FRONT) < 2:
                 self.turn_left()
                 self._turned = 0.0
                 self._state = TURNING

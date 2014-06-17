@@ -31,11 +31,11 @@ class BeeWander:
         """
         while True:
             self.go_straight()
-            while ((self.__bee.get_range(bee.IR_FRONT) < 3)
-                   and (self.__bee.get_range(bee.IR_RIGHT_FRONT) < 4)):
+            while ((self.__bee.get_range(bee.OBJECT_FRONT) < 3)
+                   and (self.__bee.get_range(bee.OBJECT_RIGHT_FRONT) < 4)):
                 self.turn_left()
-            while ((self.__bee.get_range(bee.IR_FRONT) < 3)
-                   and (self.__bee.get_range(bee.IR_LEFT_FRONT) < 4)):
+            while ((self.__bee.get_range(bee.OBJECT_FRONT) < 3)
+                   and (self.__bee.get_range(bee.OBJECT_LEFT_FRONT) < 4)):
                 self.turn_right()
 
 if __name__ == '__main__':

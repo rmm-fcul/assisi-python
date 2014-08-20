@@ -81,7 +81,7 @@ TEMP_MIN = 25
 """
 Minimum allowed setpoint for the Peltier heater, in °C.
 """
-TEMP_MAX = 45
+TEMP_MAX = 50
 """
 Maximum allowed setpoint for the peltier heater, in °C.
 """

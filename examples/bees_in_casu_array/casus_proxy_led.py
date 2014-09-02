@@ -32,9 +32,9 @@ class CasuController:
         """
         while True:
             if self.__casu.get_range(casu.IR_N) < 2:
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 1, 0, 0)
+                self.__casu.set_diagnostic_led_rgb(1, 0, 0)
             elif self.__casu.get_range(casu.IR_S) < 2:
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 0, 1, 0)
+                self.__casu.set_diagnostic_led_rgb(0, 1, 0)
             else:
                 self.__casu.diagnostic_led_standby(casu.DLED_TOP)
 

@@ -11,8 +11,7 @@ Assisi communication protocol
     
     "<Casu Name>", "Temp", "Temperatures", "TemperatureArray",  
     "<Casu Name>", "IR", "Ranges", "RangeArray", (Change naming)
-    "<Casu Name>", "Acc", "Measurements", "VibrationArray", (Data not
-    valid!)
+    "<Casu Name>", "Acc", "Measurements", "VibrationArray", (Data not valid!)
     "<Casu Name>", "CommEth", "<Target Casu>", "String"
 
 .. csv-table:: Messages subscribed to by CASUs

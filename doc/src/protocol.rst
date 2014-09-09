@@ -11,7 +11,9 @@ Assisi communication protocol
     
     "<Casu Name>", "Temp", "Temperatures", "TemperatureArray",  
     "<Casu Name>", "IR", "Ranges", "RangeArray", (Change naming)
-    "<Casu Name>", "Acc", "Measurements", "VibrationArray", (Data not valid!)
+    "<Casu Name>", "Acc", "Measurements", "VibrationArray", (Data not
+    valid!)
+    "<Casu Name>", "CommEth", "<Target Casu>", "String"
 
 .. csv-table:: Messages subscribed to by CASUs
    :header: "Name", "Device", "Command", "Data Message Type"
@@ -30,6 +32,7 @@ Assisi communication protocol
     "<Casu Name>", "EM", "efield", "ElectricField"
     "<Casu Name>", "EM", "mfield", "MagneticField"
     "<Casu Name>", "EM", "Off", "Temperature"
+    "<Casu Name>", "CommEth", "<Source Casu>", "String"
 
 .. csv-table:: Messages published by the Simulator
    :header: "Name", "Device", "Command", "Data Message Type"

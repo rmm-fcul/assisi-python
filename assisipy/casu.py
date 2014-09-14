@@ -122,7 +122,7 @@ class Casu:
     :param bool log: A variable indicating whether to log all incoming and outgoing data. If set to true, a logfile in the form 'YYYY-MM-DD-HH-MM-SS-name.csv' is created.
     """
     
-    def __init__(self, rtc_file_name='', name = 'Casu', log = False, log_folder = '.'):
+    def __init__(self, rtc_file_name='casu.rtc', name = 'Casu', log = False, log_folder = '.'):
         
         if rtc_file_name:
             # Parse the rtc file

@@ -7,7 +7,6 @@ A simple simulation environment with one Casu and one bee.
 
 from assisipy import sim
 
-from math import pi
 
 if __name__ == '__main__':
 

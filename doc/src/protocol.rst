@@ -12,7 +12,7 @@ Assisi communication protocol
     "<Casu Name>", "Temp", "Temperatures", "TemperatureArray",  
     "<Casu Name>", "IR", "Ranges", "RangeArray", (Change naming)
     "<Casu Name>", "Acc", "Measurements", "VibrationArray", (Data not valid!)
-    "<Casu Name>", "CommEth", "<Target Casu>", "String"
+    "<Target Name>", "CommEth", "<Casu Name>", "String", (Comunication message, addressed directly to target!)
 
 .. csv-table:: Messages subscribed to by CASUs
    :header: "Name", "Device", "Command", "Data Message Type"

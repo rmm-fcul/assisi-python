@@ -67,37 +67,38 @@ class Bee:
         
         if rtc_file_name:
             # Parse the rtc file
-            pass
+            raise NotImplementedError("RTC file parsing for Bees is not implemented yet. Please call the constructor with the name=beename argument.")
         else:
             # Use default values
             self.__pub_addr = 'tcp://127.0.0.1:5556'
             self.__sub_addr = 'tcp://127.0.0.1:5555'
             self.__name = name
-            self.__object_readings = dev_msgs_pb2.ObjectArray()
-            self.__encoder_readings = dev_msgs_pb2.DiffDrive()
-            self.__true_pose = base_msgs_pb2.PoseStamped()
-            self.__light_readings = base_msgs_pb2.ColorStamped()
-            self.__temp_readings = dev_msgs_pb2.TemperatureArray()
+        
+        self.__object_readings = dev_msgs_pb2.ObjectArray()
+        self.__encoder_readings = dev_msgs_pb2.DiffDrive()
+        self.__true_pose = base_msgs_pb2.PoseStamped()
+        self.__light_readings = base_msgs_pb2.ColorStamped()
+        self.__temp_readings = dev_msgs_pb2.TemperatureArray()
 
-            # Create the data update thread
-            self.__connected = False
-            self.__context = zmq.Context(1)
-            self.__comm_thread = threading.Thread(target=self.__update_readings)
-            self.__comm_thread.daemon = True
-            self.__lock =threading.Lock()
-            self.__comm_thread.start()
+        # Create the data update thread
+        self.__connected = False
+        self.__context = zmq.Context(1)
+        self.__comm_thread = threading.Thread(target=self.__update_readings)
+        self.__comm_thread.daemon = True
+        self.__lock =threading.Lock()
+        self.__comm_thread.start()
 
-            # Connect the publisher socket
-            self.__pub = self.__context.socket(zmq.PUB)
-            self.__pub.connect(self.__pub_addr)
+        # Connect the publisher socket
+        self.__pub = self.__context.socket(zmq.PUB)
+        self.__pub.connect(self.__pub_addr)
 
-            # Wait for the connection
-            while not self.__connected:
-                pass
-            print('{0} connected!'.format(self.__name))
+        # Wait for the connection
+        while not self.__connected:
+            pass
+        print('{0} connected!'.format(self.__name))
 
-            # Wait one more second to get all the data
-            time.sleep(0.5)
+        # Wait one more second to get all the data
+        time.sleep(0.5)
 
     def __update_readings(self):
         """ 

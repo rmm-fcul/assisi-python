@@ -175,7 +175,7 @@ class Casu:
 
         # Create inter-casu communication sockets
         self.__msg_queue = []
-        if self.__msg_pub_addr:
+        if self.__msg_pub_addr and self.__neighbors:
             self.__msg_pub = self.__context.socket(zmq.PUB)
             self.__msg_pub.bind(self.__msg_pub_addr)
             self.__msg_sub = self.__context.socket(zmq.SUB)

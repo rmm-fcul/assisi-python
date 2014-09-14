@@ -33,13 +33,15 @@ if __name__ == '__main__':
     mybee = bee.Bee(name=sys.argv[1])
 
     random.seed()
-
-    go_straight(mybee)
+    count = 0
 
     # Naive wander control loop
     while True:
         while mybee.get_range(bee.OBJECT_FRONT) < 2:
             turn_random(mybee)
         go_straight(mybee)
+        count += 1
+        if count % 10 == 0:
+            print("I'm feeling {0} degrees.".format(mybee.get_temp()))
         sleep(0.1)
 

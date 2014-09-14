@@ -34,8 +34,6 @@ if __name__ == '__main__':
 
     random.seed()
 
-    go_straight(mybee)
-
     # Naive wander control loop
     while True:
         while mybee.get_range(bee.OBJECT_FRONT) < 2:

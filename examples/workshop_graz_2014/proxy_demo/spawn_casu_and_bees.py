@@ -17,10 +17,11 @@ if __name__ == '__main__':
 
     # Spawn bees at random locations
     random.seed()
-    num_bees = 5
-    r_max = 10 # Arena radius
-    for i in range(num_bees):
-        r = random.uniform(-r_max,r_max)
+    num_bees = 3
+    r_max = 12 # Arena radius is 15
+    r_min = 2  # Casu radius is 1
+    for i in range(1,num_bees+1):
+        r = random.uniform(r_min,r_max)
         a = random.uniform(-pi,pi)
         yaw = random.uniform(-pi,pi)
         simctrl.spawn('Bee','bee-'+str(i),(r*cos(a),r*sin(a),yaw))

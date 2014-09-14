@@ -122,9 +122,18 @@ class Casu:
     :param bool log: A variable indicating whether to log all incoming and outgoing data. If set to true, a logfile in the form 'YYYY-MM-DD-HH-MM-SS-name.csv' is created.
     """
     
-    def __init__(self, rtc_file_name='casu.rtc', name = 'Casu', log = False, log_folder = '.'):
+    def __init__(self, rtc_file_name='casu.rtc', name = '', log = False, log_folder = '.'):
         
-        if rtc_file_name:
+
+        if name:
+            # Use default values
+            self.__pub_addr = 'tcp://127.0.0.1:5556'
+            self.__sub_addr = 'tcp://127.0.0.1:5555'
+            self.__name = name
+            self.__neighbors = None
+            self.__msg_pub_addr = None
+            self.__msg_sub = None
+        else:
             # Parse the rtc file
             with open(rtc_file_name) as rtc_file:
                 rtc = yaml.safe_load(rtc_file)
@@ -135,14 +144,7 @@ class Casu:
             self.__neighbors = rtc['neighbors']
             self.__msg_sub = None
 
-        else:
-            # Use default values
-            self.__pub_addr = 'tcp://127.0.0.1:5556'
-            self.__sub_addr = 'tcp://127.0.0.1:5555'
-            self.__name = name
-            self.__neighbors = None
-            self.__msg_pub_addr = None
-            self.__msg_sub = None
+
 
         self.__stop = False
 

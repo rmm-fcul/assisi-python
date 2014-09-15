@@ -60,6 +60,6 @@ if __name__=='__main__':
             blue = 1
             count += 1
         mycasu.set_diagnostic_led_rgb(r=red,g=green,b=blue)
-        print('Current detection count: {0}'.format(count))
+        print('Total detection count: {0}'.format(count))
         sleep(1)
             

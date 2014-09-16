@@ -12,17 +12,17 @@ from assisipy import casu
 
 from time import sleep
 
-heating_temp = 38
-cooling_temp = 25
-
-HEATING = 1
-COOLING = 0
-
-period = 60
-
 if __name__ == '__main__':
 
-    heater = casu.Casu()
+    heating_temp = 38
+    cooling_temp = 25
+
+    HEATING = 1
+    COOLING = 0
+
+    period = 60
+
+    heater = casu.Casu(name='casu-001')
     state = COOLING
     
     while True:
@@ -34,6 +34,6 @@ if __name__ == '__main__':
             state = COOLING
             heater.set_temp(cooling_temp)
             heater.set_diagnostic_led_rgb(b=1)
-        sleep(60)
+        sleep(period)
 
     

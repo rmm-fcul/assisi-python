@@ -31,5 +31,5 @@ msg_addr : tcp://*:50203
 neighbors:
     west :
         name    : casu-004
-        address : tcp://localhost:50204
+        address : tcp://casu-004:50204
 

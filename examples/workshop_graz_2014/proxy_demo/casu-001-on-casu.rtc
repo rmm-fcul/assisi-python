@@ -1,9 +1,9 @@
-# Run-Time Configuration file for casu-002
+# Run-Time Configuration file for casu-001
 # Adjust the neighbors parameters to adapt to simulation or on-casu deployment
 
 # Name of the Casu to connect to
-# Casu naming convention is casu-0xy, where xy is the casu number,
-name     : casu-004
+# Casu naming convention is casu-0xy, where xy is the casu unique id number,
+name     : casu-001
 
 # Address at which the Casu listens for incoming commands
 # (i.e., the address to which the controller publishes
@@ -11,7 +11,7 @@ name     : casu-004
 # 
 # Default value (local simulator and on-Casu deployment):
 # tcp://127.0.0.1:5556
-pub_addr : tcp://casu-004:5556
+pub_addr : tcp://localhost:5556
 
 # Address to which the Casu publishes sensor data
 # (i.e., address from which the controller
@@ -19,18 +19,17 @@ pub_addr : tcp://casu-004:5556
 #
 # Default value (local simulator and on-Casu deployment):
 # tcp://127.0.0.1:5555
-sub_addr : tcp://casu-004:5555
+sub_addr : tcp://localhost:5555
 
 # Messaging socket address
 # tcp://*:50102 will work for both simulation and deployment
 # Leave empty for no inter-casu comms.
-msg_addr : tcp://*:50204
+msg_addr : tcp://*:50201
 
-# Neighbor specification for simulation
-# Comment this block for deployment on Casus
+# Neighbor specification (for simulation)
+# Adjust the address for on-casu deployment
 neighbors:
-    east :
-        name    : casu-003
-        address : tcp://casu-003:50203
-
+    west :
+        name    : casu-002
+        address : tcp://casu-002:50202
 

@@ -5,6 +5,7 @@
 Count bees and indicate the count with diagnostic LED.
 """
 
+import sys
 from time import sleep
 
 from assisipy import casu
@@ -28,7 +29,8 @@ def calibrate_thresholds(thiscasu, thresholds):
 
 if __name__=='__main__':
 
-    mycasu = casu.Casu(name='casu-001',log=True,log_folder='logs')
+    rtc = sys.argv[1]
+    mycasu = casu.Casu(rtc_file_name=rtc,log=True,log_folder='logs')
     
     thresholds = mycasu.get_ir_raw_value(casu.ARRAY)
     calibrate_thresholds(mycasu, thresholds)

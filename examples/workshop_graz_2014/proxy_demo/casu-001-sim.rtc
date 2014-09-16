@@ -1,9 +1,8 @@
-# Run-Time Configuration file for Casu 001
-# Suitable for local simulation and Casu deployment
+# Run-Time Configuration file for casu-001
+# Adjust the neighbors parameters to adapt to simulation or on-casu deployment
 
 # Name of the Casu to connect to
-# Casu naming convention is Casu-rr-cc, where rr denotes the row,
-# and cc denotes the column where the Casu is located
+# Casu naming convention is casu-0xy, where xy is the casu unique id number,
 name     : casu-001
 
 # Address at which the Casu listens for incoming commands
@@ -23,15 +22,14 @@ pub_addr : tcp://localhost:5556
 sub_addr : tcp://localhost:5555
 
 # Messaging socket address
-# This will work for both simulation and deployment
-# Comment out if no neighbors are specified!
-msg_addr : tcp://*:50101
+# tcp://*:50102 will work for both simulation and deployment
+# Leave empty for no inter-casu comms.
+msg_addr : tcp://*:50201
 
-# Neighbor specification for simulation
-# Comment this block for deployment on Casus
+# Neighbor specification (for simulation)
+# Adjust the address for on-casu deployment
 neighbors:
-#    south :
-#        name    : Casu-002
-#        address : tcp://127.0.0.1:50202
-
+    west :
+        name    : casu-002
+        address : tcp://localhost:50202
 

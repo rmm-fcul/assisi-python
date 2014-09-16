@@ -13,38 +13,60 @@ from msg import base_msgs_pb2
 
 
 LENGTH = 2
-""" Bee length, in centimetres. """
+"""
+Bee length, in centimetres. 
+"""
 
 WIDTH = 0.8
-""" Bee width, in centimetres. """
+"""
+Bee width, in centimetres. 
+"""
 
 WHEEL_DISTANCE = 0.4
-""" Axle width of the underlying differential-wheeled model. """
+"""
+Axle width of the underlying differential-wheeled model. 
+"""
 
 # Device ID definitions (for convenience)
-""" IR range sensors """
+"""
+IR range sensors 
+"""
 
 OBJECT_SIDE_RIGHT = 0 #: Sensor at 90°
-""" Right object sensor """
+"""
+Right object sensor 
+"""
 
 OBJECT_RIGHT_FRONT = 1
-""" Right-front object sensor """
+"""
+Right-front object sensor 
+"""
 
 OBJECT_FRONT = 2
-""" Front object sensor """
+"""
+Front object sensor 
+"""
 
 OBJECT_LEFT_FRONT = 3
-""" Left-front object sensor """
+"""
+Left-front object sensor 
+"""
 
 OBJECT_SIDE_LEFT = 4
-""" Left object sensor """
+"""
+Left object sensor 
+"""
 
 LIGHT_SENSOR = 5
-""" Light sensor """
+"""
+Light sensor 
+"""
 
 
 TEMP_SENSOR = 6
-""" Temperature sensor """
+"""
+Temperature sensor 
+"""
 
 ARRAY = 10000
 """

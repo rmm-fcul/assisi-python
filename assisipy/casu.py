@@ -191,7 +191,7 @@ class Casu:
         self.__comm_thread.start()
         # Wait for the connection
         while not self.__connected:
-            pass
+            time.sleep(1)
         print('{0} connected!'.format(self.__name))
             
 

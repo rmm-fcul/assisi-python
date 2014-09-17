@@ -114,9 +114,9 @@ class Bee:
         self.__pub = self.__context.socket(zmq.PUB)
         self.__pub.connect(self.__pub_addr)
 
-        # Wait for the connection
+        # Wait for the connection, check every second
         while not self.__connected:
-            pass
+            time.sleep(1)
         print('{0} connected!'.format(self.__name))
 
         # Wait one more second to get all the data

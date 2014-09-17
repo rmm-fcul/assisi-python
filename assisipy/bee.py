@@ -264,6 +264,29 @@ class Bee:
                     self.__light_readings.color.green,
                     self.__light_readings.color.blue)
 
+    def set_color(self,r=0,g=0,b=0):
+        """
+        Set the color of the bee. This can be useful for diagnostic and
+        demonstration purposes.
+
+        :param float r: Red component intensity, between 0 and 1.
+        :param float g: Green component intensity, between 0 and 1.
+        :param float b: Blue component intensity, between 0 and 1.
+        """
+
+        # Limit values to [0,1] range
+        r = sorted([0,r,1])[1]
+        g = sorted([0,g,1])[1]
+        b = sorted([0,b,1])[1]
+
+        color = base_msgs_pb2.ColorStamped()
+        color.color.red = r
+        color.color.green = g
+        color.color.blue = b
+
+        self.__pub.send_multipart([self.__name,"Color","Set",color.SerializeToString()])
+        
+
     def get_true_pose(self):
         """ 
         :return: (x,y,yaw) tuple, representing te true pose of the bee

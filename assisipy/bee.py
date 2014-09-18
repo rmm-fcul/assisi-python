@@ -264,10 +264,20 @@ class Bee:
                     self.__light_readings.color.green,
                     self.__light_readings.color.blue)
 
-    def set_color(self,r=0,g=0,b=0):
+    def set_color(self,r=0.93,g=0.79,b=0):
         """
         Set the color of the bee. This can be useful for diagnostic and
         demonstration purposes.
+
+        Take note of default values! E.g. in order to change the color to blue, 
+        you have to call the function with all parameters explicitly set:
+
+        b.set_color(r=0,g=0,b=1)
+
+        To revert to "original" bee coloring, call the function without
+        any parameters:
+
+        b.set_color()
 
         :param float r: Red component intensity, between 0 and 1.
         :param float g: Green component intensity, between 0 and 1.

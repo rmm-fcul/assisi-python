@@ -323,7 +323,10 @@ class Casu:
          """
         with self.__lock:
             if self.__temp_readings.temp:
-                return self.__temp_readings.temp[id - TEMP_N]
+                if id == ARRAY:
+                    return [t for t in self.__temp_readings.temp]
+                else:
+                    return self.__temp_readings.temp[id - TEMP_N]
             else:
                 return -1
 

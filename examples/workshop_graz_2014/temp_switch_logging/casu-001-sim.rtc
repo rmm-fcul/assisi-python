@@ -1,0 +1,9 @@
+# Simulation deployment
+name: casu-001
+pub_addr: tcp://localhost:5556
+sub_addr: tcp://localhost:5555
+msg_addr: tcp://*:50201
+neighbors:
+    west:
+        name: casu-002
+        address: tcp://localhost:50202

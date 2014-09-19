@@ -153,7 +153,7 @@ class Casu:
         self.__ir_range_readings = dev_msgs_pb2.RangeArray()
         self.__temp_readings = dev_msgs_pb2.TemperatureArray()
         self.__diagnostic_led = [0,0,0,0] # Not used!
-        self.__acc_readings = dev_msgs_pb2.VibrationArray()
+        self.__acc_readings = dev_msgs_pb2.VibrationReadingArray()
 
         # Create the data update thread
         self.__connected = False
@@ -227,8 +227,16 @@ class Casu:
                 if cmd == 'Measurements':
                     with self.__lock:
                         self.__acc_readings.ParseFromString(data)
-                    self.__write_to_log(['acc_freq', time.time()] + [f for f in self.__acc_readings.freq])
-                    self.__write_to_log(['acc_amp', time.time()] + [a for a in self.__acc_readings.amplitude])
+
+                    acc_freqs = [0, 0, 0, 0]
+                    acc_amps = [0, 0, 0, 0]
+                    
+                    for i in range(0, 4):
+                        acc_freqs[i] = self.__acc_readings.reading[i].freq
+                        acc_amps[i] = self.__acc_readings.reading[i].amplitude
+
+                    self.__write_to_log(['acc_freq', time.time()] + [f for f in acc_freqs])
+                    self.__write_to_log(['acc_amp', time.time()] + [a for a in acc_amps])
             else:
                 print('Unknown device {0} for {1}'.format(dev, self.__name))
             
@@ -420,7 +428,7 @@ class Casu:
         :param float f: Vibration frequency, between 0 and 500 Hz.
         """
         
-        vibration = dev_msgs_pb2.Vibration()
+        vibration = dev_msgs_pb2.VibrationSetpoint()
         vibration.freq = f
         vibration.amplitude = 0
         self.__pub.send_multipart([self.__name, "VibeMotor", "On",
@@ -440,19 +448,19 @@ class Casu:
     def get_vibration_amplitude(self, id):
         """ 
         Returns the vibration amplitude reported by sensor id.
+
+        .. note::
+
+           NOT implemented!
         """
-        with self.__lock:
-            if self.__acc_readings.amplitude:
-                return self.__acc_readings.amplitude[id - ACC_N]
-            else:
-                return -1
+        pass
 
     def vibration_standby(self, id  = VIBE_ACT):
         """
         Turn the vibration actuator id off.
         """
         
-        vibration = dev_msgs_pb2.Vibration()
+        vibration = dev_msgs_pb2.VibrationSetpoint()
         vibration.freq = 0
         vibration.amplitude = 0
         self.__pub.send_multipart([self.__name, "VibeMotor", "Off",

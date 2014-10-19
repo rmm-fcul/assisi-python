@@ -21,6 +21,8 @@ if __name__ == '__main__':
     casu_dist = 8
     num_bees = 36
 
+    radius = 40 # Arena radius
+    
     # Spawn the Casus and run their controllers
     casus = []
     x = range(-int(casu_dist*casu_cols/2), int(casu_dist*(casu_cols+1)/2), casu_dist)
@@ -28,11 +30,11 @@ if __name__ == '__main__':
     for i in range(casu_rows):
         for j in range(casu_cols):
             simctrl.spawn('Casu', 'Casu-0{0}-0{1}'.format(i,j), (x[i],y[j],0))
-    
+
     # Spawn the bees at randomly generated poses and let them run :)
     bees = []
     for i in range(1,num_bees+1):
-        d = 38*random()
+        d = 0.9*radius*random()
         a = 2*pi*random()
         if i < 10:
             simctrl.spawn('Bee', 'Bee-00{0}'.format(i), (d*cos(a), d*sin(a), a))

@@ -45,9 +45,11 @@ Assisi communication protocol
    :widths: 20, 20, 20, 40
 
     "<Bee Name>", "Base", "Enc", "DiffDrive"
+    "...", "...", "VelRef", "DiffDrive"
     "...", "...", "GroundTruth","PoseStamped"
     "...", "Object", "Ranges", "ObjectArray"
     "...", "Light","Readings", "ColorStamped"
+    "...", "Color", "ColorVal", "ColorSamped"
 
 .. csv-table:: Messages subscribed to by simulated Bees
    :header: "Name", "Device", "Command", "Data Message Type"

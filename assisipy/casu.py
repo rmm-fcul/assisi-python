@@ -154,6 +154,8 @@ class Casu:
         self.__temp_readings = dev_msgs_pb2.TemperatureArray()
         self.__diagnostic_led = [0,0,0,0] # Not used!
         self.__acc_readings = dev_msgs_pb2.VibrationReadingArray()
+        self.__peltier_setpoint = dev_msgs_pb2.Temperature()
+        self.__peltier_on = False
 
         # Create the data update thread
         self.__connected = False
@@ -238,6 +240,19 @@ class Casu:
 
                         self.__write_to_log(['acc_freq', time.time()] + [f for f in acc_freqs])
                         self.__write_to_log(['acc_amp', time.time()] + [a for a in acc_amps])
+            elif dev == 'Peltier':
+                if cmd == 'Off':
+                    self.__peltier_on = False
+                    with self.__lock:
+                        self.__peltier_setpoint.ParseFromString(data)
+                    self.__write_to_log(['Pelter', '0', time.time(), self.__peltier_setpoint.temp])
+                elif cmd == 'On':
+                    self.__peltier_on = True
+                    with self.__lock:
+                        self.__peltier_setpoint.ParseFromString(data)
+                    self.__write_to_log(['Pelter', '1', time.time(), self.__peltier_setpoint.temp])
+                else:
+                    print('Unknown command {0} for {1}'.format(cmd, self.__name))
             else:
                 print('Unknown device {0} for {1}'.format(dev, self.__name))
             
@@ -372,6 +387,15 @@ class Casu:
         self.__pub.send_multipart([self.__name, device, "Off",
                                    temp_msg.SerializeToString()])
         self.__write_to_log([device + "_temp", time.time(), 0])
+
+    def get_peltier_setpoint(self, id = PELTIER_ACT):
+        """
+        Get the temperature actuator setpoint and state.
+        
+        :return: (temp,on) tuple, where temp is the temperature setpoint,
+        and on is True if the actuator is switched on.
+        """
+        return(self.__peltier_setpoint.temp,self.__peltier_on)
 
     def set_efield_freq(self, f, id = EM_ACT):
         """

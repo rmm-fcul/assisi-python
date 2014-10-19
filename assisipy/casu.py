@@ -228,15 +228,16 @@ class Casu:
                     with self.__lock:
                         self.__acc_readings.ParseFromString(data)
 
-                    acc_freqs = [0, 0, 0, 0]
-                    acc_amps = [0, 0, 0, 0]
+                    if self.__acc_readings.reading:
+                        acc_freqs = [0, 0, 0, 0]
+                        acc_amps = [0, 0, 0, 0]
                     
-                    for i in range(0, 4):
-                        acc_freqs[i] = self.__acc_readings.reading[i].freq
-                        acc_amps[i] = self.__acc_readings.reading[i].amplitude
+                        for i in range(0, 4):
+                            acc_freqs[i] = self.__acc_readings.reading[i].freq
+                            acc_amps[i] = self.__acc_readings.reading[i].amplitude
 
-                    self.__write_to_log(['acc_freq', time.time()] + [f for f in acc_freqs])
-                    self.__write_to_log(['acc_amp', time.time()] + [a for a in acc_amps])
+                        self.__write_to_log(['acc_freq', time.time()] + [f for f in acc_freqs])
+                        self.__write_to_log(['acc_amp', time.time()] + [a for a in acc_amps])
             else:
                 print('Unknown device {0} for {1}'.format(dev, self.__name))
             

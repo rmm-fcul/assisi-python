@@ -7,14 +7,13 @@ Assisi communication protocol
 .. csv-table:: Messages published by CASUs
    :header: "Name", "Device", "Command", "Data Message Type", "Note"
    :widths: 20, 20, 20, 40, 40
-
-    
-    "<Casu Name>", "Temp", "Temperatures", "TemperatureArray",  
-    "<Casu Name>", "IR", "Ranges", "RangeArray", (Change naming)
-    "<Casu Name>", "Acc", "Measurements", "VibrationArray", (Data not valid!)
-    "<Casu Name>", "Peltier", "On", "Temperature", Temperature setpoint
-    "<Casu Name>", "Peltier", "Off", "Temperature", Temperature setpoint
-    "<Target Name>", "CommEth", "<Casu Name>", "String", (Comunication message, addressed directly to target!)
+   
+    "<Casu Name>", "Temp", "Temperatures", "TemperatureArray",  "bla"
+    "<Casu Name>", "IR", "Ranges", "RangeArray", "(Change naming)"
+    "<Casu Name>", "Acc", "Measurements", "VibrationArray", "(Data not valid!)"
+    "<Casu Name>", "Peltier", "On", "Temperature", "Temperature setpoint"
+    "<Casu Name>", "Peltier", "Off", "Temperature", "Temperature setpoint"
+    "<Target Name>", "CommEth", "<Casu Name>", "String", "(Comunication message, addressed directly to target!)"
 
 
 .. csv-table:: Messages subscribed to by CASUs

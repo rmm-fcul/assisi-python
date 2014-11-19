@@ -101,6 +101,8 @@ class Bee:
         self.__true_pose = base_msgs_pb2.PoseStamped()
         self.__light_readings = base_msgs_pb2.ColorStamped()
         self.__temp_readings = dev_msgs_pb2.TemperatureArray()
+        self.__vel_setpoints = dev_msgs_pb2.DiffDrive()
+        self.__color_setpoint = base_msgs_pb2.ColorStamped()
 
         # Create the data update thread
         self.__connected = False
@@ -153,6 +155,9 @@ class Bee:
                 elif cmd == 'GroundTruth':
                     with self.__lock:
                         self.__true_pose.ParseFromString(data)
+                elif cmd == 'VelRef':
+                    with self.__lock:
+                        self.__vel_setpoints.ParseFromString(data)
                 else:
                     print('Unknown command {0} for Bee {1}'.format(cmd, self.__name))
             ### Light sensors ###
@@ -168,6 +173,14 @@ class Bee:
                 if cmd == 'Temperatures':
                     with self.__lock:
                         self.__temp_readings.ParseFromString(data)
+                else:
+                    print('Unknown command {0} for Bee {1}'.format(cmd, self.__name))
+                    
+            ### Diagnostic color actuator ###
+            elif dev == 'Color':
+                if cmd == 'ColorVal':
+                    with self.__lock:
+                        self.__color_setpoint.ParseFromString(data)
                 else:
                     print('Unknown command {0} for Bee {1}'.format(cmd, self.__name))
 
@@ -326,6 +339,23 @@ class Bee:
         vel.vel_right = vel_right
         self.__pub.send_multipart([self.__name, "Base", "Vel", 
                                    vel.SerializeToString()])
+
+
+    def get_vel_ref(self):
+        """
+        :return: (vel_left,vel_right) tuple of wheel velocity setpoints.
+        """
+        return(self.__vel_setpoints.vel_left, 
+               self.__vel_setpoints.vel_right)
+
+    def get_color(self):
+        """
+        :return: (r,g,b) tuple of bee color setpoints.
+        """
+        return(self.__color_setpoint.color.red,
+               self.__color_setpoint.color.green,
+               self.__color_setpoint.color.blue)
+
 
 if __name__ == '__main__':
     

@@ -46,7 +46,7 @@ class Control:
 
         Spawn an object in the simulated world.
             
-        :param str obj_type: Type of object to spawn. Currently supported types are 'Casu', 'EPuck' and 'Physical'
+        :param str obj_type: Type of object to spawn. Currently supported types are 'Casu', 'Bee', 'EPuck' and 'Physical'
         :param str name: Name of the object. Must be unique in the world.
         :param tuple pose: An (x,y,yaw) tuple.
         :param tuple polygon: A tuple of vertex coordinates ((x1,y1),(x2,y2),...). If obj_type is 'Physical', this defines the shape of the object.

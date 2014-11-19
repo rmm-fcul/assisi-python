@@ -94,6 +94,14 @@ class Control:
         self.__pub.send_multipart(['Sim', 'Teleport', obj_name,
                                    data.SerializeToString()])
 
+    def reset_temperature (self, temperature):
+        """
+        Reset world temperature to given value
+        """
+        temp_msg = dev_msgs_pb2.Temperature ()
+        temp_msg.temp = temp
+        self.__pub.send_multipart (['Sim', 'Heat', 'reset', temp_msg.SerializeToString ()]
+
     def kill(self, obj_name):
         """
         Kill an object in the simulated world.

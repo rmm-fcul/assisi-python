@@ -10,6 +10,7 @@ import zmq
 
 from msg import sim_msgs_pb2
 from msg import base_msgs_pb2
+from msg import dev_msgs_pb2
 
 class Control:
     """ 
@@ -94,13 +95,13 @@ class Control:
         self.__pub.send_multipart(['Sim', 'Teleport', obj_name,
                                    data.SerializeToString()])
 
-    def reset_temperature (self, temperature):
+    def reset_temperature (self, temp):
         """
         Reset world temperature to given value
         """
         temp_msg = dev_msgs_pb2.Temperature ()
         temp_msg.temp = temp
-        self.__pub.send_multipart (['Sim', 'Heat', 'reset', temp_msg.SerializeToString ()]
+        self.__pub.send_multipart (['Sim', 'Heat', 'reset', temp_msg.SerializeToString ()])
 
     def kill(self, obj_name):
         """

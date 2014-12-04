@@ -14,58 +14,58 @@ from msg import base_msgs_pb2
 
 LENGTH = 2
 """
-Bee length, in centimetres. 
+Bee length, in centimetres.
 """
 
 WIDTH = 0.8
 """
-Bee width, in centimetres. 
+Bee width, in centimetres.
 """
 
 WHEEL_DISTANCE = 0.4
 """
-Axle width of the underlying differential-wheeled model. 
+Axle width of the underlying differential-wheeled model.
 """
 
 # Device ID definitions (for convenience)
 """
-IR range sensors 
+IR range sensors
 """
 
 OBJECT_SIDE_RIGHT = 0 #: Sensor at 90°
 """
-Right object sensor 
+Right object sensor
 """
 
 OBJECT_RIGHT_FRONT = 1
 """
-Right-front object sensor 
+Right-front object sensor
 """
 
 OBJECT_FRONT = 2
 """
-Front object sensor 
+Front object sensor
 """
 
 OBJECT_LEFT_FRONT = 3
 """
-Left-front object sensor 
+Left-front object sensor
 """
 
 OBJECT_SIDE_LEFT = 4
 """
-Left object sensor 
+Left object sensor
 """
 
 LIGHT_SENSOR = 5
 """
-Light sensor 
+Light sensor
 """
 
 
 TEMP_SENSOR = 6
 """
-Temperature sensor 
+Temperature sensor
 """
 
 ARRAY = 10000
@@ -74,28 +74,34 @@ Special value to get all sensor values from an array of sensors.
 """
 
 class Bee:
-    """ 
-    The low-level interface to Bee 'robots'. 
-    This clas provides an api for programming bee behaviors.
+    """
+    The low-level interface to Bee 'robots'.
+    This class provides an api for programming bee behaviors.
     It creates a connection to the data source, i.e., the simulated bee.
     Waits for the bee of specified by 'name' to be spawned into the simulator.
 
     :param string rtc_file_name: Name of the run-time-configuration (RTC) file. This file specifies the simulation connection parameters and the name of the simulated bee object.
     :param string name: The name of the bee (if not specified in the RTC file).
+    :param dict kwargs: accepts strings to override values for:
+        `pub_addr` (defaults to localhost:5556)
+        `sub_addr` (defautls to localhost:5555)
+
     """
-    
-    def __init__(self, rtc_file_name='', name = 'Bee'):
-        
-        
+
+    def __init__(self, rtc_file_name='', name = 'Bee', **kwargs):
+
+
         if rtc_file_name:
             # Parse the rtc file
             raise NotImplementedError("RTC file parsing for Bees is not implemented yet. Please call the constructor with the name=beename argument.")
         else:
-            # Use default values
-            self.__pub_addr = 'tcp://127.0.0.1:5556'
-            self.__sub_addr = 'tcp://127.0.0.1:5555'
+            # parse any keywords provided, otherwise take default values
+            self.__pub_addr = kwargs.get('pub_addr', 'tcp://127.0.0.1:5556')
+            self.__sub_addr = kwargs.get('sub_addr', 'tcp://127.0.0.1:5555')
+            #self.__pub_addr = 'tcp://127.0.0.1:5556'
+            #self.__sub_addr = 'tcp://127.0.0.1:5555'
             self.__name = name
-        
+
         self.__object_readings = dev_msgs_pb2.ObjectArray()
         self.__encoder_readings = dev_msgs_pb2.DiffDrive()
         self.__true_pose = base_msgs_pb2.PoseStamped()
@@ -125,18 +131,18 @@ class Bee:
         time.sleep(0.5)
 
     def __update_readings(self):
-        """ 
-        Get a message from Bee and update data. 
+        """
+        Get a message from Bee and update data.
         """
         self.__sub = self.__context.socket(zmq.SUB)
         self.__sub.connect(self.__sub_addr)
         #self.__sub.setsockopt(zmq.HWM, 1)
         self.__sub.setsockopt(zmq.SUBSCRIBE, self.__name)
-                    
+
         while True:
             [name, dev, cmd, data] = self.__sub.recv_multipart()
             self.__connected = True
-            
+
             ### Range readings ###
             if dev == 'Object':
                 if cmd == 'Ranges':
@@ -175,7 +181,7 @@ class Bee:
                         self.__temp_readings.ParseFromString(data)
                 else:
                     print('Unknown command {0} for Bee {1}'.format(cmd, self.__name))
-                    
+
             ### Diagnostic color actuator ###
             elif dev == 'Color':
                 if cmd == 'ColorVal':
@@ -189,9 +195,9 @@ class Bee:
 
 
     def get_range(self, id):
-        """ 
-        Returns the range reading corresponding to sensor id. 
-        
+        """
+        Returns the range reading corresponding to sensor id.
+
         TODO: Fix the hacky correction of invalid readings
         """
         range = -1
@@ -210,8 +216,8 @@ class Bee:
         return range
 
     def get_object(self, id):
-        """ 
-        Returns the object type detected by sensor id. 
+        """
+        Returns the object type detected by sensor id.
         """
         obj = None
         with self.__lock:
@@ -252,7 +258,7 @@ class Bee:
         """
         with self.__lock:
             return self.__temp_readings.temp[id - TEMP_SENSOR]
-        
+
 
     def get_vibration_frequency(self, id):
         """
@@ -282,7 +288,7 @@ class Bee:
         Set the color of the bee. This can be useful for diagnostic and
         demonstration purposes.
 
-        Take note of default values! E.g. in order to change the color to blue, 
+        Take note of default values! E.g. in order to change the color to blue,
         you have to call the function with all parameters explicitly set:
 
         b.set_color(r=0,g=0,b=1)
@@ -308,10 +314,10 @@ class Bee:
         color.color.blue = b
 
         self.__pub.send_multipart([self.__name,"Color","Set",color.SerializeToString()])
-        
+
 
     def get_true_pose(self):
-        """ 
+        """
         :return: (x,y,yaw) tuple, representing te true pose of the bee
                  in the world.
         """
@@ -319,13 +325,13 @@ class Bee:
             return (self.__true_pose.pose.position.x,
                     self.__true_pose.pose.position.y,
                     self.__true_pose.pose.orientation.z)
-    
+
     def set_vel(self, vel_left, vel_right):
-        """ 
-        Set wheel velocities. 
+        """
+        Set wheel velocities.
 
         Bee body velocities depend on wheel velocities in the following way:
-        
+
         .. math:: v = \\frac{v_{left}+v_{right}}{2}
         .. math:: \\omega = \\frac{v_{right}-v_{left}}{d}
 
@@ -337,7 +343,7 @@ class Bee:
         vel = dev_msgs_pb2.DiffDrive();
         vel.vel_left = vel_left
         vel.vel_right = vel_right
-        self.__pub.send_multipart([self.__name, "Base", "Vel", 
+        self.__pub.send_multipart([self.__name, "Base", "Vel",
                                    vel.SerializeToString()])
 
 
@@ -345,7 +351,7 @@ class Bee:
         """
         :return: (vel_left,vel_right) tuple of wheel velocity setpoints.
         """
-        return(self.__vel_setpoints.vel_left, 
+        return(self.__vel_setpoints.vel_left,
                self.__vel_setpoints.vel_right)
 
     def get_color(self):
@@ -358,7 +364,7 @@ class Bee:
 
 
 if __name__ == '__main__':
-    
+
     bee1 = Bee(name = 'Bee')
     bee1.set_vel(5, 5)
     while True:

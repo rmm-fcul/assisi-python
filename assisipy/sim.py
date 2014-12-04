@@ -29,7 +29,7 @@ class Control:
         if rtc_file_name:
             # Parse the rtc file
             raise NotImplementedError(
-                "RTC file parsing for Bees is not implemented yet. "
+                "RTC file parsing for Simulator control is not implemented yet. "
                 "Please call the constructor with the name=beename argument.")
             pass
         else:
@@ -39,6 +39,7 @@ class Control:
             self.__context = zmq.Context(1)
             self.__pub = self.__context.socket(zmq.PUB)
             self.__pub.connect(self.__pub_addr)
+
 
     def spawn(self,
               obj_type,

@@ -1,0 +1,16 @@
+# First, you need to launch the simulator environment
+# Here we assume that...
+#   the server IP address is 127.0.0.1; that 
+#   the server LISTENS on port 5156, meaning that the clients must PUBLISH to 5156
+#   the server EMITS from port 5155, meaning that clients must SUBSCRIBE to 5155
+# Then, to launch a bee and a CASU (only one directional):
+python spawn_eg.py -svr 127.0.0.1 -pp 5156
+
+# and to execute the bee behaviour:
+python bee_wander.py -bn bee-001 -pp 5156 -sp 5155
+
+# press <ctrl-c> to exit, and it should halt the bee in place.
+
+# no CASU behaviour is defined as yet.
+
+

@@ -40,6 +40,11 @@ nosetests.xml
 \#*#
 .#*
 
+# vim
+*.swp
+# rope
+.ropeproject/
+
 # Generated message files
 #assisipy/msg/*pb2.py
 

@@ -22,14 +22,18 @@ class Control:
 
     """
 
-    def __init__(self, rtc_file_name=''):
+    def __init__(self, rtc_file_name='', **kwargs):
 
         if rtc_file_name:
             # Parse the rtc file
+            raise NotImplementedError(
+                "RTC file parsing for Simulator control is not implemented yet. "
+                "Please call the constructor with the name=beename argument.")
             pass
         else:
-            # Use default values
-            self.__pub_addr = 'tcp://127.0.0.1:5556'
+            # parse any keywords provided, otherwise take default values
+            self.__pub_addr = kwargs.get('pub_addr', 'tcp://127.0.0.1:5556')
+            #self.__pub_addr = 'tcp://127.0.0.1:5556'
             self.__context = zmq.Context(1)
             self.__pub = self.__context.socket(zmq.PUB)
             self.__pub.connect(self.__pub_addr)

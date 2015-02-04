@@ -82,18 +82,24 @@ class Bee:
 
     :param string rtc_file_name: Name of the run-time-configuration (RTC) file. This file specifies the simulation connection parameters and the name of the simulated bee object.
     :param string name: The name of the bee (if not specified in the RTC file).
+    :param dict kwargs: accepts strings to override values for:
+        `pub_addr` (defaults to localhost:5556)
+        `sub_addr` (defautls to localhost:5555)
+
     """
     
-    def __init__(self, rtc_file_name='', name = 'Bee'):
+    def __init__(self, rtc_file_name='', name = 'Bee', **kwargs):
         
         
         if rtc_file_name:
             # Parse the rtc file
             raise NotImplementedError("RTC file parsing for Bees is not implemented yet. Please call the constructor with the name=beename argument.")
         else:
-            # Use default values
-            self.__pub_addr = 'tcp://127.0.0.1:5556'
-            self.__sub_addr = 'tcp://127.0.0.1:5555'
+            # parse any keywords provided, otherwise take default values
+            self.__pub_addr = kwargs.get('pub_addr', 'tcp://127.0.0.1:5556')
+            self.__sub_addr = kwargs.get('sub_addr', 'tcp://127.0.0.1:5555')
+            #self.__pub_addr = 'tcp://127.0.0.1:5556'
+            #self.__sub_addr = 'tcp://127.0.0.1:5555'
             self.__name = name
         
         self.__object_readings = dev_msgs_pb2.ObjectArray()

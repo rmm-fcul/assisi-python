@@ -1,0 +1,26 @@
+# First, you need to launch the simulator environment
+# Here we assume that...
+#   the server IP address is 127.0.0.1; that 
+#   the server LISTENS on port 5156, meaning that the clients must PUBLISH to 5156
+#   the server EMITS from port 5155, meaning that clients must SUBSCRIBE to 5155
+# 
+# Note: to set this up, if you have at least rev 30de0b2 then you can use the config
+# file `Playground_N.cfg` to initialise the server appropriately:
+#
+cp ./Playground_N.cfg <playground_dir>
+cd <playground_dir>
+./assisi_playground -c Playground_N.cfg
+# alternatively, you can use the command-line options
+./assisi_playground --pub_addr tcp://*:5155 --sub_addr tcp://*5156
+
+# Then, to launch a bee and a CASU (only one directional):
+python spawn_eg.py -svr 127.0.0.1 -pp 5156
+
+# and to execute the bee behaviour:
+python bee_wander.py -bn bee-001 -pp 5156 -sp 5155
+
+# press <ctrl-c> to exit, and it should halt the bee in place.
+
+# no CASU behaviour is defined as yet.
+
+

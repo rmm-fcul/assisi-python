@@ -1,0 +1,50 @@
+# A simple configuration file describing a 3x3 arena
+
+layer-01 :
+    # Casu names must be unique across the whole file!
+    casu-001-l01 :
+        pose : {x : -5, y : 5, yaw : 0}
+        sub_addr : tcp://localhost:5555
+        pub_addr : tcp://localhost:5556
+        msg_addr : tcp://localhost:50201
+    casu-002-l01 :
+        pose : {x : 0, y : 5, yaw : 0}
+        sub_addr : tcp://localhost:5555
+        pub_addr : tcp://localhost:5556
+        msg_addr : tcp://localhost:50202
+    casu-003-l01 :
+        pose : {x : 5, y : 5, yaw : 0}
+        sub_addr : tcp://localhost:5555
+        pub_addr : tcp://localhost:5556
+        msg_addr : tcp://localhost:50203
+    casu-004-l01 :
+        pose : {x : -5, y : 0, yaw : 0}
+        sub_addr : tcp://localhost:5555
+        pub_addr : tcp://localhost:5556
+        msg_addr : tcp://localhost:50204
+    casu-005-l01 :
+        pose : {x : 0, y : 0, yaw : 0}
+        sub_addr : tcp://localhost:5555
+        pub_addr : tcp://localhost:5556
+        msg_addr : tcp://localhost:50205
+    casu-006-l01 :
+        pose : {x : 5, y : 0, yaw : 0}
+        sub_addr : tcp://localhost:5555
+        pub_addr : tcp://localhost:5556
+        msg_addr : tcp://localhost:50206
+    casu-007-l01 :
+        pose : {x : -5, y : -5, yaw : 0}
+        sub_addr : tcp://localhost:5555
+        pub_addr : tcp://localhost:5556
+        msg_addr : tcp://localhost:50207
+    casu-008-l01 :
+        pose : {x : 0, y : -5, yaw : 0}
+        sub_addr : tcp://localhost:5555
+        pub_addr : tcp://localhost:5556
+        msg_addr : tcp://localhost:50208
+    casu-009-l01 :
+        pose : {x : 5, y : -5, yaw : 0}
+        sub_addr : tcp://localhost:5555
+        pub_addr : tcp://localhost:5556
+        msg_addr : tcp://localhost:50209
+

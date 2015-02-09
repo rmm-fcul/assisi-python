@@ -7,4 +7,4 @@ arena : simple_3x3.arena
 nbg : simple_3x3.nbg
 
 # Deployment specification
-dep : deploy.dep
+dep : local.dep

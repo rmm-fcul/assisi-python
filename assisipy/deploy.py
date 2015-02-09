@@ -3,10 +3,12 @@
 
 import yaml
 import pygraphviz as pgv
+from fabric.api import run, settings
 
 import sys
 import os
 import shutil
+
 
 """ Tools for automatically deploying CASU controllers. """
 
@@ -28,15 +30,23 @@ class Deploy:
         self.dep = {}
 
         self.project_root = os.path.dirname(os.path.abspath(project_file_name))
-        self.sandbox_dir = project_file_name.split('.')[0] + '_deploy'
+        self.sandbox_dir = project_file_name.split('.')[0] + '_sandbox'
+
+        self.prepared = False
 
         with open(project_file_name) as project_file:
             project = yaml.safe_load(project_file)
             
+        # Read the .arena file
         with open(os.path.join(self.project_root, project['arena'])) as arena_file:
             self.arena = yaml.safe_load(arena_file)
 
+        # Read the neighborhood graph
         self.nbg = pgv.AGraph(os.path.join(self.project_root, project['nbg']))
+
+        # Read the deployment file
+        with open(os.path.join(self.project_root, project['dep'])) as dep_file:
+            self.dep = yaml.safe_load(dep_file)
 
     def prepare(self):
         """
@@ -77,8 +87,15 @@ class Deploy:
                     yaml.dump({'msg_addr': self.arena[layer][casu]['msg_addr']}, 
                               rtc_file, default_flow_style=False)
                     neighbors = {'neighbors':{}}
-                    for nb in self.nbg.out_neighbors(casu):
-                        neighbors['neighbors'][str(nb)] = 'test'
+                    for nb in self.nbg.get_subgraph(layer).out_neighbors(casu):
+                        side = str(self.nbg.get_edge(casu,nb).attr['label'])
+                        nb_full_name = str(nb).split('/')
+                        nb_name = nb_full_name[-1]
+                        nb_layer = layer
+                        if len(nb_full_name) > 1:
+                            nb_layer = nb_full_name[0]
+                        neighbors['neighbors'][side] = {'name': nb_name,
+                                                        'address': self.arena[nb_layer][nb_name]['msg_addr']}
                     yaml.dump(neighbors, rtc_file, default_flow_style=False)
 
                 os.chdir('..')
@@ -86,11 +103,36 @@ class Deploy:
         
 
         print('Returning to original directory {0}'.format(cwd))
+        os.chdir(cwd)
+        
+        self.prepared = True
+
+    def deploy(self):
+        """ 
+        Perform deployment by copying files from the sandbox directory
+        to their appropriate destinations.
+        """
+        
+        if not self.prepared:
+            self.prepare()
+
+        cwd = os.getcwd()
+        """
+        os.chdir(os.path.join(self.project_root, self.sandbox_dir))
+        for layer in self.dep['layers']:
+            for casu in self.dep['layers'][layer]:
+            
+        with settings(host_string='localhost',user='assisi'):
+            result = run('ls -la')
+            print(result)
+        """
+        
+        os.chdir(cwd)
 
 if __name__ == '__main__':
 
     # TODO: use argparse!
-
+    print('hellooooo')
     deploy = Deploy(sys.argv[1])
-    deploy.prepare()
+    deploy.deploy()
 

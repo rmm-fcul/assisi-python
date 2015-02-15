@@ -3,7 +3,7 @@
 
 import yaml
 import pygraphviz as pgv
-from fabric.api import run, settings
+from fabric.api import run, put, settings
 
 import sys
 import os
@@ -78,6 +78,7 @@ class Deploy:
             for casu in self.arena[layer]:
                 os.mkdir(casu)
                 os.chdir(casu)
+                # Create the .rtc file
                 with open(casu+'.rtc','a') as rtc_file:
                     yaml.dump({'name':casu}, rtc_file, default_flow_style=False)
                     yaml.dump({'pub_addr': self.arena[layer][casu]['pub_addr']},
@@ -97,11 +98,13 @@ class Deploy:
                         neighbors['neighbors'][side] = {'name': nb_name,
                                                         'address': self.arena[nb_layer][nb_name]['msg_addr']}
                     yaml.dump(neighbors, rtc_file, default_flow_style=False)
-
+                # Copy the controller
+                shutil.copy(os.path.join(self.project_root,self.dep[layer][casu]['controller']),'.')
                 os.chdir('..')
             os.chdir(sandbox_path)
         
 
+        print('Preparaton done!')
         print('Returning to original directory {0}'.format(cwd))
         os.chdir(cwd)
         
@@ -117,22 +120,28 @@ class Deploy:
             self.prepare()
 
         cwd = os.getcwd()
-        """
+
         os.chdir(os.path.join(self.project_root, self.sandbox_dir))
-        for layer in self.dep['layers']:
-            for casu in self.dep['layers'][layer]:
-            
-        with settings(host_string='localhost',user='assisi'):
-            result = run('ls -la')
-            print(result)
-        """
+        for layer in self.dep:
+            print('Deploying layer {0} ...'.format(layer))
+            os.chdir(layer)
+            for casu in self.dep[layer]:
+                os.chdir(casu)
+                # Connect to the target machine and deploy the files.
+                with settings(host_string = self.dep[layer][casu]['hostname'],
+                              user = self.dep[layer][casu]['user']):
+                    destdir = os.path.join(self.dep[layer][casu]['prefix'], layer, casu)
+                    run('mkdir -p ' + destdir)
+                    run('rm -rf ' + os.path.join(destdir,'*'))
+                    put('*', destdir)
+                os.chdir('..')
+            os.chdir('..')
         
         os.chdir(cwd)
 
 if __name__ == '__main__':
 
     # TODO: use argparse!
-    print('hellooooo')
     deploy = Deploy(sys.argv[1])
     deploy.deploy()
 

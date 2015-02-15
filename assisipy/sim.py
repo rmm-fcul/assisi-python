@@ -37,7 +37,10 @@ class Control:
             self.__context = zmq.Context(1)
             self.__pub = self.__context.socket(zmq.PUB)
             self.__pub.connect(self.__pub_addr)
-            
+            # Sleep a bit to provide enought time for connection setup.
+            # TODO: Replace this with explicit check for connection.
+            time.sleep(1)
+
     def spawn(self, 
               obj_type, 
               name, 

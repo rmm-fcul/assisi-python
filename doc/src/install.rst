@@ -2,13 +2,8 @@ Installation instructions
 =========================
 
 Below are instructions for installing the current version of the
-Bee-arena software. Once the softwer is finalized, automatic installer
+Bee-arena software. Once the software is finalized, automatic installer
 packages will be developed.
-
-System setup
-------------
-
-The software is known to work on Ubuntu 12.04 (Precise) 64-bit. It has not been tested on other systems.
 
 For maximum portability, it is also possible to install the simulator
 in a virtual machine. Two minimalistic virtual machines are available:
@@ -29,7 +24,19 @@ instructions, below.
 an Ubuntu 12.04, or some other compatible system, (e.g. a newer Ubuntu
 version or Debian), a native install is the way to go.
 
-Install the tools needed to build the software:
+Installling dependencies
+------------------------
+
+The installation procedure has been tested on the systems listed
+below, and is known to work on those systems. In principle,
+installation on other Posix-compliant systems should also be possible,
+but YMMV (Your Mileage May Vary :)
+
+Ubuntu 12.04 (Precise) 64-bit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Most of the dependencies needed to build and run ASSISI software can
+be installed from official Ubuntu repositories:
 
 .. code-block:: console
   
@@ -37,8 +44,8 @@ Install the tools needed to build the software:
     sudo apt-get install libboost-dev libboost-program-options-dev
     sudo apt-get install libprotobuf-dev protobuf-compiler python-protobuf
     sudo apt-get install python-dev python-zmq python-sphinx python-yaml
-  
-Create a folder for the Assisi project and position yourself there
+
+A few dependencies have to be installed manually. Create a folder for the Assisi project and position yourself there
 
 .. code-block:: console
     
@@ -46,11 +53,7 @@ Create a folder for the Assisi project and position yourself there
     mkdir assisi
     cd assisi
 
-Dependencies
-------------
-
-Now install third-party libraries necessary for building and running
-the software. First ZeroMQ:
+Build and install the ZeroMQ networking library:
 
 .. code-block:: console
 
@@ -73,7 +76,30 @@ Add ZeroMQ c++ bindings:
     git clone https://github.com/zeromq/cppzmq
     sudo cp cppzmq/zmq.hpp /usr/local/include
 
-Finally, install the enki simulator:
+Ubuntu 14.04 (Trusty) 64-bit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On Ubuntu Trusty, all of the required dependencies are available as
+pre-build packages from official Ubuntu repositories:
+
+.. code-block:: console
+  
+    sudo apt-get install build-essential git cmake qt4-dev-tools
+    sudo apt-get install libboost-dev libboost-program-options-dev
+    sudo apt-get install libprotobuf-dev protobuf-compiler python-protobuf
+    sudo apt-get install python-dev python-sphinx python-yaml
+    sudo apt-get install libzmq3-dev python-zmq
+
+MacOS X
+~~~~~~~
+
+TODO
+
+Building the assisi software
+----------------------------
+
+The assisi-playground simulator uses the Enki simulation engine, which
+needs to be installed first:
 
 .. code-block:: console
     
@@ -89,10 +115,7 @@ Finally, install the enki simulator:
 
 You should have enki and viewer folders in you ``/user/local/include`` folder.
 
-Building the assisi software
-----------------------------
-
-The simulator:
+The assisi-playground itself:
 
 .. code-block:: console
 

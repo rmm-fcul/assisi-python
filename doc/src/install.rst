@@ -92,6 +92,10 @@ pre-build packages from official Ubuntu repositories:
     sudo apt-get install python-dev python-sphinx python-yaml
     sudo apt-get install libzmq3-dev python-zmq
 
+If you have a manually installed version of libzmq on your system, you
+will have to uninstall it manually. Go to the folder where you
+originally built it and run ``make uninstall``
+
 MacOS X
 ~~~~~~~
 

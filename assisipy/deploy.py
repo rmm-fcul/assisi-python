@@ -142,6 +142,6 @@ class Deploy:
 if __name__ == '__main__':
 
     # TODO: use argparse!
-    deploy = Deploy(sys.argv[1])
-    deploy.deploy()
+    project = Deploy(sys.argv[1])
+    project.deploy()
 

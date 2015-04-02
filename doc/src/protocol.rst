@@ -13,8 +13,8 @@ Assisi communication protocol
     "<Casu Name>", "Acc", "Measurements", "VibrationArray", "(Data not valid!)"
     "<Casu Name>", "Peltier", "On", "Temperature", "Temperature setpoint"
     "<Casu Name>", "Peltier", "Off", "Temperature", "Temperaturesetpoint"
-    "<Casu Name>", "Airflow", "On", "Intensity", "Airflow intensity setpoint"
-    "<Casu Name>", "Airflow", "Off", "0", "Set airflow actuator into standby"
+    "<Casu Name>", "Airflow", "On", "Airflow", "Airflow intensity setpoint"
+    "<Casu Name>", "Airflow", "Off", "Airflow", "Set airflow actuator into standby"
     "<Target Name>", "CommEth", "<Casu Name>", "String", "(Comunication message, addressed directly to target!)"
 
 

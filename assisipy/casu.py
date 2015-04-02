@@ -103,6 +103,9 @@ EM_MAGNETIC_FREQ_MAX = 50
 Maximum allowed Magnetic field frequency, in Hz.
 """
 
+AIRFLOW_ACT = 20
+""" Airflow actuator """
+
 ARRAY = 10000
 """
 Special value to get all sensor values from an array of sensors
@@ -566,6 +569,28 @@ class Casu:
         self.__pub.send_multipart([self.__name, "DiagnosticLed", "Off",
                                   light.SerializeToString()])
         self.__write_to_log(["dled_ref", time.time(), 0, 0, 0])
+
+    def set_airflow_intensity(self, intensity, id = AIRFLOW_ACT):
+        """
+        Set the airflow intensity.
+
+        :param float intensity: Airflow intensity (in precentage of maximum actuator value).
+        """
+        int_msg = dev_msgs_pb2.Airflow()
+        int_msg.intensity = intensity
+        self.__pub.send_multipart([self.__name, "Airflow", "On",
+                                   int_msg.SerializeToString()])
+        self.__write_to_log(["airflow_ref", time.time(), intensity])
+
+    def airflow_standby(self, id  = AIRFLOW_ACT):
+        """
+        Puts the airflow actuator on standby.
+        """
+        int_msg = dev_msgs_pb2.Airflow()
+        int_msg.intensity = 0
+        self.__pub.send_multipart([self.__name, "Airflow", "Off",
+                                   int_msg.SerializeToString()])
+        self.__write_to_log(["airflow_ref", time.time(), 0])
 
     def send_message(self, direction, msg):
         """

@@ -31,35 +31,35 @@ class CasuController:
         msg = self.__casu.read_message()
         if msg:
             if  msg['data'] == 'On':
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 1, 0, 0)
+                self.__casu.set_diagnostic_led_rgb(1, 0, 0, casu.DLED_TOP)
             else:
                 self.__casu.diagnostic_led_standby(casu.DLED_TOP)
             
     def send_msg(self):
 
         while True:
-            # North side
+            # North side => yellow
             if self._ctr_dir == 'N' and  self.__casu.get_range(casu.IR_N) < 2:
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 1, 0, 0)
-                self.old_state = self.state
-                self.state = 'Red On'
-            # East
-            elif self._ctr_dir == 'E' and ((self.__casu.get_range(casu.IR_NE) <
-                2 or self.__casu.get_range(casu.IR_SE) < 2)):
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 0, 1, 0)
-                self.old_state = self.state
-                self.state = 'Green On'
-            # West
-            elif self._ctr_dir == 'W' and self.__casu.get_range(casu.IR_S) < 2:
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 0, 0, 1)
-                self.old_state = self.state
-                self.state = 'Blue On'
-            # South
-            elif self._ctr_dir == 'S' and ((self.__casu.get_range(casu.IR_SW) <
-                2 or self.__casu.get_range(casu.IR_NW) < 2)):
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 1, 1, 0)
+                self.__casu.set_diagnostic_led_rgb(1, 1, 0, casu.DLED_TOP)
                 self.old_state = self.state
                 self.state = 'Yellow On'
+            # East => red
+            elif self._ctr_dir == 'E' and ((self.__casu.get_range(casu.IR_NE) <
+                2 or self.__casu.get_range(casu.IR_SE) < 2)):
+                self.__casu.set_diagnostic_led_rgb(1, 0, 0, casu.DLED_TOP)
+                self.old_state = self.state
+                self.state = 'Red On'
+            # South => blue
+            elif self._ctr_dir == 'S' and self.__casu.get_range(casu.IR_S) < 2:
+                self.__casu.set_diagnostic_led_rgb(0, 0, 1, casu.DLED_TOP)
+                self.old_state = self.state
+                self.state = 'Blue On'
+            # West => green
+            elif self._ctr_dir == 'W' and ((self.__casu.get_range(casu.IR_SW) <
+                2 or self.__casu.get_range(casu.IR_NW) < 2)):
+                self.__casu.set_diagnostic_led_rgb(0, 1, 0, casu.DLED_TOP)
+                self.old_state = self.state
+                self.state = 'Green On'
             else:
                 self.__casu.diagnostic_led_standby(casu.DLED_TOP)
                 self.old_state = self.state

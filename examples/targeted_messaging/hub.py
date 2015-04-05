@@ -31,7 +31,7 @@ def find_comm_links(rtc, verb=False):
 
 
 
-class CasuController:
+class CasuController(object):
 
     def __init__(self, rtc_file, verb=True):
         self.__casu = casu.Casu(rtc_file)
@@ -64,11 +64,15 @@ class CasuController:
                 self.old_state = self.state
                 self.state = 'Off'
 
+            if self.verb:
+                print "[I] rx msg from {} (link {}), new state is {}".format(
+                        src_physical, src_label, self.state)
+
         if self.old_state != self.state:
             if self.state == 'red On':
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 1, 0, 0)
+                self.__casu.set_diagnostic_led_rgb(1, 0, 0, casu.DLED_TOP)
             elif self.state == 'green On':
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 0, 1, 0)
+                self.__casu.set_diagnostic_led_rgb(0, 1, 0, casu.DLED_TOP)
             else:
                 self.__casu.diagnostic_led_standby(casu.DLED_TOP)
 

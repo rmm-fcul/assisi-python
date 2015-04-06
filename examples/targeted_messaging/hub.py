@@ -13,31 +13,6 @@ from assisipy import casu
 import argparse, os
 import time
 
-'''
-Note: the function `find_comm_links` is not needed in this example any
-longer, since the functionality is provided by the assisipy.Casu class.
-'''
-import yaml
-def find_comm_links(rtc, verb=False):
-    phys_logi_map = {}
-
-    try:
-        deploy = yaml.safe_load(file(rtc, 'r'))
-        # verify that the deployment file is for the same named object
-        if 'neighbors' in deploy and deploy['neighbors'] is not None:
-            for k, v in deploy['neighbors'].iteritems():
-                neigh = v.get('name', None)
-                if verb: print v, neigh
-                if neigh:
-                    phys_logi_map[neigh] = k
-
-    except IOError:
-        print "[W] could not read rtc conf file for casu {}".format(casu_name)
-    
-    return phys_logi_map
-
-
-
 
 class CasuController(object):
 

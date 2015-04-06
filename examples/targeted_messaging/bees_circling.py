@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# A simple demo of bee-casu interaction
+# A simple demo of bee-casu interaction, with bees rotating about 
+# CASUs to periodically trigger IR sensors.
 
 from assisipy import bee
 import time 
@@ -17,7 +18,7 @@ if __name__ == '__main__':
     
     # Let the bee run in circles
     for i, w in enumerate(walkers):
-        f = (i+1) * 1.0 # growth rate :)
+        f = (i+1) * 1.0 # growth rate
 
         w.set_vel(f*0.65, f*0.8)
 

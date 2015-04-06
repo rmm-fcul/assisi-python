@@ -1,14 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Control of the central Casu
-# This responds to different incoming messages, in a different manner
-# according to the label.
+'''
+Control of the central Casu
+
+This responds to different incoming messages, in a different manner
+according to the label / "channel name" (which is independent from
+the physical name of the sender)
+'''
 
 from assisipy import casu
 import argparse, os
 import time
 
+'''
+Note: the function `find_comm_links` is not needed in this example any
+longer, since the functionality is provided by the assisipy.Casu class.
+'''
 import yaml
 def find_comm_links(rtc, verb=False):
     phys_logi_map = {}
@@ -46,8 +54,9 @@ class CasuController(object):
     def react_to_neighbors(self):
         '''
         read messages from afar, and change color according to the *channel* 
-        that the incoming message came from.  (optionally, message payload
-        indicates different factor - like how long to flash for/how intense?)
+        that the incoming message came from.  (optional extension, message
+        payload indicates different factor - like how long to flash for/how
+        intense?)
 
         '''
 
@@ -66,7 +75,7 @@ class CasuController(object):
                 self.state = 'Off'
 
             if self.verb:
-                print "[I] rx msg from {} (link {}), new state is {}".format(
+                print "[I] rx msg from '{}' (link '{}'), new state: {}".format(
                         src_physical, src_label, self.state)
 
         if self.old_state != self.state:
@@ -76,7 +85,6 @@ class CasuController(object):
                 self.__casu.set_diagnostic_led_rgb(0, 1, 0, casu.DLED_TOP)
             else:
                 self.__casu.diagnostic_led_standby(casu.DLED_TOP)
-
 
 
 
@@ -96,8 +104,8 @@ class CasuController(object):
                 msgs.append(msg)
 
                 if self.verb:
-                    print "\t[i]<== recv msg ({1} by): from {0}".format(
-                        msg['sender'], len(msg['data']) )
+                    print "\t[i]<== recv msg ({1} by): from {0} ('{2}')".format(
+                        msg['sender'], len(msg['data']), msg['label'] )
                 if self.verb > 1:
                     print msg.items()
 
@@ -110,56 +118,6 @@ class CasuController(object):
                     break
 
         return msgs
-
-
-
-    def react_to_bees(self):
-        """
-        Changes color to red, when a bee is detected by one of the proximity sensors.
-        Notifies neighbor.
-        """
-        while True:
-            if self.__casu.get_range(casu.IR_N) < 2:
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 1, 0, 0)
-                self.old_state = self.state
-                self.state = 'Red On'
-            elif (self.__casu.get_range(casu.IR_NE) < 2 or
-                  self.__casu.get_range(casu.IR_SE) < 2):
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 0, 1, 0)
-                self.old_state = self.state
-                self.state = 'Green On'
-            elif self.__casu.get_range(casu.IR_S) < 2:
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 0, 0, 1)
-                self.old_state = self.state
-                self.state = 'Blue On'
-            elif (self.__casu.get_range(casu.IR_SW) < 2 or
-                  self.__casu.get_range(casu.IR_NW) < 2):
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 1, 1, 0)
-                self.old_state = self.state
-                self.state = 'Yellow On'
-            else:
-                self.__casu.diagnostic_led_standby(casu.DLED_TOP)
-                self.old_state = self.state
-                self.state = 'Off'
-
-            if self.old_state != self.state:
-                if self.old_state == 'Red On':
-                    self.__casu.send_message('north', 'Off')
-                elif self.old_state == 'Green On':
-                    self.__casu.send_message('east', 'Off')
-                elif self.old_state == 'Blue On':
-                    self.__casu.send_message('south', 'Off')
-                elif self.old_state == 'Yellow On':
-                    self.__casu.send_message('west', 'Off')
-
-                if self.state == 'Red On':
-                    self.__casu.send_message('north', 'On')
-                if self.state == 'Green On':
-                    self.__casu.send_message('east', 'On')
-                if self.state == 'Blue On':
-                    self.__casu.send_message('south', 'On')
-                if self.state == 'Yellow On':
-                    self.__casu.send_message('west', 'On')
 
 
 
@@ -177,18 +135,14 @@ if __name__ == '__main__':
     rtc = os.path.join(args.rtc_path, fname)
     print "connecting to casu {} ('{}')".format(args.name, rtc)
 
-    ctrl = CasuController(rtc_file=rtc)
+    ctrl = CasuController(rtc_file=rtc, verb=args.verb)
 
     try:
         while True:
             ctrl.react_to_neighbors()
-            #time.sleep(0.5)
     except KeyboardInterrupt:
         # cleanup
         ctrl.stop()
 
 
-
-        
-        
 

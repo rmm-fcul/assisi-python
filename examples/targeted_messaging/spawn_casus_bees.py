@@ -21,9 +21,5 @@ if __name__ == '__main__':
     simctrl.spawn('Casu','casu-left',  (-9,0, yaw))
     simctrl.spawn('Casu','casu-right', (+9,0, yaw))
 
-    #simctrl.spawn('Casu','Casu-01-02',(0,9,pi/2))
-    #simctrl.spawn('Casu','Casu-02-01',(-9,0,pi/2))
-    #simctrl.spawn('Casu','Casu-02-03',(9,0,pi/2))
-    #simctrl.spawn('Casu','Casu-03-02',(0,-9,pi/2))
     simctrl.spawn('Bee','Bee-001',(-9+2, 0, pi/2))
     simctrl.spawn('Bee','Bee-002',(+9+0,+2, 2*pi/2))

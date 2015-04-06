@@ -143,7 +143,7 @@ class Casu:
             self.__msg_pub_addr = rtc['msg_addr']
             self.__neighbors = rtc['neighbors']
             self.__msg_sub = None
-
+            self.__phys_logi_map = self.__read_comm_links(rtc_file_name)
 
 
         self.__stop = False
@@ -589,6 +589,11 @@ class Casu:
         if self.__msg_queue:
             with self.__lock:
                 msg = self.__msg_queue.pop()
+
+                # attempt to find the label (logical name for neighbour) from 
+                # the records found in the RTC file (now part of the Casu 
+                # instance)
+                msg['label'] = self.__phys_logi_map.get(msg['sender'], None)
         
         return msg
 
@@ -598,6 +603,28 @@ class Casu:
         """
         if self.__log:
             self.__logger.writerow(data)
+
+    def __read_comm_links(self, rtc):
+        '''
+        parse the RTC file for communication links and return as a map.
+        '''
+        phys_logi_map = {} 
+
+        try: 
+            deploy = yaml.safe_load(file(rtc, 'r')) 
+            if 'neighbors' in deploy and deploy['neighbors'] is not None: 
+                for k, v in deploy['neighbors'].iteritems(): 
+                    neigh = v.get('name', None) 
+                    if neigh: 
+                        phys_logi_map[neigh] = k 
+     
+        except IOError: 
+            print "[W] could not read rtc conf file {}".format(rtc) 
+         
+        return phys_logi_map 
+
+
+
 
 if __name__ == '__main__':
     

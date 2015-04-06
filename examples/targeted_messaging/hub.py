@@ -38,7 +38,7 @@ class CasuController(object):
         self.old_state = 'Off'
         self.state = 'Off'
         self.verb = verb
-        self._comm_links = find_comm_links(rtc_file, verb=self.verb)
+        #self._comm_links = find_comm_links(rtc_file, verb=self.verb)
 
     def stop(self):
         self.__casu.stop()
@@ -54,7 +54,8 @@ class CasuController(object):
         msgs = self.recv_all_msgs(retry_cnt=0, max_recv=None)
         for msg in msgs:
             src_physical = msg['sender']
-            src_label = self._comm_links.get(src_physical, None)
+            #src_label = self._comm_links.get(src_physical, None)
+            src_label = msg['label']
 
             if src_label in ['red', 'green']:
                 self.old_state = self.state

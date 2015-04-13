@@ -1,5 +1,5 @@
 digraph simple_3x3 {
-    subgraph "beearena" {
+    subgraph "sim-01" {
         "casu-001" -> "casu-002" [ label = "right" ]
         "casu-001" -> "casu-004" [ label = "back" ]
         "casu-002" -> "casu-001" [ label = "left" ]

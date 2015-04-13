@@ -5,6 +5,28 @@ Below are instructions for deploying Casu controllers to the
 simulator, and to the Beaglebone boards. This manual procedure
 will eventually be replaced by automatic deployment tools.
 
+Automatic deployment (command-line tools)
+-----------------------------------------
+
+.assisi
+.arena
+.nbg
+.dep
+
+deploy.py
+
+assisirun.py
+
+/HOME/.ssh/id_rsa.pub
+
+ssh-keygen -t rsa
+
+cat /HOME/.ssh/id_rsa.pub | ssh assisi@casu-00x 'cat >>
+.ssh/authorized_keys'
+
+http://www.linuxproblem.org/art_9.html
+
+
 Deployment to the simulator
 ---------------------------
 
@@ -13,8 +35,8 @@ Check out the examples.
 
 Todo: Add more details about deployment of separate controller executables.
 
-Deployment to the Casus
------------------------
+Manual deployment to the Casus
+------------------------------
 
 You have two options for controlling the Casus. The simpler option is
 **Remote deployment**, which implies running the controller on the

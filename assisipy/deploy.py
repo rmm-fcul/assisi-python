@@ -25,6 +25,7 @@ class Deploy:
 
     def __init__(self, project_file_name):
  
+        self.fabfile_name = project_file_name[:-7] + '.py'
         self.arena = {}
         self.nbg = {}
         self.dep = {}
@@ -57,6 +58,18 @@ class Deploy:
         print('Changing directory to {0}'.format(self.project_root))
         os.chdir(self.project_root)
         print('Preparing files for deployment!')
+
+        # Remove old fabfile, if it exists
+        print('The file {0} will be overwritten!'.format(self.fabfile_name))
+        try:
+            os.remove(self.fabfile_name)
+        except OSError:
+            # The fabfile does not exist,
+            # no bigie
+            pass
+
+        # Collect fabric tasks
+        fabfile_string = ''
 
         # Clean up and create new sandbox folder
         sandbox_path = os.path.join(self.project_root, self.sandbox_dir)
@@ -98,11 +111,25 @@ class Deploy:
                         neighbors['neighbors'][side] = {'name': nb_name,
                                                         'address': self.arena[nb_layer][nb_name]['msg_addr']}
                     yaml.dump(neighbors, rtc_file, default_flow_style=False)
+
                 # Copy the controller
                 shutil.copy(os.path.join(self.project_root,self.dep[layer][casu]['controller']),'.')
+
+                # Append to fabfile
+                fabfile_string += \
+                                  '''
+[@parallel]
+def {casu}:
+    run({controller})
+                                  '''.format(casu=casu.replace('-','_'),
+                                             controller=self.dep[layer][casu]['controller'])
+
                 os.chdir('..')
             os.chdir(sandbox_path)
         
+        os.chdir(self.project_root)
+        with open(self.fabfile_name,'w') as fabfile:
+            fabfile.write(fabfile_string)
 
         print('Preparaton done!')
         print('Returning to original directory {0}'.format(cwd))

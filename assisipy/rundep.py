@@ -58,6 +58,9 @@ class Rundep:
                 counter += 1
                 if counter: break
 
+        for key in self.running:
+            self.running[key].join()
+
 if __name__ == '__main__':
     
     parser = argparse.ArgumentParser(description='Run a set of CASU controllers.')

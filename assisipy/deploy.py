@@ -69,7 +69,12 @@ class Deploy:
             pass
 
         # Collect fabric tasks
-        fabfile_string = ''
+        fabfile_tasks = '''
+from fabric.api import cd, run, settings, parallel
+'''
+        fabfile_all = '''
+def all():
+'''
 
         # Clean up and create new sandbox folder
         sandbox_path = os.path.join(self.project_root, self.sandbox_dir)
@@ -116,20 +121,28 @@ class Deploy:
                 shutil.copy(os.path.join(self.project_root,self.dep[layer][casu]['controller']),'.')
 
                 # Append to fabfile
-                fabfile_string += \
-                                  '''
-[@parallel]
-def {casu}:
-    run({controller})
-                                  '''.format(casu=casu.replace('-','_'),
-                                             controller=self.dep[layer][casu]['controller'])
-
+                fabfile_tasks += '''
+@parallel
+def {task}():
+    with settings(host_string='{host}', user='{username}'):
+        with cd('{code_dir}'):
+                run('export PYTHONPATH=/home/assisi/assisi-python:$PYTHONPATH; ./{command} {rtc}')
+                                  '''.format(task=(layer+'_'+casu).replace('-','_'),
+                                             host=self.dep[layer][casu]['hostname'],
+                                             username=self.dep[layer][casu]['user'],
+                                             code_dir=os.path.join(self.dep[layer][casu]['prefix'],layer,casu),
+                                             command=os.path.basename(self.dep[layer][casu]['controller']),
+                                             rtc=casu+'.rtc')
+                fabfile_all += '    {task}()\n'.format(task=(layer+'_'+casu).replace('-','_'))
                 os.chdir('..')
             os.chdir(sandbox_path)
         
         os.chdir(self.project_root)
+
+        # Finalize the fabric file
         with open(self.fabfile_name,'w') as fabfile:
-            fabfile.write(fabfile_string)
+            fabfile.write(fabfile_tasks)
+            fabfile.write(fabfile_all)
 
         print('Preparaton done!')
         print('Returning to original directory {0}'.format(cwd))

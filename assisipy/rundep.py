@@ -44,20 +44,19 @@ class Rundep:
         Execute the controllers.
         """
         #env.parallel = True
+        counter = 0
         for layer in self.depspec:
             for casu in self.depspec[layer]:
                 ctrl_name = os.path.basename(self.depspec[layer][casu]['controller'])
                 rtc_name = casu + '.rtc'
-                self.run_single(self.depspec[layer][casu]['hostname'],
-                                self.depspec[layer][casu]['user'],
-                                os.path.join(self.depspec[layer][casu]['prefix'],layer,casu,ctrl_name),
-                                rtc_name)
-#                with settings(host_string = self.depspec[layer][casu]['hostname'],
-#                              user = self.depspec[layer][casu]['user']):
-#                    with cd(os.path.join(self.depspec[layer][casu]['prefix'],
-#                                         layer, casu)):
-#                        run('export PYTHONPATH=/home/assisi/assisi-python:$PYTHONPATH;' + './' + ctrl_name + ' ' + rtc_name)
-                        #print self.depspec[layer][casu]
+                args = (self.depspec[layer][casu]['hostname'],
+                        self.depspec[layer][casu]['user'],
+                        os.path.join(self.depspec[layer][casu]['prefix'],layer,casu,ctrl_name),
+                        rtc_name)
+                self.running[layer+'/'+casu] = threading.Thread(target=self.run_single,args=args)
+                self.running[layer+'/'+casu].start()
+                counter += 1
+                if counter: break
 
 if __name__ == '__main__':
     

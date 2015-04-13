@@ -85,7 +85,7 @@ class Deploy:
                                rtc_file, default_flow_style=False)
                     yaml.dump({'sub_addr': self.arena[layer][casu]['sub_addr']},
                               rtc_file, default_flow_style=False)
-                    yaml.dump({'msg_addr': self.arena[layer][casu]['msg_addr']}, 
+                    yaml.dump({'msg_addr': 'tcp://*:' + self.arena[layer][casu]['msg_addr'].split(':')[-1]}, 
                               rtc_file, default_flow_style=False)
                     neighbors = {'neighbors':{}}
                     for nb in self.nbg.get_subgraph(layer).out_neighbors(casu):
@@ -134,6 +134,9 @@ class Deploy:
                     run('mkdir -p ' + destdir)
                     run('rm -rf ' + os.path.join(destdir,'*'))
                     put('*', destdir)
+                    # Give executable permissions to the controller
+                    ctrl_name = os.path.basename(self.dep[layer][casu]['controller'])
+                    run('chmod +x ' + os.path.join(destdir, ctrl_name))
                 os.chdir('..')
             os.chdir('..')
         

@@ -5,9 +5,13 @@
 Tool for remotely running CASU controllers.
 """
 
+from fabric.api import settings, cd, run, env
+
 import yaml
 
-import sys
+import os.path
+import argparse
+import threading
 
 class Rundep:
     """
@@ -21,16 +25,45 @@ class Rundep:
         with open(depfile_name) as depfile:
             self.depspec = yaml.safe_load(depfile)
 
+        # Running controllers
+        self.running = {}
+
+    def run_single(self,host,username,controller,rtc):
+        """
+        Run a single controller instance, on the specified host.
+
+        controller - full path to the controller code
+        rtc - full path or just file name (assumes it's in the same folder with the controller)
+        """
+        with settings(host_string = host, user = username):
+            with cd(os.path.dirname(controller)):
+                    run('export PYTHONPATH=/home/assisi/assisi-python:$PYTHONPATH;' + './' + os.path.basename(controller) + ' ' + rtc)
+
     def run(self):
         """
         Execute the controllers.
         """
-        for arena in self.depspec:
-            for casu in self.depspec[arena]:
-                pass
+        #env.parallel = True
+        for layer in self.depspec:
+            for casu in self.depspec[layer]:
+                ctrl_name = os.path.basename(self.depspec[layer][casu]['controller'])
+                rtc_name = casu + '.rtc'
+                self.run_single(self.depspec[layer][casu]['hostname'],
+                                self.depspec[layer][casu]['user'],
+                                os.path.join(self.depspec[layer][casu]['prefix'],layer,casu,ctrl_name),
+                                rtc_name)
+#                with settings(host_string = self.depspec[layer][casu]['hostname'],
+#                              user = self.depspec[layer][casu]['user']):
+#                    with cd(os.path.join(self.depspec[layer][casu]['prefix'],
+#                                         layer, casu)):
+#                        run('export PYTHONPATH=/home/assisi/assisi-python:$PYTHONPATH;' + './' + ctrl_name + ' ' + rtc_name)
+                        #print self.depspec[layer][casu]
 
 if __name__ == '__main__':
     
-    # TODO: Use argparse
-    project = Rundep(sys.argv[1])
+    parser = argparse.ArgumentParser(description='Run a set of CASU controllers.')
+    parser.add_argument('depfile', help='name of .dep file specifying the deployment details.')
+    args = parser.parse_args()
+
+    project = Rundep(args.depfile)
     project.run()

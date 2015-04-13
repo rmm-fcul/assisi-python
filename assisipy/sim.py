@@ -3,9 +3,11 @@
 
 """ Pyton interface to the simulated world. """
 
+import argparse
 import threading
 import time
 
+import yaml
 import zmq
 
 from msg import sim_msgs_pb2
@@ -91,6 +93,16 @@ class Control:
         self.__pub.send_multipart(['Sim', 'Spawn', obj_type, 
                                    data.SerializeToString()])
 
+    def spawn_array(self, obj_type, array):
+        """
+        Spawn an array of objects.
+        """
+        for name in array:
+            self.spawn(obj_type, name, 
+                       (array[name]['pose']['x'],
+                        array[name]['pose']['y'],
+                        array[name]['pose']['yaw']))
+
     def teleport(self, obj_name, pose):
         """
         Teleport object to pose.
@@ -118,5 +130,21 @@ class Control:
 
 if __name__ == '__main__':
 
-    sim_ctrl = Control()
-    sim_ctrl.spawn('Casu', 'Casu', 10, 10, 0)
+    parser = argparse.ArgumentParser(description='Spawn an array of objects (casus or bees), from an .arena/.bees file.')
+    parser.add_argument('filename', help='an .arena or .bees file')
+    args = parser.parse_args()
+
+    with open(args.filename) as array_file:
+        arrays = yaml.safe_load(array_file)
+        # Several arrays can be defined within one file
+        for layer in arrays:
+            # Spawn only simulated arrays
+            if layer[:3].lower() == 'sim':
+                print('Spawning objects in layer {0}...'.format(layer))
+                if arrays[layer]:
+                    # The array is non-empty, get the first element
+                    obj_name = arrays[layer].keys()[0]
+                    obj_type = obj_name.split('-')[0].title()
+                    sim_ctrl = Control(pub_addr = arrays[layer][obj_name]['pub_addr'])
+                    sim_ctrl.spawn_array(obj_type, arrays[layer])
+

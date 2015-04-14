@@ -61,6 +61,7 @@ CASUs are connected to a local TCP/IP network with IP adresses on the
 below is reserved for development hosts. The relevant section of
 ``/etc/hosts`` from the Master Workstation are given below:[#fmultip]_
 ::
+
    # Casus
    192.168.12.1   control-workstation
    192.168.12.101 casu-001
@@ -73,6 +74,7 @@ below is reserved for development hosts. The relevant section of
    192.168.12.104 casu-008
    192.168.12.105 casu-009
 
+.. _ssh_nopass:
 
 Paswordless ssh login
 ~~~~~~~~~~~~~~~~~~~~~
@@ -82,6 +84,7 @@ also save you some typing when doing manual deployment. To set it up,
 you will need an ``id_rsa.pub`` key file in your ``~/.ssh``
 folder. If it's not there, create it with the command:
 ::
+
    ssh-keygen -t rsa
 
 (you can skip creating a password for your key file by just pressing
@@ -91,10 +94,12 @@ Assuming that you will be deploying your code to a machine called
 ``target``, you have to add your key file to the list of authorized
 keys on the target machine:
 ::
+
    cat ~/.ssh/id_rsa.pub | ssh username@target 'cat >> .ssh/authorized_keys'
 
 Check that everything is working by logging in from the development host:
 ::
+
    ssh username@target
 
 You should be logged in automatically, without being prompted for a
@@ -102,10 +107,12 @@ password.
 
 If you get an error saying something similar to:
 ::
+
    Agent admitted failure to sign using the key.
 
 just do:
 ::
+
    ssh-add
 
 on the develpment host.
@@ -134,9 +141,9 @@ provides a quick overview of the deployment process.
 
 Automatic deployment generally consists of two steps:
 
-# The **deployment step**, where controllers are copied from the
+#. The **deployment step**, where controllers are copied from the
 development host to the deployment target
-# The **run step**, where the deployed controller code is executed to
+#. The **run step**, where the deployed controller code is executed to
 control the behavior of CASUs (real or simulated)
 
 In order to successfully perform the steps above, the user has to
@@ -144,7 +151,7 @@ prepare four files describing the details of the deployment he/she
 wishes to perform:
 
 * An **arena description file** recognized by the ``.arena``
-  extension and written in `yaml http://yaml.org/>`_ syntax, which describes 
+  extension and written in `yaml <http://yaml.org/>`_ syntax, which describes 
   the physical arena layout (absolute CASU positions) 
   and CASU URIs for establishing ZeroMQ connections
 * A **neighborhood file**, recognized by the ``.nbg`` extension
@@ -152,7 +159,7 @@ wishes to perform:
   <http://www.graphviz.org/content/dot-language>`_ syntax,
   which describes the inter-CASU data connection topology
 * A **deployment file**, recognized by the ``.dep`` extension and
-  written in `yaml http://yaml.org/>`_ syntax, which describes 
+  written in `yaml <http://yaml.org/>`_ syntax, which describes 
   the desired deployment strategy, i.e., for each CASU it specifies
   the controller to be deployed and the connection details of the
   deployment target
@@ -162,6 +169,7 @@ wishes to perform:
 
 To deploy the code, simply invoke:
 ::
+
    deploy.py PROJECTFILE.assisi
 
 After successfully running the deployment script, you will
@@ -175,6 +183,7 @@ controllers.
 
 To run the controllers, invoke:
 ::
+
    assisirun.py PROJECTFILE.assisi
 
 You will be able to observe program output from each of your CASU
@@ -210,8 +219,8 @@ there. Either way, your network needs to be set up correctly.
 
 For remote deployment, you need check two things:
 
-   #. you have the appropriate .rtc file (check out the `Run-Time Configuration (.rtc) file structure`_ for details)
-   #. you are connected to the Casu network and the Casu you want to control is powered; Check this by pinging the Casu:
+#. you have the appropriate .rtc file (check out the `Run-Time Configuration (.rtc) file structure`_ for details)
+#. you are connected to the Casu network and the Casu you want to control is powered; Check this by pinging the Casu:
 
 .. code-block:: console
 
@@ -289,5 +298,5 @@ Simulated casu .rtc file example
 .. rubric:: Footnotes
 
 .. [#fdhcp] TODO: Implement a local DHCP server.
-.. [#multip] In the current setup, two CASU devices are connected to
+.. [#fmultip] In the current setup, two CASU devices are connected to
              the same Beaglebone board

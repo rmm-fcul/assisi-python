@@ -16,6 +16,7 @@ Contents:
    deploy
    manual
    protocol
+   examples
 
 Indices and tables
 ==================

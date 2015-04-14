@@ -32,6 +32,30 @@ below, and is known to work on those systems. In principle,
 installation on other Posix-compliant systems should also be possible,
 but YMMV (Your Mileage May Vary :)
 
+Ubuntu 14.04 (Trusty) 64-bit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ubuntu Trusty is the only officially supported platform for ASSISI
+software. Efforts are made to make the software as portable as
+possible, but we can not guarantee correct operation on other systems.
+
+On Ubuntu Trusty, all of the required dependencies are available as
+pre-build packages from official Ubuntu repositories:
+
+.. code-block:: console
+  
+    sudo apt-get install build-essential git cmake qt4-dev-tools
+    sudo apt-get install libboost-dev libboost-program-options-dev libboost-system-dev
+    sudo apt-get install libboost-filesystem-dev libboost-python-dev
+    sudo apt-get install libprotobuf-dev protobuf-compiler python-protobuf
+    sudo apt-get install python-dev python-sphinx python-yaml
+    sudo apt-get install libzmq3-dev python-zmq
+    sudo apt-get install python-pygraphviz fabric
+
+If you have a manually installed version of libzmq on your system, you
+will have to uninstall it manually. Go to the folder where you
+originally built it and run ``make uninstall``
+
 Ubuntu 12.04 (Precise) 64-bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -45,6 +69,7 @@ be installed from official Ubuntu repositories:
     sudo apt-get install libboost-filesystem-dev libboost-python-dev
     sudo apt-get install libprotobuf-dev protobuf-compiler python-protobuf
     sudo apt-get install python-dev python-zmq python-sphinx python-yaml
+    sudo apt-get install python-pygraphviz fabric
 
 A few dependencies have to be installed manually. Create a folder for the Assisi project and position yourself there
 
@@ -76,25 +101,6 @@ Add ZeroMQ c++ bindings:
 
     git clone https://github.com/zeromq/cppzmq
     sudo cp cppzmq/zmq.hpp /usr/local/include
-
-Ubuntu 14.04 (Trusty) 64-bit
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-On Ubuntu Trusty, all of the required dependencies are available as
-pre-build packages from official Ubuntu repositories:
-
-.. code-block:: console
-  
-    sudo apt-get install build-essential git cmake qt4-dev-tools
-    sudo apt-get install libboost-dev libboost-program-options-dev libboost-system-dev
-    sudo apt-get install libboost-filesystem-dev libboost-python-dev
-    sudo apt-get install libprotobuf-dev protobuf-compiler python-protobuf
-    sudo apt-get install python-dev python-sphinx python-yaml
-    sudo apt-get install libzmq3-dev python-zmq
-
-If you have a manually installed version of libzmq on your system, you
-will have to uninstall it manually. Go to the folder where you
-originally built it and run ``make uninstall``
 
 MacOS X
 ~~~~~~~
@@ -132,6 +138,7 @@ The assisi-playground itself:
   cd build
   cmake ..
   make
+  export PATH=${PATH}:~/assisi/playground/build/playground
   cd ../..
   
 The Pyton API
@@ -145,7 +152,7 @@ The Pyton API
   export PYTHONPATH=${PYTHONPATH}:~/assisi/python
   cd ..
 
-The ``PYTHONPATH`` export has to be done very time you open a new shell, so It's best to add it to the end of your ``~/.bashrc`` file. It's purpose is to enable the importing of the Assisi python API in Python programs.
+The ``PATH`` and ``PYTHONPATH`` exports have to be done very time you open a new shell, so It's best to add it to the end of your ``~/.bashrc`` file. It's purpose is to enable the importing of the Assisi python API in Python programs.
 
 After completing all of the abovementioned steps, we should have the following folder structure:
   * assisi

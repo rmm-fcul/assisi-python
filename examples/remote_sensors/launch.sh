@@ -1,11 +1,11 @@
 #!/bin/sh
 
-ipA=194.117.20.244
+ipA=127.0.0.1
 ipB=127.0.0.1
-saA=5455
-paA=5456
-saB=5755
-paB=5756
+saA=5155
+paA=5156
+saB=5255
+paB=5256
 
 # select the experiment configuration desired
 # note: currently only cfg-sim

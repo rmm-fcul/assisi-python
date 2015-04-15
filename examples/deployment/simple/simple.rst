@@ -48,9 +48,11 @@ For more info on resetting the terminal, check out `this link <http://manpages.u
 To retreive the data logged by the casu controllers, run:
 ::
 
-   collect_data.py sim_3x3_local.assisi
+   collect_data.py sim_3x3_local.assisi --clean
 
-The logfiles will be stored in a new subfolder called `data_sim_3x3_local`.
+The logfiles will be stored in a new subfolder called
+`data_sim_3x3_local`. The `--clean` option removes the original log
+files after copying them.
 
 The ``sim_3x3_local.assisi`` file is a yaml-formated file that lists the files describing
 your project:
@@ -111,7 +113,9 @@ To retreive the data logged by the casus, run:
 
    collect_data.py sim_3x3_local.assisi
 
-The logfiles will be stored in a new subfolder called `data_sim_3x3_local`.
+The logfiles will be stored in a new subfolder called
+`data_sim_3x3_local`. The `--clean` option removes the original
+logfiles after copying them.
 
 The ``sim_3x3_local.assisi`` file is a yaml-formated file that lists the files describing
 your project:

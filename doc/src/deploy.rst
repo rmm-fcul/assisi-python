@@ -191,6 +191,15 @@ controllers in the terminal. To stop the execution of all controllers
 simultaneously, just interrupt the `assisirun.py` script by pressing
 `Ctrl-C`.
 
+To retreive the data logged by the casu controllers, run:
+::
+
+   collect_data.py sim_3x3_local.assisi --clean
+
+The logfiles will be stored in a new subfolder called
+`data_sim_3x3_local`. The `--clean` option removes the original log
+files after copying them.
+
 
 Other deployment options
 ------------------------

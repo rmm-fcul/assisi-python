@@ -15,7 +15,7 @@ import time
 
 if __name__ == '__main__':
 
-    c = casu.Casu(sys.argv[1])
+    c = casu.Casu(sys.argv[1], log=True)
 
     counter = 0
     while True:

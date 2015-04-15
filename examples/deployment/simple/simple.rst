@@ -45,6 +45,13 @@ type are not displayed). To restore the terminal, just type:
 
 For more info on resetting the terminal, check out `this link <http://manpages.ubuntu.com/manpages/utopic/man1/tset.1.html>`_.
 
+To retreive the data logged by the casu controllers, run:
+::
+
+   collect_data.py sim_3x3_local.assisi
+
+The logfiles will be stored in a new subfolder called `data_sim_3x3_local`.
+
 The ``sim_3x3_local.assisi`` file is a yaml-formated file that lists the files describing
 your project:
 
@@ -90,6 +97,22 @@ and run:
 
 and observe the CASUs blinking their LEDs. Type `Ctrl-C` to stop the controllers.
 
+After stopping the controllers, your terminal command line might
+become corrupted (i.e. it looses the carriage-return and commands you
+type are not displayed). To restore the terminal, just type:
+::
+
+   <Ctrl-J>reset<Ctrl-J>
+
+For more info on resetting the terminal, check out `this link <http://manpages.ubuntu.com/manpages/utopic/man1/tset.1.html>`_.
+
+To retreive the data logged by the casus, run:
+::
+
+   collect_data.py sim_3x3_local.assisi
+
+The logfiles will be stored in a new subfolder called `data_sim_3x3_local`.
+
 The ``sim_3x3_local.assisi`` file is a yaml-formated file that lists the files describing
 your project:
 
@@ -104,6 +127,13 @@ The ``simple_3x3-sim.nbg`` file is a Graphviz dot-formatted file that
 describes the communication network topology between the CASUs:
 
 .. literalinclude:: ../../examples/deployment/simple/simple_3x3.nbg
+
+You can visualize the neighborhood graph with the command:
+::
+
+   dot -Tpdf -O simple_3x3.nbg
+
+which will create a ``.pdf`` file with the neighborhood graph.
 
 The ``local.dep`` file is a yaml-formatted file that specifies the
 controller code to deploy to individual casus and connection details

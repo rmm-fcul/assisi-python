@@ -88,7 +88,7 @@ class DataCollector:
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description='Collect CASU logs.')
+    parser = argparse.ArgumentParser(description='Collect CASU logs. Currently assumes that the logs are located in the same folder as the controller.')
     parser.add_argument('project', help='Project file name (.assisi).')
     parser.add_argument('--clean', action='store_true', default=False,
                         help='Remove original log files after copying.')

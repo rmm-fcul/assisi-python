@@ -1,0 +1,8 @@
+name: casu-sensor-left
+pub_addr: tcp://@HOSTB@:@PUBADDRB@
+sub_addr: tcp://@HOSTB@:@SUBADDRB@
+msg_addr: tcp://*:50200
+neighbors:
+    collector:
+        name: casu-monitor
+        address: tcp://@HOSTA@:50300

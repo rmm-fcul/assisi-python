@@ -1,0 +1,11 @@
+name: casu-monitor
+pub_addr: tcp://@HOSTA@:@PUBADDRA@
+sub_addr: tcp://@HOSTA@:@SUBADDRA@
+msg_addr: tcp://*:50300
+neighbors:
+    red:
+        name: casu-sensor-left
+        address: tcp://@HOSTB@:50200
+    green:
+        name: casu-sensor-right
+        address: tcp://@HOSTB@:50201

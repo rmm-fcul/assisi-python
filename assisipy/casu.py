@@ -280,6 +280,12 @@ class Casu:
         if self.__log:
             self.__logfile.close()
 
+    def name(self):
+        """
+        Returns the name of this Casu instance.
+        """
+        return self.__name
+
     def stop(self):
         """
         Stops the Casu interface and cleans up.

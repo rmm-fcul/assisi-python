@@ -36,6 +36,15 @@ Run the deployed controllers:
 and see the simulated CASUs blink their LEDs. Type `Ctrl-C` in the
 same terminal to stop the controllers.
 
+After stopping the controllers, your terminal command line might
+become corrupted (i.e. it looses the carriage-return and commands you
+type are not displayed). To restore the terminal, just type:
+::
+
+   <Ctrl-J>reset<Ctrl-J>
+
+For more info on resetting the terminal, check out `this link <http://manpages.ubuntu.com/manpages/utopic/man1/tset.1.html>`_.
+
 The ``sim_3x3_local.assisi`` file is a yaml-formated file that lists the files describing
 your project:
 

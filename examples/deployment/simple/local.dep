@@ -8,7 +8,7 @@ sim-01 :
         hostname : localhost
         user : assisi
         prefix : deploy
-        controller: controllers/blink_and_send.py
+        controller: controllers/blink_and_send_seed.py
     casu-002 : 
         hostname : localhost
         user : assisi

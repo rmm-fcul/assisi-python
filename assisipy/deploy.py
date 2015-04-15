@@ -15,16 +15,12 @@ import shutil
 class Deploy:
     """
     Class for performing deployment tasks.
-
-    Parses the configuration files and initializes internal data structures.
-
-    :param arena_file_name: Name of the .arena arena configuration file.
-    :param nbg_file_name: Name of the .nbg neighborhood graph file.
-    :param dep_file_name: Name of the .dep dependency specificaton file.
     """
 
     def __init__(self, project_file_name):
- 
+        """
+        Parses the configuration files and initializes internal data structures.
+        """
         self.fabfile_name = project_file_name[:-7] + '.py'
         self.arena = {}
         self.nbg = {}

@@ -32,7 +32,8 @@ python ./spawn_casus_bees.py
 
 3. run behaviour of bees
 - there is just one script for both bees.
-python circling_bees.py
+python bees_circling.py 
+
 
 4. run CASU controllers -- in different terminals (or backgrounded)
 (set 1):

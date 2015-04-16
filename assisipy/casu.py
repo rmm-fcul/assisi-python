@@ -12,7 +12,7 @@ import yaml # For parsing configuration (.rtc) files
 
 # For logging
 from datetime import datetime
-import csv  
+import csv
 
 from msg import dev_msgs_pb2
 from msg import base_msgs_pb2
@@ -21,7 +21,7 @@ from msg import base_msgs_pb2
 
 """ IR range sensors """
 
-IR_N = 0 
+IR_N = 0
 """ Range sensor pointing to 0° (NORTH) """
 IR_NE = 1
 """ Range sensor pointing to 45° (NORTH-EAST) """
@@ -40,7 +40,7 @@ LIGHT_ACT = 6
 DLED_TOP = 7
 """ Top diagnostic LED """
 
-TEMP_N = 8 
+TEMP_N = 8
 """ Temperature sensor at 0° (NORTH) """
 TEMP_E = 9
 """ Temperature sensor at 90° (EAST) """
@@ -110,10 +110,10 @@ Special value to get all sensor values from an array of sensors
 """
 
 class Casu:
-    """ 
+    """
     The low-level interface to Casu devices.
 
-    Initializes the object and starts listening for data. 
+    Initializes the object and starts listening for data.
     The fully constructed object is returned only after
     the data connection has been established.
 
@@ -121,9 +121,9 @@ class Casu:
     :param string name: Casu name (if a RTC file is provided, this value is overridden).
     :param bool log: A variable indicating whether to log all incoming and outgoing data. If set to true, a logfile in the form 'YYYY-MM-DD-HH-MM-SS-name.csv' is created.
     """
-    
+
     def __init__(self, rtc_file_name='casu.rtc', name = '', log = False, log_folder = '.'):
-        
+
 
         if name:
             # Use default values
@@ -133,6 +133,7 @@ class Casu:
             self.__neighbors = None
             self.__msg_pub_addr = None
             self.__msg_sub = None
+            self.__phys_logi_map = {}
         else:
             # Parse the rtc file
             with open(rtc_file_name) as rtc_file:
@@ -184,27 +185,27 @@ class Casu:
             for direction in self.__neighbors:
                 self.__msg_sub.connect(self.__neighbors[direction]['address'])
             self.__msg_sub.setsockopt(zmq.SUBSCRIBE, self.__name)
-        
+
         # Connect the control publisher socket
         self.__pub = self.__context.socket(zmq.PUB)
         self.__pub.connect(self.__pub_addr)
-        
+
         # Connect to the device and start receiving data
         self.__comm_thread.start()
         # Wait for the connection
         while not self.__connected:
             time.sleep(1)
         print('{0} connected!'.format(self.__name))
-            
+
 
     def __update_readings(self):
-        """ 
-        Get data from Casu and update local data. 
+        """
+        Get data from Casu and update local data.
         """
         self.__sub = self.__context.socket(zmq.SUB)
         self.__sub.connect(self.__sub_addr)
         self.__sub.setsockopt(zmq.SUBSCRIBE, self.__name)
-        
+
         while not self.__stop:
             [name, dev, cmd, data] = self.__sub.recv_multipart()
             self.__connected = True
@@ -233,7 +234,7 @@ class Casu:
                     if self.__acc_readings.reading:
                         acc_freqs = [0, 0, 0, 0]
                         acc_amps = [0, 0, 0, 0]
-                    
+
                         for i in range(0, 4):
                             acc_freqs[i] = self.__acc_readings.reading[i].freq
                             acc_amps[i] = self.__acc_readings.reading[i].amplitude
@@ -255,7 +256,7 @@ class Casu:
                     print('Unknown command {0} for {1}'.format(cmd, self.__name))
             else:
                 print('Unknown device {0} for {1}'.format(dev, self.__name))
-            
+
             if self.__msg_sub:
                 try:
                     [name, msg, sender, data] = self.__msg_sub.recv_multipart(zmq.NOBLOCK)
@@ -270,7 +271,7 @@ class Casu:
         """
         Performs necessary cleanup operations, i.e. stops communication threads,
         closes connections and files.
-        """        
+        """
         # Wait for communicaton threads to finish
         self.__comm_thread.join()
 
@@ -312,11 +313,11 @@ class Casu:
         self.__write_to_log(["em_config", time.time(), mode])
 
     def get_range(self, id):
-        """ 
-        Returns the range reading (in cm) corresponding to sensor id. 
+        """
+        Returns the range reading (in cm) corresponding to sensor id.
 
         .. note::
-           
+
            This API call might become deprecated in favor of get_raw_value,
            to better reflect actual sensor capabilities.
         """
@@ -325,11 +326,11 @@ class Casu:
                 return self.__ir_range_readings.range[id]
             else:
                 return -1
-        
+
     def get_ir_raw_value(self, id):
-        """ 
-        Returns the raw value from the IR proximity sensor corresponding to sensor id. 
-        
+        """
+        Returns the raw value from the IR proximity sensor corresponding to sensor id.
+
         """
         with self.__lock:
             if self.__ir_range_readings.raw_value:
@@ -342,7 +343,7 @@ class Casu:
 
     def get_temp(self, id):
         """
-        Returns the temperature reading of sensor id. 
+        Returns the temperature reading of sensor id.
 
          """
         with self.__lock:
@@ -373,7 +374,7 @@ class Casu:
         self.__pub.send_multipart([self.__name, device, "temp",
                                    temp_msg.SerializeToString()])
         self.__write_to_log([device + "_temp", time.time(), temp])
- 
+
     def temp_standby(self, id = PELTIER_ACT):
         """
         Turn the temperature actuator off.
@@ -391,7 +392,7 @@ class Casu:
     def get_peltier_setpoint(self, id = PELTIER_ACT):
         """
         Get the temperature actuator setpoint and state.
-        
+
         :return: (temp,on) tuple, where temp is the temperature setpoint,
         and on is True if the actuator is switched on.
         """
@@ -449,10 +450,10 @@ class Casu:
     def set_vibration_freq(self, f, id = VIBE_ACT):
         """
         Sets the vibration frequency of the pwm motor.
-        
+
         :param float f: Vibration frequency, between 0 and 500 Hz.
         """
-        
+
         vibration = dev_msgs_pb2.VibrationSetpoint()
         vibration.freq = f
         vibration.amplitude = 0
@@ -471,7 +472,7 @@ class Casu:
         pass
 
     def get_vibration_amplitude(self, id):
-        """ 
+        """
         Returns the vibration amplitude reported by sensor id.
 
         .. note::
@@ -484,7 +485,7 @@ class Casu:
         """
         Turn the vibration actuator id off.
         """
-        
+
         vibration = dev_msgs_pb2.VibrationSetpoint()
         vibration.freq = 0
         vibration.amplitude = 0
@@ -526,7 +527,7 @@ class Casu:
         self.__write_to_log(["light_ref", time.time(), 0, 0, 0])
 
     def set_diagnostic_led_rgb(self, r = 0, g = 0, b = 0, id = DLED_TOP):
-        """ 
+        """
         Set the diagnostic LED light color. Automatically turns the actuator on.
 
         :param float r: Red component intensity, between 0 and 1.
@@ -543,20 +544,20 @@ class Casu:
         light.color.red = r
         light.color.green = g
         light.color.blue = b
-        self.__pub.send_multipart([self.__name, "DiagnosticLed", "On", 
+        self.__pub.send_multipart([self.__name, "DiagnosticLed", "On",
                                    light.SerializeToString()])
         self.__write_to_log(["dled_ref", time.time(), r, g, b])
 
     def get_diagnostic_led_rgb(self, id = DLED_TOP):
-        """ 
-        Get the diagnostic light RGB value. 
+        """
+        Get the diagnostic light RGB value.
 
         :return: An (r,g,b) tuple (values between 0 and 1).
         """
         pass
 
     def diagnostic_led_standby(self, id = DLED_TOP):
-        """ 
+        """
         Turn the diagnostic LED off.
         """
         light = base_msgs_pb2.ColorStamped();
@@ -573,16 +574,16 @@ class Casu:
         """
         success = False
         if direction in self.__neighbors:
-            self.__msg_pub.send_multipart([self.__neighbors[direction]['name'], 'Message', 
+            self.__msg_pub.send_multipart([self.__neighbors[direction]['name'], 'Message',
                                            self.__name, msg])
             success = True
-        
+
         return success
 
     def read_message(self):
         """
         Retrieve the latest message from the buffer.
-        
+
         Returns a dictionary with sender(string), and data (string) fields.
         """
         msg = []
@@ -590,11 +591,11 @@ class Casu:
             with self.__lock:
                 msg = self.__msg_queue.pop()
 
-                # attempt to find the label (logical name for neighbour) from 
-                # the records found in the RTC file (now part of the Casu 
+                # attempt to find the label (logical name for neighbour) from
+                # the records found in the RTC file (now part of the Casu
                 # instance)
                 msg['label'] = self.__phys_logi_map.get(msg['sender'], None)
-        
+
         return msg
 
     def __write_to_log(self, data):
@@ -608,26 +609,26 @@ class Casu:
         '''
         parse the RTC file for communication links and return as a map.
         '''
-        phys_logi_map = {} 
+        phys_logi_map = {}
 
-        try: 
-            deploy = yaml.safe_load(file(rtc, 'r')) 
-            if 'neighbors' in deploy and deploy['neighbors'] is not None: 
-                for k, v in deploy['neighbors'].iteritems(): 
-                    neigh = v.get('name', None) 
-                    if neigh: 
-                        phys_logi_map[neigh] = k 
-     
-        except IOError: 
-            print "[W] could not read rtc conf file {}".format(rtc) 
-         
-        return phys_logi_map 
+        try:
+            deploy = yaml.safe_load(file(rtc, 'r'))
+            if 'neighbors' in deploy and deploy['neighbors'] is not None:
+                for k, v in deploy['neighbors'].iteritems():
+                    neigh = v.get('name', None)
+                    if neigh:
+                        phys_logi_map[neigh] = k
+
+        except IOError:
+            print "[W] could not read rtc conf file {}".format(rtc)
+
+        return phys_logi_map
 
 
 
 
 if __name__ == '__main__':
-    
+
     casu1 = Casu()
     switch = -1
     count = 0

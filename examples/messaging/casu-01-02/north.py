@@ -18,7 +18,7 @@ class CasuController:
         msg = self.__casu.read_message()
         if msg:
             if  msg['data'] == 'On':
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 1, 0, 0)
+                self.__casu.set_diagnostic_led_rgb(1, 0, 0, casu.DLED_TOP)
             else:
                 self.__casu.diagnostic_led_standby(casu.DLED_TOP)
             

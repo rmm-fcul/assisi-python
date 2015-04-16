@@ -19,21 +19,21 @@ class CasuController:
         """
         while True:
             if self.__casu.get_range(casu.IR_N) < 2:
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 1, 0, 0)
+                self.__casu.set_diagnostic_led_rgb(1, 0, 0, casu.DLED_TOP)
                 self.old_state = self.state
                 self.state = 'Red On'
             elif (self.__casu.get_range(casu.IR_NE) < 2 or
                   self.__casu.get_range(casu.IR_SE) < 2):
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 0, 1, 0)
+                self.__casu.set_diagnostic_led_rgb(0, 1, 0, casu.DLED_TOP)
                 self.old_state = self.state
                 self.state = 'Green On'
             elif self.__casu.get_range(casu.IR_S) < 2:
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 0, 0, 1)
+                self.__casu.set_diagnostic_led_rgb(0, 0, 1, casu.DLED_TOP)
                 self.old_state = self.state
                 self.state = 'Blue On'
             elif (self.__casu.get_range(casu.IR_SW) < 2 or
                   self.__casu.get_range(casu.IR_NW) < 2):
-                self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 1, 1, 0)
+                self.__casu.set_diagnostic_led_rgb(1, 1, 0, casu.DLED_TOP)
                 self.old_state = self.state
                 self.state = 'Yellow On'
             else:

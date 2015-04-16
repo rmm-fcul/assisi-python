@@ -117,8 +117,8 @@ class Casu:
     The fully constructed object is returned only after
     the data connection has been established.
 
-    :param string rtc_file_name: Name of the run-time configuration (RTC) file. If no file is provided, the default configuration is used.
-    :param string name: Casu name (if a RTC file is provided, this value is overridden).
+    :param string rtc_file_name: Name of the run-time configuration (RTC) file. If no file is provided, the default configuration is used; if `name` is provided, this parameter is ignored (and no RTC file is read).
+    :param string name: Casu name (note: this value takes precedence over `rtc_file_name` if both provided: thus no RTC file is read)
     :param bool log: A variable indicating whether to log all incoming and outgoing data. If set to true, a logfile in the form 'YYYY-MM-DD-HH-MM-SS-name.csv' is created.
     """
 

@@ -82,6 +82,7 @@ if [ ${st_sim} -ne 0 ] ; then
     playground_pid=$!
     PIDS=${PIDS}"$! "
     #PIDS+="$! "
+    sleep 2
 fi
 
 # 2. spawn the objects 

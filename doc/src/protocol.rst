@@ -30,11 +30,6 @@ Assisi communication protocol
     "<Casu Name>", "Peltier", "Off", "Temperature"
     "...", "VibeMotor", "On", "Vibration"
     "...", "VibeMotor", "Off", "Vibration"
-    "<Casu Name>", "EM", "config", "EMDeviceConfig"
-    "<Casu Name>", "EM", "temp", "Temperature"
-    "<Casu Name>", "EM", "efield", "ElectricField"
-    "<Casu Name>", "EM", "mfield", "MagneticField"
-    "<Casu Name>", "EM", "Off", "Temperature"
     "<Casu Name>", "CommEth", "<Source Casu>", "String"
 
 .. csv-table:: Messages published by the Simulator

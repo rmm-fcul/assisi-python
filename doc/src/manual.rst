@@ -132,67 +132,6 @@ You can also check the current value of any sensor, e.g. for the
 For a full list of available functions, and detailed explanation of
 function arguments, please consult the :py:mod:`casu` documentation.
 
-Controlling the EM actuators
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-To control the EM actuators, make sure that they are properly
-connected. Note that a group of four actuators is controlled
-simultaneously, i.e. all four actuators connected to a single control
-board will have the same output.
-
-The actuator can operate **either** in the magnetic **or** in the
-electric operating mode. The appropriate mode needs to be activated
-first. Also, please note that the actuators need to be **physically
-turned over** in order to change the effective field!
-
-For the **Magnetic actuator** enable it first:
-
-.. code-block:: ipython
-
-   In[11]: casu4.config_em(casu.EM_MODE_MAGNETIC)
-
-ant then set the frequency to the desired value, e.g.:
-
-.. code-block:: ipython
-
-   In[12]: casu4.set_mfield_freq(10)
-   In[13]: casu4.set_mfield_freq(15)
-
-**Note:** The allowable frequency range for the magnetic actuator
-is between 4 and 40 Hz.
-
-For the **Electric actuator** enable it:
-
-.. code-block:: ipython
-
-   In[14]: casu4.config_em(casu.EM_MODE_ELECTRIC)
-
-and then you can provide the setpoints:
-
-.. code-block:: ipython
-
-   In[15]: casu4.set_efield_freq(200)
-   In[16]: casu4.set_efield_freq(200)
-
-**Note:** The allowable frequency range for the electric actuator is
-between 100 and 500 Hz.
-
-To turn off the actuator (regardless of the operating mode it's in), issue the command:
-
-.. code-block:: ipython
-
-   In[17]: casu4.em_standby()
-
-**Important:** If you want to activate the actuator again after
-sending it to standby mode, you have to re-issue the config command
-before any `set_*_freq` commands:
-
-.. code-block:: ipython
-
-   In[16]: casu4.config_em(casu.EM_MODE_MAGNETIC)
-   In[17]: casu4.set_mfield_freq(10)
-
-
 Controlling several Casus at once
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

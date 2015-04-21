@@ -66,17 +66,6 @@ ACC_L = 17
 VIBE_ACT = 18
 """ Vibration actuator """
 
-EM_ACT = 19
-""" Electro-Magnetic actuator """
-
-EM_MODE_ELECTRIC = 0
-""" E-M actuator electric mode """
-EM_MODE_MAGNETIC = 1
-""" E-M actuator magnetic mode """
-EM_MODE_HEAT = 2
-""" E-M actuator heat mode """
-
-
 TEMP_MIN = 25
 """
 Minimum allowed setpoint for the Peltier heater, in °C.
@@ -84,23 +73,6 @@ Minimum allowed setpoint for the Peltier heater, in °C.
 TEMP_MAX = 50
 """
 Maximum allowed setpoint for the peltier heater, in °C.
-"""
-
-EM_ELECTRIC_FREQ_MIN = 100
-"""
-Minimum allowed Electric field frequency in Hz.
-"""
-EM_ELECTRIC_FREQ_MAX = 500
-"""
-Maximum allowed Electric field frequency, in Hz.
-"""
-EM_MAGNETIC_FREQ_MIN = 5
-"""
-Minimum allowed Magnetic field frequency, in Hz.
-"""
-EM_MAGNETIC_FREQ_MAX = 50
-"""
-Maximum allowed Magnetic field frequency, in Hz.
 """
 
 AIRFLOW_ACT = 20
@@ -295,7 +267,6 @@ class Casu:
         """
 
         # Stop all devices
-        self.em_standby()
         self.temp_standby()
         self.vibration_standby()
         self.light_standby()
@@ -304,22 +275,6 @@ class Casu:
         self.__stop = True
         self.__cleanup()
         print('{0} disconnected!'.format(self.__name))
-
-
-    def config_em(self, mode, id = EM_ACT):
-        """
-        Configure the EM device mode.
-        """
-        config = dev_msgs_pb2.EMDeviceConfig()
-        if mode == EM_MODE_ELECTRIC:
-            config.mode = dev_msgs_pb2.EMDeviceConfig.ELECTRIC
-        elif mode == EM_MODE_MAGNETIC:
-            config.mode = dev_msgs_pb2.EMDeviceConfig.MAGNETIC
-        elif mode == EM_MODE_HEAT:
-            config.mode = dev_msgs_pb2.EMDeviceConfig.HEAT
-        self.__pub.send_multipart([self.__name, "EM", "config",
-                                   config.SerializeToString()])
-        self.__write_to_log(["em_config", time.time(), mode])
 
     def get_range(self, id):
         """
@@ -378,8 +333,6 @@ class Casu:
         temp_msg = dev_msgs_pb2.Temperature()
         temp_msg.temp = temp
         device = "Peltier"
-        if id == EM_ACT:
-            device = "EM"
         self.__pub.send_multipart([self.__name, device, "temp",
                                    temp_msg.SerializeToString()])
         self.__write_to_log([device + "_temp", time.time(), temp])
@@ -392,8 +345,6 @@ class Casu:
         temp_msg = dev_msgs_pb2.Temperature()
         temp_msg.temp = 0
         device = "Peltier"
-        if id == EM_ACT:
-            device = "EM"
         self.__pub.send_multipart([self.__name, device, "Off",
                                    temp_msg.SerializeToString()])
         self.__write_to_log([device + "_temp", time.time(), 0])
@@ -406,55 +357,6 @@ class Casu:
         and on is True if the actuator is switched on.
         """
         return(self.__peltier_setpoint.temp,self.__peltier_on)
-
-    def set_efield_freq(self, f, id = EM_ACT):
-        """
-        Set the electric field frequency.
-        """
-        efield = dev_msgs_pb2.ElectricField()
-        if f < EM_ELECTRIC_FREQ_MIN:
-            f = EM_ELECTRIC_FREQ_MIN
-            print('Electric field frequency limited to {0}!'.format(f))
-        elif f > EM_ELECTRIC_FREQ_MAX:
-            f = EM_ELECTRIC_FREQ_MAX
-            print('Electric field frequency limited to {0}!'.format(f))
-        efield.freq = f
-        efield.intensity = 0
-        self.__pub.send_multipart([self.__name, "EM", "efield",
-                                   efield.SerializeToString()])
-        self.__write_to_log(["efield_ref", time.time(), f])
-
-    def set_mfield_freq(self, f, id = EM_ACT):
-        """
-        Set the magnetic field frequency.
-        """
-        if f < EM_MAGNETIC_FREQ_MIN:
-            f = EM_MAGNETIC_FREQ_MIN
-            print('Magnetic field frequency limited to {0}!'.format(f))
-        elif f > EM_MAGNETIC_FREQ_MAX:
-            f = EM_MAGNETIC_FREQ_MAX
-            print('Magnetic field frequency limited to {0}!'.format(f))
-        mfield = dev_msgs_pb2.MagneticField()
-        mfield.freq = f
-        mfield.intensity = 0
-        self.__pub.send_multipart([self.__name, "EM", "mfield",
-                                   mfield.SerializeToString()])
-        self.__write_to_log(["mfield_ref", time.time(), f])
-
-    def em_standby(self):
-        """
-        Turn the E-M device off, regardless of what mode it was in.
-        """
-        # We'll just send a dummy message, it's type and content
-        # are irrelevant
-        dummy = dev_msgs_pb2.Temperature()
-        dummy.temp = 0
-        self.__pub.send_multipart([self.__name, "EM", "Off",
-                                   dummy.SerializeToString()])
-        # For completeness, this should be logged,
-        # But it will usually just generate a meaningless
-        # one-line log file after splitting
-        #self.__write_to_log(["EM", time.time(), 0])
 
     def set_vibration_freq(self, f, id = VIBE_ACT):
         """

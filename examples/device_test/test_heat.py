@@ -47,7 +47,7 @@ if __name__ == '__main__':
             mycasu.set_temp(temp_ref)
             time_cycle_start = time_now
         
-        temp_now = mycasu.get_temp(casu.TEMP_W)
+        temp_now = mycasu.get_temp(casu.TEMP_L)
         print("Current temperature: {0}".format(temp_now))
         mycasu.set_light_rgb(r = (temp_now-temp_low)/(temp_high-temp_low), 
                              b = (temp_high - temp_now)/(temp_high - temp_low)) 

@@ -123,11 +123,11 @@ In a similar way, we can also control the heat actuator:
 **Note:** The allowable temperature range is between 25 and 45 °C.
 
 You can also check the current value of any sensor, e.g. for the
-"northern" proximity sensor:
+"front" proximity sensor:
 
 .. code-block:: ipython
 
-   In[10]: casu4.get_ir_raw_value(casu.IR_N)
+   In[10]: casu4.get_ir_raw_value(casu.IR_F)
 
 For a full list of available functions, and detailed explanation of
 function arguments, please consult the :py:mod:`casu` documentation.

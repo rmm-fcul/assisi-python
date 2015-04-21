@@ -28,9 +28,9 @@ class CasuController:
             and to Green, when a bee is detected behind a Casu.
         """
         while True:
-            if self.__casu.get_range(casu.IR_N) < 2:
+            if self.__casu.get_range(casu.IR_F) < 2:
                 self.__casu.set_diagnostic_led_rgb(g=1)
-            elif self.__casu.get_range(casu.IR_S) < 2:
+            elif self.__casu.get_range(casu.IR_B) < 2:
                 self.__casu.set_diagnostic_led_rgb(r=1)
             else:
                 self.__casu.diagnostic_led_standby()

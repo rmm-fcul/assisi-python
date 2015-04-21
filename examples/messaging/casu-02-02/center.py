@@ -18,21 +18,21 @@ class CasuController:
         Notifies neighbor.
         """
         while True:
-            if self.__casu.get_range(casu.IR_N) < 2:
+            if self.__casu.get_range(casu.IR_F) < 2:
                 self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 1, 0, 0)
                 self.old_state = self.state
                 self.state = 'Red On'
-            elif (self.__casu.get_range(casu.IR_NE) < 2 or
-                  self.__casu.get_range(casu.IR_SE) < 2):
+            elif (self.__casu.get_range(casu.IR_FR) < 2 or
+                  self.__casu.get_range(casu.IR_BR) < 2):
                 self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 0, 1, 0)
                 self.old_state = self.state
                 self.state = 'Green On'
-            elif self.__casu.get_range(casu.IR_S) < 2:
+            elif self.__casu.get_range(casu.IR_B) < 2:
                 self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 0, 0, 1)
                 self.old_state = self.state
                 self.state = 'Blue On'
-            elif (self.__casu.get_range(casu.IR_SW) < 2 or
-                  self.__casu.get_range(casu.IR_NW) < 2):
+            elif (self.__casu.get_range(casu.IR_BL) < 2 or
+                  self.__casu.get_range(casu.IR_FL) < 2):
                 self.__casu.set_diagnostic_led_rgb(casu.DLED_TOP, 1, 1, 0)
                 self.old_state = self.state
                 self.state = 'Yellow On'

@@ -43,22 +43,22 @@ if __name__=='__main__':
     # A more sophisticated implementation would use threads.
     while True:
         red = green = blue = 0
-        if mycasu.get_ir_raw_value(casu.IR_N) > thresholds[0]:
+        if mycasu.get_ir_raw_value(casu.IR_F) > thresholds[0]:
             green = 1
             count += 1
-        if mycasu.get_ir_raw_value(casu.IR_S) > thresholds[3]:
+        if mycasu.get_ir_raw_value(casu.IR_B) > thresholds[3]:
             red = 1
             count +=1
-        if mycasu.get_ir_raw_value(casu.IR_NE) > thresholds[1]:
+        if mycasu.get_ir_raw_value(casu.IR_FR) > thresholds[1]:
             blue = 1
             count += 1
-        if mycasu.get_ir_raw_value(casu.IR_SE) > thresholds[2]:
+        if mycasu.get_ir_raw_value(casu.IR_BR) > thresholds[2]:
             blue = 1
             count += 1
-        if mycasu.get_ir_raw_value(casu.IR_SW) > thresholds[4]:
+        if mycasu.get_ir_raw_value(casu.IR_BL) > thresholds[4]:
             blue = 1
             count += 1
-        if mycasu.get_ir_raw_value(casu.IR_NW) > thresholds[5]:
+        if mycasu.get_ir_raw_value(casu.IR_FL) > thresholds[5]:
             blue = 1
             count += 1
         mycasu.set_diagnostic_led_rgb(r=red,g=green,b=blue)

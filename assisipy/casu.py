@@ -21,18 +21,18 @@ from msg import base_msgs_pb2
 
 """ IR range sensors """
 
-IR_N = 0 
-""" Range sensor pointing to 0° (NORTH) """
-IR_NE = 1
-""" Range sensor pointing to 45° (NORTH-EAST) """
-IR_SE = 2
-""" Range sensor pointing to 135° (SOUTH-EAST)"""
-IR_S = 3
-""" Range sensor pointing to 180° (SOUTH) """
-IR_SW = 4
-""" Range sensor pointing to 225° (SOUTH-WEST) """
-IR_NW = 5
-""" Range sensor pointing to 270° (NORTH-WEST) """
+IR_F = 0 
+""" Range sensor pointing to 0° (FRONT) """
+IR_FR = 1
+""" Range sensor pointing to 45° (FRONT-RIGHT) """
+IR_BR = 2
+""" Range sensor pointing to 135° (BACK-RIGHT)"""
+IR_B = 3
+""" Range sensor pointing to 180° (BACK) """
+IR_BL = 4
+""" Range sensor pointing to 225° (BACK-LEFT) """
+IR_FL = 5
+""" Range sensor pointing to 270° (FRONT-LEFT) """
 
 LIGHT_ACT = 6
 """ Light stimulus actuator """
@@ -40,28 +40,28 @@ LIGHT_ACT = 6
 DLED_TOP = 7
 """ Top diagnostic LED """
 
-TEMP_N = 8 
-""" Temperature sensor at 0° (NORTH) """
-TEMP_E = 9
-""" Temperature sensor at 90° (EAST) """
-TEMP_S = 10
-""" Temperature sensor at 180° (SOUTH) """
-TEMP_W = 11
-""" Temperature sensor at 270° (WEST) """
+TEMP_F = 8 
+""" Temperature sensor at 0° (FRONT) """
+TEMP_R = 9
+""" Temperature sensor at 90° (RIGHT) """
+TEMP_B = 10
+""" Temperature sensor at 180° (BACK) """
+TEMP_L = 11
+""" Temperature sensor at 270° (LEFT) """
 TEMP_TOP = 12
 """ Top temperature sensor (Casu top) """
 
 PELTIER_ACT = 13
 """ Peltier temperature actuator """
 
-ACC_N = 14
-""" Vibration sensor at 0° (NORTH) """
-ACC_E = 15
-""" Vibration sensors 90° (EAST) """
-ACC_S = 16
-""" Vibration sensors 180° (SOUTH) """
-ACC_W = 17
-""" Vibration sensors 270° (WEST) """
+ACC_F = 14
+""" Vibration sensor at 0° (FRONT) """
+ACC_R = 15
+""" Vibration sensors 90° (RIGHT) """
+ACC_B = 16
+""" Vibration sensors 180° (BACK) """
+ACC_L = 17
+""" Vibration sensors 270° (LEFT) """
 
 VIBE_ACT = 18
 """ Vibration actuator """
@@ -359,7 +359,7 @@ class Casu:
                 if id == ARRAY:
                     return [t for t in self.__temp_readings.temp]
                 else:
-                    return self.__temp_readings.temp[id - TEMP_N]
+                    return self.__temp_readings.temp[id - TEMP_F]
             else:
                 return -1
 
@@ -636,7 +636,7 @@ if __name__ == '__main__':
     switch = -1
     count = 0
     while count < 10:
-        print(casu1.get_range(IR_N))
+        print(casu1.get_range(IR_F))
         if switch > 0:
             casu1.diagnostic_led_standby(DLED_TOP)
         else:

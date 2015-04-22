@@ -95,7 +95,7 @@ Assuming that you will be deploying your code to a machine called
 keys on the target machine:
 ::
 
-   cat ~/.ssh/id_rsa.pub | ssh username@target 'cat >> .ssh/authorized_keys'
+   ssh-copy-id -i ~/.ssh/id_rsa.pub assisi@casu-0xy
 
 Check that everything is working by logging in from the development host:
 ::

@@ -115,6 +115,11 @@ def all():
 
                 # Copy the controller
                 shutil.copy(os.path.join(self.project_root,self.dep[layer][casu]['controller']),'.')
+                # Copy additional files
+                extra = self.dep[layer][casu].get('extra',None)
+                if extra:
+                    for item in extra:
+                        shutil.copy(os.path.join(self.project_root,item),'.')
 
                 # Append to fabfile
                 fabfile_tasks += '''

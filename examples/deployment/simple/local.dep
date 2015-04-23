@@ -9,11 +9,15 @@ sim-01 :
         user : assisi
         prefix : deploy
         controller: controllers/blink_and_send_seed.py
+        # The brackets around additional files are necessary,
+        # because the deployment tool expects a list!
+        extra : [controllers/additional_file_1.dummy]
     casu-002 : 
         hostname : localhost
         user : assisi
         prefix : deploy
         controller: controllers/blink_and_send.py
+        extra : [controllers/additional_file_1.dummy,controllers/additional_file_2.dummy]
     casu-003 : 
         hostname : localhost
         user : assisi

@@ -50,20 +50,24 @@ TEMP_L = 11
 """ Temperature sensor at 270° (LEFT) """
 TEMP_TOP = 12
 """ Top temperature sensor (Casu top) """
+TEMP_CASU = 13
+""" Estimated casu-body temperature """
+TEMP_WAX = 14
+""" Estimated casu-wax temperature """
 
-PELTIER_ACT = 13
+PELTIER_ACT = 15
 """ Peltier temperature actuator """
 
-ACC_F = 14
+ACC_F = 16
 """ Vibration sensor at 0° (FRONT) """
-ACC_R = 15
+ACC_R = 17
 """ Vibration sensors 90° (RIGHT) """
-ACC_B = 16
+ACC_B = 18
 """ Vibration sensors 180° (BACK) """
-ACC_L = 17
+ACC_L = 19
 """ Vibration sensors 270° (LEFT) """
 
-VIBE_ACT = 18
+VIBE_ACT = 20
 """ Vibration actuator """
 
 TEMP_MIN = 25
@@ -75,7 +79,7 @@ TEMP_MAX = 50
 Maximum allowed setpoint for the peltier heater, in °C.
 """
 
-AIRFLOW_ACT = 20
+AIRFLOW_ACT = 21
 """ Airflow actuator """
 
 ARRAY = 10000

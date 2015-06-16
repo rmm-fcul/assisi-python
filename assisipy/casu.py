@@ -225,12 +225,12 @@ class Casu:
                     self.__peltier_on = False
                     with self.__lock:
                         self.__peltier_setpoint.ParseFromString(data)
-                    self.__write_to_log(['Pelter', '0', time.time(), self.__peltier_setpoint.temp])
+                    self.__write_to_log(['Peltier', '0', time.time(), self.__peltier_setpoint.temp])
                 elif cmd == 'On':
                     self.__peltier_on = True
                     with self.__lock:
                         self.__peltier_setpoint.ParseFromString(data)
-                    self.__write_to_log(['Pelter', '1', time.time(), self.__peltier_setpoint.temp])
+                    self.__write_to_log(['Peltier', '1', time.time(), self.__peltier_setpoint.temp])
                 else:
                     print('Unknown command {0} for {1}'.format(cmd, self.__name))
             else:
@@ -362,19 +362,39 @@ class Casu:
         """
         return(self.__peltier_setpoint.temp,self.__peltier_on)
 
-    def set_vibration_freq(self, f, id = VIBE_ACT):
+    #def set_vibration_freq(self, f, id = VIBE_ACT):
         """
         Sets the vibration frequency of the pwm motor.
 
         :param float f: Vibration frequency, between 0 and 500 Hz.
         """
 
+    #    vibration = dev_msgs_pb2.VibrationSetpoint()
+    #    vibration.freq = f
+    #    vibration.amplitude = 0
+    #    self.__pub.send_multipart([self.__name, "VibeMotor", "On",
+    #                               vibration.SerializeToString()])
+    #    self.__write_to_log(["vibe_ref", time.time(), f])
+
+    def set_vibration_pwm(self, pwm, id = VIBE_ACT):
+        """
+        Sets pwm value (0-100) to the vibration motor.
+
+        :param float pwm: Motor PWM value , between 0 and 100 %.
+        """
+        if pwm < 0:
+            pwm = 0
+            print('Motor pwm value limited to {0}!'.format(pwm))
+        elif pwm > 100:
+            pwm = 100
+            print('Motor pwm value limited to {0}!'.format(pwm))
+
         vibration = dev_msgs_pb2.VibrationSetpoint()
-        vibration.freq = f
-        vibration.amplitude = 0
+        vibration.freq = 0
+        vibration.amplitude = pwm
         self.__pub.send_multipart([self.__name, "VibeMotor", "On",
                                    vibration.SerializeToString()])
-        self.__write_to_log(["vibe_ref", time.time(), f])
+        self.__write_to_log(["vibe_pwm", time.time(), pwm])
 
     def get_vibration_freq(self, id):
         """

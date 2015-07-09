@@ -70,7 +70,7 @@ ACC_L = 19
 VIBE_ACT = 20
 """ Vibration actuator """
 
-TEMP_MIN = 25
+TEMP_MIN = 10
 """
 Minimum allowed setpoint for the Peltier heater, in °C.
 """
@@ -376,11 +376,40 @@ class Casu:
     #                               vibration.SerializeToString()])
     #    self.__write_to_log(["vibe_ref", time.time(), f])
 
-    def set_vibration_pwm(self, pwm, id = VIBE_ACT):
+    def set_speaker_vibration(self, freq, intens,  id = VIBE_ACT):
+        """
+        Sets intensity value (0-100) and frequency to the speaker.
+
+        :param float intens: Speaker intensity value , between 0 and 100 %.
+               float freq: Speaker frequency value, between 0 and 500
+        """
+        if intens < 0:
+            intens = 0
+            print('Intensity value limited to {0}!'.format(intens))
+        elif intens > 100:
+            intens = 100
+            print('Intensity value limited to {0}!'.format(intens))
+
+        if freq < 0:
+            freq = 0
+            print('Frequency limited to {0}!'.format(freq))
+        elif freq > 500:
+            freq = 500
+            print('Frequency limited to {0}!'.format(freq))
+
+        vibration = dev_msgs_pb2.VibrationSetpoint()
+        vibration.freq = freq
+        vibration.amplitude = intens
+        self.__pub.send_multipart([self.__name, "Speaker", "On",
+                                   vibration.SerializeToString()])
+        self.__write_to_log(["speaker_freq_pwm", time.time(), freq, intens])
+
+
+    def set_motor_vibration(self, pwm, id = VIBE_ACT):
         """
         Sets pwm value (0-100) to the vibration motor.
 
-        :param float pwm: Motor PWM value , between 0 and 100 %.
+        :param float : Motor PWM value , between 0 and 100 %.
         """
         if pwm < 0:
             pwm = 0
@@ -418,7 +447,7 @@ class Casu:
 
     def vibration_standby(self, id  = VIBE_ACT):
         """
-        Turn the vibration actuator id off.
+        Turn the vibration actuators (bot motor and speaker) off.
         """
 
         vibration = dev_msgs_pb2.VibrationSetpoint()
@@ -426,7 +455,11 @@ class Casu:
         vibration.amplitude = 0
         self.__pub.send_multipart([self.__name, "VibeMotor", "Off",
                                    vibration.SerializeToString()])
+        self.__pub.send_multipart([self.__name, "Speaker", "Off",
+                                   vibration.SerializeToString()])
         self.__write_to_log(["vibe_ref", time.time(), 0])
+        self.__write_to_log(["speaker_freq_pwm", time.time(), 0, 0])
+
 
     def set_light_rgb(self, r = 0, g = 0, b = 0, id = LIGHT_ACT):
         """

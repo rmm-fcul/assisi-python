@@ -405,25 +405,25 @@ class Casu:
         self.__write_to_log(["speaker_freq_pwm", time.time(), freq, intens])
 
 
-    def set_motor_vibration(self, pwm, id = VIBE_ACT):
+    def set_motor_vibration(self, intens, id = VIBE_ACT):
         """
-        Sets pwm value (0-100) to the vibration motor.
+        Sets intens value (0-100) to the vibration motor.
 
-        :param float : Motor PWM value , between 0 and 100 %.
+        :param float : Motor intens value , between 0 and 100 %.
         """
-        if pwm < 0:
-            pwm = 0
-            print('Motor pwm value limited to {0}!'.format(pwm))
-        elif pwm > 100:
-            pwm = 100
-            print('Motor pwm value limited to {0}!'.format(pwm))
+        if intens < 0:
+            intens = 0
+            print('Motor intens value limited to {0}!'.format(intens))
+        elif intens > 100:
+            intens = 100
+            print('Motor intens value limited to {0}!'.format(intens))
 
         vibration = dev_msgs_pb2.VibrationSetpoint()
         vibration.freq = 0
-        vibration.amplitude = pwm
+        vibration.amplitude = intens
         self.__pub.send_multipart([self.__name, "VibeMotor", "On",
                                    vibration.SerializeToString()])
-        self.__write_to_log(["vibe_pwm", time.time(), pwm])
+        self.__write_to_log(["vibe_intens", time.time(), intens])
 
     def get_vibration_freq(self, id):
         """
@@ -458,7 +458,7 @@ class Casu:
         self.__pub.send_multipart([self.__name, "Speaker", "Off",
                                    vibration.SerializeToString()])
         self.__write_to_log(["vibe_ref", time.time(), 0])
-        self.__write_to_log(["speaker_freq_pwm", time.time(), 0, 0])
+        self.__write_to_log(["speaker_freq_intens", time.time(), 0, 0])
 
 
     def set_light_rgb(self, r = 0, g = 0, b = 0, id = LIGHT_ACT):

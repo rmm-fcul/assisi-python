@@ -109,6 +109,7 @@ class Bee:
         self.__temp_readings = dev_msgs_pb2.TemperatureArray()
         self.__vel_setpoints = dev_msgs_pb2.DiffDrive()
         self.__color_setpoint = base_msgs_pb2.ColorStamped()
+        self.__airflow_reading = dev_msgs_pb2.AirflowReading()
 
         # Create the data update thread
         self.__connected = False
@@ -189,6 +190,14 @@ class Bee:
                         self.__color_setpoint.ParseFromString(data)
                 else:
                     print('Unknown command {0} for Bee {1}'.format(cmd, self.__name))
+
+            ### Air flow sensor ###
+            elif dev == 'Airflow':
+                if cmd == 'Reading':
+                    with self.__lock:
+                        self.__airflow_reading.ParseFromString(data)
+                else:
+                    print('Unknown command {0} for airflow of Bee {1}'.format(cmd, self.__name))
 
             else:
                 print('Unknown device {0} for Bee {1}'.format(dev, self.__name))
@@ -282,6 +291,20 @@ class Bee:
             return (self.__light_readings.color.red,
                     self.__light_readings.color.green,
                     self.__light_readings.color.blue)
+
+    def get_airflow_intensity(self, id = 0):
+        """
+        :return: the airflow intensity sensed by airflow sensor id
+        """
+        with self.__lock:
+            return self.__airflow_reading.intensity
+
+    def get_airflow_direction(self, id = 0):
+        """
+        :return: the airflow angle sensed by airflow sensor id
+        """
+        with self.__lock:
+            return self.__airflow_reading.direction
 
     def set_color(self,r=0.93,g=0.79,b=0):
         """

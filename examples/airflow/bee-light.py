@@ -51,7 +51,7 @@ class BeeWander:
             airflow_angle = self.__bee.get_airflow_direction ()
             if airflow_intensity > 0:
                 (_,_,pose) = self.__bee.get_true_pose ()
-                print ('my heading {:3d}º    airflow from {:3d}º at {:5.2f}l/s\n'.format (
+                print ('my heading {:4.0f}º    airflow from {:4.0f}º at {:5.2f}l/s'.format (
                     pose * 180 / math.pi,
                     airflow_angle * 180 / math.pi,
                     airflow_intensity))

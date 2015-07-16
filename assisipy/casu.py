@@ -50,23 +50,27 @@ TEMP_L = 11
 """ Temperature sensor at 270° (LEFT) """
 TEMP_TOP = 12
 """ Top temperature sensor (Casu top) """
+TEMP_CASU = 13
+""" Estimated casu-body temperature """
+TEMP_WAX = 14
+""" Estimated casu-wax temperature """
 
-PELTIER_ACT = 13
+PELTIER_ACT = 15
 """ Peltier temperature actuator """
 
-ACC_F = 14
+ACC_F = 16
 """ Vibration sensor at 0° (FRONT) """
-ACC_R = 15
+ACC_R = 17
 """ Vibration sensors 90° (RIGHT) """
-ACC_B = 16
+ACC_B = 18
 """ Vibration sensors 180° (BACK) """
-ACC_L = 17
+ACC_L = 19
 """ Vibration sensors 270° (LEFT) """
 
-VIBE_ACT = 18
+VIBE_ACT = 20
 """ Vibration actuator """
 
-TEMP_MIN = 25
+TEMP_MIN = 10
 """
 Minimum allowed setpoint for the Peltier heater, in °C.
 """
@@ -75,7 +79,7 @@ TEMP_MAX = 50
 Maximum allowed setpoint for the peltier heater, in °C.
 """
 
-AIRFLOW_ACT = 20
+AIRFLOW_ACT = 21
 """ Airflow actuator """
 
 ARRAY = 10000
@@ -221,12 +225,12 @@ class Casu:
                     self.__peltier_on = False
                     with self.__lock:
                         self.__peltier_setpoint.ParseFromString(data)
-                    self.__write_to_log(['Pelter', '0', time.time(), self.__peltier_setpoint.temp])
+                    self.__write_to_log(['Peltier', '0', time.time(), self.__peltier_setpoint.temp])
                 elif cmd == 'On':
                     self.__peltier_on = True
                     with self.__lock:
                         self.__peltier_setpoint.ParseFromString(data)
-                    self.__write_to_log(['Pelter', '1', time.time(), self.__peltier_setpoint.temp])
+                    self.__write_to_log(['Peltier', '1', time.time(), self.__peltier_setpoint.temp])
                 else:
                     print('Unknown command {0} for {1}'.format(cmd, self.__name))
             else:
@@ -358,19 +362,68 @@ class Casu:
         """
         return(self.__peltier_setpoint.temp,self.__peltier_on)
 
-    def set_vibration_freq(self, f, id = VIBE_ACT):
+    #def set_vibration_freq(self, f, id = VIBE_ACT):
         """
         Sets the vibration frequency of the pwm motor.
 
         :param float f: Vibration frequency, between 0 and 500 Hz.
         """
 
+    #    vibration = dev_msgs_pb2.VibrationSetpoint()
+    #    vibration.freq = f
+    #    vibration.amplitude = 0
+    #    self.__pub.send_multipart([self.__name, "VibeMotor", "On",
+    #                               vibration.SerializeToString()])
+    #    self.__write_to_log(["vibe_ref", time.time(), f])
+
+    def set_speaker_vibration(self, freq, intens,  id = VIBE_ACT):
+        """
+        Sets intensity value (0-100) and frequency to the speaker.
+
+        :param float intens: Speaker intensity value , between 0 and 100 %.
+               float freq: Speaker frequency value, between 0 and 500
+        """
+        if intens < 0:
+            intens = 0
+            print('Intensity value limited to {0}!'.format(intens))
+        elif intens > 100:
+            intens = 100
+            print('Intensity value limited to {0}!'.format(intens))
+
+        if freq < 0:
+            freq = 0
+            print('Frequency limited to {0}!'.format(freq))
+        elif freq > 500:
+            freq = 500
+            print('Frequency limited to {0}!'.format(freq))
+
         vibration = dev_msgs_pb2.VibrationSetpoint()
-        vibration.freq = f
-        vibration.amplitude = 0
+        vibration.freq = freq
+        vibration.amplitude = intens
+        self.__pub.send_multipart([self.__name, "Speaker", "On",
+                                   vibration.SerializeToString()])
+        self.__write_to_log(["speaker_freq_pwm", time.time(), freq, intens])
+
+
+    def set_motor_vibration(self, intens, id = VIBE_ACT):
+        """
+        Sets intens value (0-100) to the vibration motor.
+
+        :param float : Motor intens value , between 0 and 100 %.
+        """
+        if intens < 0:
+            intens = 0
+            print('Motor intens value limited to {0}!'.format(intens))
+        elif intens > 100:
+            intens = 100
+            print('Motor intens value limited to {0}!'.format(intens))
+
+        vibration = dev_msgs_pb2.VibrationSetpoint()
+        vibration.freq = 0
+        vibration.amplitude = intens
         self.__pub.send_multipart([self.__name, "VibeMotor", "On",
                                    vibration.SerializeToString()])
-        self.__write_to_log(["vibe_ref", time.time(), f])
+        self.__write_to_log(["vibe_intens", time.time(), intens])
 
     def get_vibration_freq(self, id):
         """
@@ -394,7 +447,7 @@ class Casu:
 
     def vibration_standby(self, id  = VIBE_ACT):
         """
-        Turn the vibration actuator id off.
+        Turn the vibration actuators (bot motor and speaker) off.
         """
 
         vibration = dev_msgs_pb2.VibrationSetpoint()
@@ -402,7 +455,11 @@ class Casu:
         vibration.amplitude = 0
         self.__pub.send_multipart([self.__name, "VibeMotor", "Off",
                                    vibration.SerializeToString()])
+        self.__pub.send_multipart([self.__name, "Speaker", "Off",
+                                   vibration.SerializeToString()])
         self.__write_to_log(["vibe_ref", time.time(), 0])
+        self.__write_to_log(["speaker_freq_intens", time.time(), 0, 0])
+
 
     def set_light_rgb(self, r = 0, g = 0, b = 0, id = LIGHT_ACT):
         """

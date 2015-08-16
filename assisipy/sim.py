@@ -147,7 +147,9 @@ class Control:
 
         :return: the absolute time as reported by the assisi playground.
         """
-        return self.__absolute_time
+        with self.__lock:
+            timestamp = self.__absolute_time.sec + self.__absolute_time.nsec*1e-9
+        return timestamp
 
     def __update_readings(self):
         """

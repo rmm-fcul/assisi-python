@@ -35,13 +35,26 @@ class Control:
         else:
             # parse any keywords provided, otherwise take default values
             self.__pub_addr = kwargs.get('pub_addr', 'tcp://127.0.0.1:5556')
+            self.__sub_addr = kwargs.get('sub_addr', 'tcp://127.0.0.1:5555')
             #self.__pub_addr = 'tcp://127.0.0.1:5556'
             self.__context = zmq.Context(1)
             self.__pub = self.__context.socket(zmq.PUB)
             self.__pub.connect(self.__pub_addr)
-            # Sleep a bit to provide enought time for connection setup.
-            # TODO: Replace this with explicit check for connection.
-            time.sleep(1)
+            # TODO: Fill readings with fake data
+            #       to prevent program crashes.
+            self.__absolute_time = base_msgs_pb2.Time()
+            # Create the data update thread
+            self.__connected = False
+            self.__context = zmq.Context(1)
+            self.__comm_thread = threading.Thread(target=self.__update_readings)
+            self.__comm_thread.daemon = True
+            self.__lock = threading.Lock()
+            # Connect to the server and start receiving data
+            self.__comm_thread.start()
+            # Wait for the connection
+            while not self.__connected:
+                time.sleep(1)
+            print('Simulator control connected!')
 
     def spawn(self, 
               obj_type, 
@@ -127,6 +140,35 @@ class Control:
         Kill an object in the simulated world.
         """
         pass
+
+    def get_absolute_time(self):
+        """
+        Get the absolute time as reported by the assisi playground.
+
+        :return: the absolute time as reported by the assisi playground.
+        """
+        return self.__absolute_time
+
+    def __update_readings(self):
+        """
+        Get data from assisi playground and update local data.
+        """
+        self.__sub = self.__context.socket(zmq.SUB)
+        self.__sub.connect(self.__sub_addr)
+        self.__sub.setsockopt(zmq.SUBSCRIBE, 'Sim')
+
+        while True:
+            [name, dev, cmd, data] = self.__sub.recv_multipart()
+            self.__connected = True
+            if dev == 'AbsoluteTime':
+                if cmd == 'Value':
+                    # Protect write with a lock
+                    # to make sure all data is written before access
+                    with self.__lock:
+                        self.__absolute_time.ParseFromString(data)
+                else:
+                    print('Unknown command {0} for sim control'.format(cmd))
+
 
 if __name__ == '__main__':
 

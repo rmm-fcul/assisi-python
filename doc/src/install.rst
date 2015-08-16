@@ -28,6 +28,7 @@ pre-build packages from official Ubuntu repositories:
     sudo apt-get install build-essential git cmake qt4-dev-tools
     sudo apt-get install libboost-dev libboost-program-options-dev libboost-system-dev
     sudo apt-get install libboost-filesystem-dev libboost-python-dev
+    sudo apt-get install libboost-thread-dev libboost-timer-dev
     sudo apt-get install libprotobuf-dev protobuf-compiler python-protobuf
     sudo apt-get install python-dev python-sphinx python-yaml
     sudo apt-get install libzmq3-dev python-zmq

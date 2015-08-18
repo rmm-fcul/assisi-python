@@ -225,12 +225,12 @@ class Casu:
                     self.__peltier_on = False
                     with self.__lock:
                         self.__peltier_setpoint.ParseFromString(data)
-                    self.__write_to_log(['Peltier', '0', time.time(), self.__peltier_setpoint.temp])
+                    self.__write_to_log(['Peltier', time.time(), '0', self.__peltier_setpoint.temp])
                 elif cmd == 'On':
                     self.__peltier_on = True
                     with self.__lock:
                         self.__peltier_setpoint.ParseFromString(data)
-                    self.__write_to_log(['Peltier', '1', time.time(), self.__peltier_setpoint.temp])
+                    self.__write_to_log(['Peltier', time.time(), '1',  self.__peltier_setpoint.temp])
                 else:
                     print('Unknown command {0} for {1}'.format(cmd, self.__name))
             else:

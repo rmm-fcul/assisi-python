@@ -50,7 +50,7 @@ be installed from official Ubuntu repositories:
     sudo apt-get install libboost-dev libboost-program-options-dev libboost-system-dev
     sudo apt-get install libboost-filesystem-dev libboost-python-dev
     sudo apt-get install libprotobuf-dev protobuf-compiler python-protobuf
-    sudo apt-get install python-dev python-zmq python-sphinx python-yaml
+    sudo apt-get install python-dev python-sphinx python-yaml
     sudo apt-get install python-pygraphviz fabric
 
 A few dependencies have to be installed manually. Create a folder for the Assisi project and position yourself there
@@ -83,6 +83,13 @@ Add ZeroMQ c++ bindings:
 
     git clone https://github.com/zeromq/cppzmq
     sudo cp cppzmq/zmq.hpp /usr/local/include
+
+Now install python-zmq using pip (if you install using apt-get it will install an older version of libzmq as a dependency):
+
+.. code-block:: console
+  
+    sudo apt-get install pip
+    sudo pip install pyzmq
 
 MacOS X
 ~~~~~~~

@@ -76,6 +76,16 @@ below is reserved for development hosts. The relevant section of
 
 .. _ssh_nopass:
 
+.. note:: If you experience a sluggish ssh/scp connection, when connecting to
+   physical CASUs:
+
+   - Edit ``/etc/hosts`` on each of the CASU beaglebone computers, to include
+     your host IP and machine name.  (i.e. beaglebone->your PC, the reverse 
+     direction to above)
+   - This is already set up for the CASU Master Workstation at the Artificial
+     Life Lab in Graz (192.168.12.1).
+
+
 Paswordless ssh login
 ~~~~~~~~~~~~~~~~~~~~~
 

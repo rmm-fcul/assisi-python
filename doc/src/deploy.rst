@@ -50,7 +50,7 @@ Hostname definitions
 To enable correct code deployment and execution, all the involved
 machines have to be able to to resolve each other's
 hostnames. Currently, this is acheived by manually editing the
-``/etc/hosts`` system configuration file (requires ``sudo`` privileges).[#fdhcp]_
+``/etc/hosts`` system configuration file (requires ``sudo`` privileges). [#fdhcp]_
 
 For local deployment and simulation, it usually suffices that
 ``localhost`` is defined. For remote deployment, and in the case when
@@ -75,6 +75,16 @@ below is reserved for development hosts. The relevant section of
    192.168.12.105 casu-009
 
 .. _ssh_nopass:
+
+.. note:: If you experience a sluggish ssh/scp connection, when connecting to
+   physical CASUs:
+
+   - Edit ``/etc/hosts`` on each of the CASU beaglebone computers, to include
+     your host IP and machine name.  (i.e. beaglebone->your PC, the reverse 
+     direction to above)
+   - This is already set up for the CASU Master Workstation at the Artificial
+     Life Lab in Graz (192.168.12.1).
+
 
 Paswordless ssh login
 ~~~~~~~~~~~~~~~~~~~~~
@@ -307,5 +317,6 @@ Simulated casu .rtc file example
 .. rubric:: Footnotes
 
 .. [#fdhcp] TODO: Implement a local DHCP server.
+
 .. [#fmultip] In the current setup, two CASU devices are connected to
              the same Beaglebone board

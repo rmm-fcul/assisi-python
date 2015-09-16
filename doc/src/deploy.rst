@@ -50,7 +50,7 @@ Hostname definitions
 To enable correct code deployment and execution, all the involved
 machines have to be able to to resolve each other's
 hostnames. Currently, this is acheived by manually editing the
-``/etc/hosts`` system configuration file (requires ``sudo`` privileges).[#fdhcp]_
+``/etc/hosts`` system configuration file (requires ``sudo`` privileges). [#fdhcp]_
 
 For local deployment and simulation, it usually suffices that
 ``localhost`` is defined. For remote deployment, and in the case when
@@ -317,5 +317,6 @@ Simulated casu .rtc file example
 .. rubric:: Footnotes
 
 .. [#fdhcp] TODO: Implement a local DHCP server.
+
 .. [#fmultip] In the current setup, two CASU devices are connected to
              the same Beaglebone board

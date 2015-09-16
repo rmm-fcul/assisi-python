@@ -38,6 +38,8 @@ If you have a manually installed version of libzmq on your system, you
 will have to uninstall it manually. Go to the folder where you
 originally built it and run ``make uninstall``
 
+The next step is `Building the assisi software`_ 
+
 Ubuntu 12.04 (Precise) 64-bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -91,6 +93,8 @@ Now install python-zmq using pip (if you install using apt-get it will install a
     sudo apt-get install pip
     sudo pip install pyzmq
 
+The next step is `Building the assisi software`_ 
+
 MacOS X
 ~~~~~~~
 
@@ -103,6 +107,9 @@ The assisi-playground simulator uses the Enki simulation engine, which
 needs to be installed first:
 
 .. code-block:: console
+
+    mkdir -p ~/assisi/deps
+    cd ~/assisi/deps
     
     git clone https://github.com/larics/enki
     cd enki
@@ -130,7 +137,7 @@ The assisi-playground itself:
   export PATH=${PATH}:~/assisi/playground/build/playground
   cd ../..
   
-The Pyton API
+The Python API
 
 .. code-block:: console
 
@@ -143,6 +150,7 @@ The Pyton API
 
 The ``PATH`` and ``PYTHONPATH`` exports have to be done very time you open a new shell, so It's best to add it to the end of your ``~/.bashrc`` file. It's purpose is to enable the importing of the Assisi python API in Python programs.
 
+
 After completing all of the abovementioned steps, we should have the following folder structure:
   * assisi
 
@@ -153,6 +161,9 @@ After completing all of the abovementioned steps, we should have the following f
       + zeromq-3.2.4
       + cppzmq
       + enki
+
+(Note: for Ubuntu 14.04 installation, ``cppzmq`` and ``zeromq-3.2.4`` use the 
+system installer, and so should not exist in the ``assisi/deps`` directory)
     
 Running and testing the software
 --------------------------------

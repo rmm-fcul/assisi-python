@@ -141,6 +141,8 @@ Automatic deployment (GUI tool)
 
 TODO
 
+.. _deployment_tools:
+
 Automatic deployment (command-line tools)
 -----------------------------------------
 
@@ -152,9 +154,9 @@ provides a quick overview of the deployment process.
 Automatic deployment generally consists of two steps:
 
 #. The **deployment step**, where controllers are copied from the
-development host to the deployment target
+   development host to the deployment target
 #. The **run step**, where the deployed controller code is executed to
-control the behavior of CASUs (real or simulated)
+   control the behavior of CASUs (real or simulated)
 
 In order to successfully perform the steps above, the user has to
 prepare four files describing the details of the deployment he/she

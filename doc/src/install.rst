@@ -38,6 +38,8 @@ If you have a manually installed version of libzmq on your system, you
 will have to uninstall it manually. Go to the folder where you
 originally built it and run ``make uninstall``
 
+The next step is `Building the assisi software`_ 
+
 Ubuntu 12.04 (Precise) 64-bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -91,6 +93,8 @@ Now install python-zmq using pip (if you install using apt-get it will install a
     sudo apt-get install pip
     sudo pip install pyzmq
 
+The next step is `Building the assisi software`_ 
+
 MacOS X
 ~~~~~~~
 
@@ -103,6 +107,9 @@ The assisi-playground simulator uses the Enki simulation engine, which
 needs to be installed first:
 
 .. code-block:: console
+
+    mkdir -p ~/assisi/deps
+    cd ~/assisi/deps
     
     git clone https://github.com/larics/enki
     cd enki
@@ -130,7 +137,7 @@ The assisi-playground itself:
   export PATH=${PATH}:~/assisi/playground/build/playground
   cd ../..
   
-The Pyton API
+The Python API
 
 .. code-block:: console
 
@@ -143,6 +150,7 @@ The Pyton API
 
 The ``PATH`` and ``PYTHONPATH`` exports have to be done very time you open a new shell, so It's best to add it to the end of your ``~/.bashrc`` file. It's purpose is to enable the importing of the Assisi python API in Python programs.
 
+
 After completing all of the abovementioned steps, we should have the following folder structure:
   * assisi
 
@@ -153,6 +161,9 @@ After completing all of the abovementioned steps, we should have the following f
       + zeromq-3.2.4
       + cppzmq
       + enki
+
+(Note: for Ubuntu 14.04 installation, ``cppzmq`` and ``zeromq-3.2.4`` use the 
+system installer, and so should not exist in the ``assisi/deps`` directory)
     
 Running and testing the software
 --------------------------------
@@ -205,3 +216,97 @@ In a new terminal window:
 .. code-block:: console
 
   ./casus_proxy_led.py
+
+
+Setup for simulation via the deployment tool
+--------------------------------------------
+
+To execute simulations with the deployment tool requires some further installation.
+
+The deployment tool is further described in :ref:`deployment_tools` and :ref:`deployment_examples`.
+
+1. Create a new user account
+
+.. code-block:: console
+
+   sudo adduser assisi
+   # enter a password; default for other details is ok
+
+2. Set up an ssh key to access this account
+
+.. code-block:: console
+
+   # generate new key
+   ssh-keygen -t rsa -b 4096 -C "local assisi account" -f ~/.ssh/id_rsa_localassisi
+   ssh-add ~/.ssh/id_rsa_localassisi
+   # <type passphrase for key>
+
+   # check the new key is present in the keychain
+   ssh-add -l
+
+   # install key into new account
+   ssh-copy-id -i ~/.ssh/id_rsa_localassisi.pub -o "PubKeyAuthentication=no" assisi@localhost 
+   # <type password, hopefully for the last time!>
+
+   # check login is possible, without typing a password.
+   ssh assisi@localhost
+
+   logout
+
+3. Install assisi-python for this account
+
+NOTE: the path for the assisipy package installation here (for assisi@localhost account) is slightly different to that for the normal login as described above.
+
+.. code-block:: console
+
+   ssh assisi@localhost
+   cd ~
+   git clone https://github.com/larics/assisi-python python
+   cd python
+   git submodule update --init
+   ./compile_msgs.sh
+
+   logout
+
+
+4. On your normal login, update the ``PATH`` environment variable:
+
+.. code-block:: console
+
+   PATH=${PATH}:~/assisi/python/assisipy:
+
+As per above, you can add this command in your ``.bashrc`` file
+
+test that the deployment tools are on your path:
+
+.. code-block:: console
+
+   which deploy.py
+
+   # should return something like
+   /home/user/assisi/python/assisipy/deploy.py
+
+5. Test a sample deployment.
+
+.. code-block:: console
+
+   cd ~/assisi/python/examples/deployment/simple
+   assisi_playground &
+   sim.py simple_3x3-sim.arena
+   deploy.py sim_3x3_local.assisi
+   # NOTE: ===> This stage should *not* ask for a password, else the toolflow will not work correctly.
+   assisirun.py sim_3x3_local.assisi
+
+(For more detail describing the example, see :ref:`deployment_examples`)
+
+
+
+
+
+
+
+
+
+
+
+

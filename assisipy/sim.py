@@ -15,11 +15,11 @@ from msg import base_msgs_pb2
 from msg import dev_msgs_pb2
 
 class Control:
-    """ 
-    Simulator control API. 
+    """
+    Simulator control API.
 
-    Creates a command publisher and connects it to the simulator. 
-        
+    Creates a command publisher and connects it to the simulator.
+
     :param string rtc_file_name: Name of the run-time configuraiton file. This file specifies the parameters for connecting to the simulator.
 
     """
@@ -56,24 +56,24 @@ class Control:
                 time.sleep(1)
             print('Simulator control connected!')
 
-    def spawn(self, 
-              obj_type, 
-              name, 
-              pose, 
-              polygon = (), 
-              radius = (), 
+    def spawn(self,
+              obj_type,
+              name,
+              pose,
+              polygon = (),
+              radius = (),
               color = (),
               height = 1,
               mass = -1):
-        """ 
+        """
 
         Spawn an object in the simulated world.
-            
+
         :param str obj_type: Type of object to spawn. Currently supported types are 'Casu', 'Bee', 'EPuck' and 'Physical'
         :param str name: Name of the object. Must be unique in the world.
         :param tuple pose: An (x,y,yaw) tuple.
         :param tuple polygon: A tuple of vertex coordinates ((x1,y1),(x2,y2),...). If obj_type is 'Physical', this defines the shape of the object.
-        :param radius: Radius of a cylindrical 'Physical' object. 
+        :param radius: Radius of a cylindrical 'Physical' object.
         :param color: Color of a 'Physical' object.
         :param float height: 'Physical' object height.
         :param mass: 'Physical' object mass.
@@ -103,7 +103,7 @@ class Control:
             data.polygon.height = height
             data.polygon.mass = mass
             data.type = 'Polygon'
-        self.__pub.send_multipart(['Sim', 'Spawn', obj_type, 
+        self.__pub.send_multipart(['Sim', 'Spawn', obj_type,
                                    data.SerializeToString()])
 
     def spawn_array(self, obj_type, array):
@@ -111,7 +111,7 @@ class Control:
         Spawn an array of objects.
         """
         for name in array:
-            self.spawn(obj_type, name, 
+            self.spawn(obj_type, name,
                        (array[name]['pose']['x'],
                         array[name]['pose']['y'],
                         array[name]['pose']['yaw']))
@@ -172,8 +172,8 @@ class Control:
                     print('Unknown command {0} for sim control'.format(cmd))
 
 
-if __name__ == '__main__':
 
+def main():
     parser = argparse.ArgumentParser(description='Spawn an array of objects (casus or bees), from an .arena/.bees file.')
     parser.add_argument('filename', help='an .arena or .bees file')
     args = parser.parse_args()
@@ -192,3 +192,5 @@ if __name__ == '__main__':
                     sim_ctrl = Control(pub_addr = arrays[layer][obj_name]['pub_addr'])
                     sim_ctrl.spawn_array(obj_type, arrays[layer])
 
+if __name__ == '__main__':
+    main()

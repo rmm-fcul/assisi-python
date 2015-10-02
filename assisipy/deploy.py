@@ -5,7 +5,7 @@ import yaml
 import pygraphviz as pgv
 from fabric.api import run, put, settings
 
-import sys
+import argparse
 import os
 import shutil
 
@@ -33,7 +33,7 @@ class Deploy:
 
         with open(project_file_name) as project_file:
             project = yaml.safe_load(project_file)
-            
+
         # Read the .arena file
         with open(os.path.join(self.project_root, project['arena'])) as arena_file:
             self.arena = yaml.safe_load(arena_file)
@@ -81,7 +81,7 @@ def all():
             # The sandbox directory does not exist,
             # no biggie
             pass
-        
+
         # Create one folder per arena layer
         # with subfolders for each casu
         os.mkdir(self.sandbox_dir)
@@ -99,7 +99,7 @@ def all():
                                rtc_file, default_flow_style=False)
                     yaml.dump({'sub_addr': self.arena[layer][casu]['sub_addr']},
                               rtc_file, default_flow_style=False)
-                    yaml.dump({'msg_addr': 'tcp://*:' + self.arena[layer][casu]['msg_addr'].split(':')[-1]}, 
+                    yaml.dump({'msg_addr': 'tcp://*:' + self.arena[layer][casu]['msg_addr'].split(':')[-1]},
                               rtc_file, default_flow_style=False)
                     neighbors = {'neighbors':{}}
                     for nb in self.nbg.get_subgraph(layer).out_neighbors(casu):
@@ -137,7 +137,7 @@ def {task}():
                 fabfile_all += '    {task}()\n'.format(task=(layer+'_'+casu).replace('-','_'))
                 os.chdir('..')
             os.chdir(sandbox_path)
-        
+
         os.chdir(self.project_root)
 
         # Finalize the fabric file
@@ -148,15 +148,15 @@ def {task}():
         print('Preparaton done!')
         print('Returning to original directory {0}'.format(cwd))
         os.chdir(cwd)
-        
+
         self.prepared = True
 
     def deploy(self):
-        """ 
+        """
         Perform deployment by copying files from the sandbox directory
         to their appropriate destinations.
         """
-        
+
         if not self.prepared:
             self.prepare()
 
@@ -180,12 +180,16 @@ def {task}():
                     run('chmod +x ' + os.path.join(destdir, ctrl_name))
                 os.chdir('..')
             os.chdir('..')
-        
+
         os.chdir(cwd)
 
-if __name__ == '__main__':
+def main():
+    parser = argparse.ArgumentParser(description='Transfer controller code to CASUs (physical or simulated)')
+    parser.add_argument('project', help='name of .assisi file specifying the project details.')
+    args = parser.parse_args()
 
-    # TODO: use argparse!
-    project = Deploy(sys.argv[1])
+    project = Deploy(args.project)
     project.deploy()
 
+if __name__ == '__main__':
+    main()

@@ -4,11 +4,19 @@ A setuptools script that follows recommendations (where relevant) from:
   https://github.com/jeffknupp/sandman/blob/develop/setup.py
   http://pythonhosted.org/setuptools/setuptools.html
 
+
 Note: to ensure that the description file is available in the target,
 (needed when setup.py is executed, either manually or by easy_install/pip)
 the MANIFEST.in file is used.
 package_data and data_files are ignored by setuptools when compiling
 source distributions!
+
+Note: for the entry points to work, the rhs expects the target to be a
+function in a module, that takes no arguments:
+http://stackoverflow.com/q/2853088
+Luckily, argparse somehow access sys.argv from wherever they are created
+so arguments need to be passed to that entry point func.
+The four tools used in deployment scenarios have these entry points set up.
 
 '''
 
@@ -35,6 +43,16 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 long_description = read('DESCRIPTION.rst')
+
+# setting up entry points to code within the python package - hopefully..
+console_scripts = [
+            ['sim.py = assisipy.sim:main'],
+            ['assisirun.py = assisipy.assisirun:main'],
+            ['deploy.py = assisipy.deploy:main'],
+            ['collect_data.py = assisipy.collect_data:main'],
+]
+
+
 
 setup(
     name="assisipy",
@@ -69,5 +87,8 @@ setup(
     # Run-time dependencies (will be installed by pip)
     install_requires = ['pyzmq','protobuf','pyyaml', 'pygraphviz', 'Fabric'],
 
+    entry_points     = {
+        'console_scripts': console_scripts,
+    }
 
 )

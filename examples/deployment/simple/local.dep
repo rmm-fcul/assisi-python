@@ -23,6 +23,9 @@ sim-01 :
         user : assisi
         prefix : deploy
         controller: controllers/blink_and_send.py
+        # if command-line arguments to the controller are required, supply as 
+        # a list in 'args'. ([] brackets required as per the 'extra' setting)
+        args : [ rg,]
     casu-004 : 
         hostname : localhost
         user : assisi
@@ -33,6 +36,7 @@ sim-01 :
         user : assisi
         prefix : deploy
         controller: controllers/blink_and_send.py
+        args : [ b]
     casu-006 : 
         hostname : localhost
         user : assisi
@@ -53,6 +57,5 @@ sim-01 :
         user : assisi
         prefix : deploy
         controller: controllers/blink_and_send.py
-
             
         

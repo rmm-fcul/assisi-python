@@ -121,19 +121,25 @@ def all():
                     for item in extra:
                         shutil.copy(os.path.join(self.project_root,item),'.')
 
+                # compile extra args string
+                _extra_args = self.dep[layer][casu].get('args', [])
+                extra_args = " ".join(_extra_args)
+
                 # Append to fabfile
                 fabfile_tasks += '''
 @parallel
 def {task}():
     with settings(host_string='{host}', user='{username}'):
         with cd('{code_dir}'):
-                run('export PYTHONPATH=/home/assisi/python:$PYTHONPATH; ./{command} {rtc}')
+                run('export PYTHONPATH=/home/assisi/python:$PYTHONPATH; ./{command} {rtc} {extra_args}')
                                   '''.format(task=(layer+'_'+casu).replace('-','_'),
                                              host=self.dep[layer][casu]['hostname'],
                                              username=self.dep[layer][casu]['user'],
                                              code_dir=os.path.join(self.dep[layer][casu]['prefix'],layer,casu),
                                              command=os.path.basename(self.dep[layer][casu]['controller']),
-                                             rtc=casu+'.rtc')
+                                             rtc=casu+'.rtc',
+                                             extra_args=extra_args,
+                                             )
                 fabfile_all += '    {task}()\n'.format(task=(layer+'_'+casu).replace('-','_'))
                 os.chdir('..')
             os.chdir(sandbox_path)

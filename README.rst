@@ -18,3 +18,11 @@ This release was sourced from:
 	assisi-msg    git rev 0dd2e6a0646f26887b6124ab276230494b235f43
 	assisi-python version 0.9.0
 ============================================================
+
+
+============================================================
+This release was sourced from:
+	assisi-python git rev 94579b304d4b3857a44d00e92f0296cf3f237732
+	assisi-msg    git rev 0dd2e6a0646f26887b6124ab276230494b235f43
+	assisi-python version 0.9.0
+============================================================

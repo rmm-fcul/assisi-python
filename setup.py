@@ -75,7 +75,7 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Topic :: Scientific/Engineering :: Artificial Life',
-        'License :: OSI Approved :: LGPL License',
+        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
         'Programming Language :: Python :: 2.7'
     ],
 

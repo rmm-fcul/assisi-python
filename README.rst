@@ -2,3 +2,11 @@ assisi-python
 =============
 
 Python API for the ASSISI|bf project.
+
+
+============================================================
+This release was sourced from:
+	assisi-python git rev abef303bba0510fb9ce06e7ef7dbf496f53bcdcd
+	assisi-msg    git rev 0dd2e6a0646f26887b6124ab276230494b235f43
+	assisi-python version 0.9.0
+============================================================

@@ -5,11 +5,12 @@
 Tool for remotely running CASU controllers.
 """
 
-from fabric.api import settings, cd, run, env
+# none of the fabric tools are used [directly], import removed
+#from fabric.api import settings, cd, run, env
 
 import yaml
 
-import os.path
+#import os.path
 import argparse
 import subprocess
 
@@ -21,7 +22,7 @@ class AssisiRun:
         """
         Constructor.
         """
-        
+
         self.fabfile_name = project_name[:-6] + 'py'
         self.depspec = {}
         with open(project_name) as project:
@@ -48,11 +49,13 @@ class AssisiRun:
         for taskname in self.running:
             self.running[taskname].wait()
 
-if __name__ == '__main__':
-    
+def main():
     parser = argparse.ArgumentParser(description='Run a set of CASU controllers.')
     parser.add_argument('project', help='name of .assisi file specifying the project details.')
     args = parser.parse_args()
 
     project = AssisiRun(args.project)
     project.run()
+
+if __name__ == '__main__':
+    main()

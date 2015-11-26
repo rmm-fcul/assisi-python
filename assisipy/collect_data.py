@@ -86,8 +86,7 @@ class DataCollector:
         os.chdir(self.project_root)
 
 
-if __name__ == '__main__':
-
+def main():
     parser = argparse.ArgumentParser(description='Collect CASU logs. Currently assumes that the logs are located in the same folder as the controller.')
     parser.add_argument('project', help='Project file name (.assisi).')
     parser.add_argument('--clean', action='store_true', default=False,
@@ -96,3 +95,5 @@ if __name__ == '__main__':
     dc = DataCollector(args.project, args.clean)
     dc.collect()
 
+if __name__ == '__main__':
+    main()

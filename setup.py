@@ -73,12 +73,9 @@ setup(
 
     classifiers=[
         'Development Status :: 5 - Production/Stable',
-
-        'Intended Audience :: ASSISIbf researchers',
-        'Topic :: Collective systems :: Software tools',
-
+        'Intended Audience :: Developers',
+        'Topic :: Scientific/Engineering :: Artificial Life',
         'License :: OSI Approved :: LGPL License',
-
         'Programming Language :: Python :: 2.7'
     ],
 

@@ -72,7 +72,7 @@ setup(
     license='LGPL',
 
     classifiers=[
-        'Development status :: 5 - Production/Stable',
+        'Development Status :: 5 - Production/Stable',
 
         'Intended Audience :: ASSISIbf researchers',
         'Topic :: Collective systems :: Software tools',

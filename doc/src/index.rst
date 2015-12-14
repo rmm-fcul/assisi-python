@@ -17,6 +17,7 @@ Contents:
    manual
    protocol
    examples
+   dev-guide
 
 Indices and tables
 ==================

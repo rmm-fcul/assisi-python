@@ -19,6 +19,11 @@ Contents:
    examples
    dev-guide
 
+.. toctree::
+   :hidden:
+
+   older-platform-install
+
 Indices and tables
 ==================
 

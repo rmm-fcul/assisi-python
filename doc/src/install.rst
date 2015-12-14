@@ -41,7 +41,9 @@ originally built it and run ``make uninstall``
 The next step is `Building the assisi software`_ 
 
 Ubuntu 12.04 (Precise) 64-bit
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+NOTE: if you are using ubuntu 14.04, skip this section.
 
 Most of the dependencies needed to build and run ASSISI software can
 be installed from official Ubuntu repositories:
@@ -100,10 +102,14 @@ MacOS X
 
 TODO
 
+
+
 Building the assisi software
 ----------------------------
 
-The assisi-playground simulator uses the Enki simulation engine, which
+There are three main components to install.
+
+1. The assisi-playground simulator uses the **Enki simulation engine**, which
 needs to be installed first:
 
 .. code-block:: console
@@ -121,9 +127,9 @@ needs to be installed first:
     cd ../../..
   
 
-You should have enki and viewer folders in you ``/user/local/include`` folder.
+You should have enki and viewer folders in you ``/usr/local/include`` folder.
 
-The assisi-playground itself:
+2. The **assisi-playground** itself:
 
 .. code-block:: console
 
@@ -137,7 +143,38 @@ The assisi-playground itself:
   export PATH=${PATH}:~/assisi/playground/build/playground
   cd ../..
   
-The Python API
+3. The **python API**:
+
+(These instructions are valid from December 2015 onwards, using >=v0.9.0)
+
+.. code-block:: console
+
+  sudo pip install assisipy
+
+
+
+The ``PATH`` export has to be done very time you open a new shell, so It's best to add it to the end of your ``~/.bashrc`` file. It's purpose is to enable the importing of the Assisi python API in Python programs.
+
+
+After completing all of the abovementioned steps, we should have the following folder structure:
+  * assisi
+
+    - playground
+    - examples
+    - deps
+
+      + enki
+
+(Note for older installation, e.g. Ubuntu 12.04, the ``assisi/deps`` directory
+should also contain sub-directories for ``cppzmq`` and ``zeromq-3.2.4``).
+
+    
+
+
+
+Installing the Python API -- old version (pre v0.9.0)
+-----------------------------------------------------
+
 
 .. code-block:: console
 

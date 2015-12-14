@@ -1,5 +1,8 @@
 Examples of assisipy usage
 ==========================
 
-.. include:: ../../examples/deployment/simple/simple.rst
+See documentation included with the examples repository (https://github.com/assisi/assisipy-examples)
+
+
+.. .. include:: ../../examples/deployment/simple/simple.rst
 

@@ -41,69 +41,26 @@ originally built it and run ``make uninstall``
 The next step is `Building the assisi software`_ 
 
 Ubuntu 12.04 (Precise) 64-bit
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Most of the dependencies needed to build and run ASSISI software can
-be installed from official Ubuntu repositories:
+NOTE: we are no longer actively supporting 12.04 installations.  However, in case your platform requires dependencies that cannot be installed via the package manager, we retain the older instructions elsewhere.
 
-.. code-block:: console
-  
-    sudo apt-get install build-essential git cmake qt4-dev-tools
-    sudo apt-get install libboost-dev libboost-program-options-dev libboost-system-dev
-    sudo apt-get install libboost-filesystem-dev libboost-python-dev
-    sudo apt-get install libprotobuf-dev protobuf-compiler python-protobuf
-    sudo apt-get install python-dev python-sphinx python-yaml
-    sudo apt-get install python-pygraphviz fabric
+See the guide :ref:`Installation instructions for older distributions`_.
 
-A few dependencies have to be installed manually. Create a folder for the Assisi project and position yourself there
-
-.. code-block:: console
-    
-    cd ~
-    mkdir assisi
-    cd assisi
-
-Build and install the ZeroMQ networking library:
-
-.. code-block:: console
-
-   mkdir deps
-   cd deps
-   wget http://download.zeromq.org/zeromq-3.2.4.tar.gz
-   tar xvf zeromq-3.2.4.tar.gz
-   cd zeromq-3.2.4
-   ./configure
-   make
-   sudo make install
-   cd ..
-
-After this step you should have the files ``zmq.h`` and ``zmq_utils.h`` in your ``/usr/local/include`` folder.
-
-Add ZeroMQ c++ bindings:
-
-.. code-block:: console
-
-    git clone https://github.com/zeromq/cppzmq
-    sudo cp cppzmq/zmq.hpp /usr/local/include
-
-Now install python-zmq using pip (if you install using apt-get it will install an older version of libzmq as a dependency):
-
-.. code-block:: console
-  
-    sudo apt-get install pip
-    sudo pip install pyzmq
-
-The next step is `Building the assisi software`_ 
 
 MacOS X
 ~~~~~~~
 
 TODO
 
+
+
 Building the assisi software
 ----------------------------
 
-The assisi-playground simulator uses the Enki simulation engine, which
+There are three main components to install.
+
+1. The assisi-playground simulator uses the **Enki simulation engine**, which
 needs to be installed first:
 
 .. code-block:: console
@@ -121,9 +78,9 @@ needs to be installed first:
     cd ../../..
   
 
-You should have enki and viewer folders in you ``/user/local/include`` folder.
+You should have enki and viewer folders in you ``/usr/local/include`` folder.
 
-The assisi-playground itself:
+2. The **assisi-playground** itself:
 
 .. code-block:: console
 
@@ -137,34 +94,49 @@ The assisi-playground itself:
   export PATH=${PATH}:~/assisi/playground/build/playground
   cd ../..
   
-The Python API
+3. The **python API**:
+
+(These instructions are valid from December 2015 onwards, using >=v0.9.0)
 
 .. code-block:: console
 
-  git clone https://github.com/larics/assisi-python python
-  cd python
-  git submodule update --init
-  ./compile_msgs.sh
-  export PYTHONPATH=${PYTHONPATH}:~/assisi/python
-  cd ..
+  sudo pip install assisipy
 
-The ``PATH`` and ``PYTHONPATH`` exports have to be done very time you open a new shell, so It's best to add it to the end of your ``~/.bashrc`` file. It's purpose is to enable the importing of the Assisi python API in Python programs.
+
+The ``PATH`` export has to be done very time you open a new shell, so It's best to add it to the end of your ``~/.bashrc`` file. It's purpose is to enable the importing of the Assisi python API in Python programs.
+
+
+Examples (optional)
+-------------------
+
+A variety of code examples are provided, which illustrate how to use the API to run simulations and execute code on the physical CASUs.
+
+.. code-block:: console
+    
+    cd ~/assisi
+    git clone https://github.com/assisi/assisipy-examples.git examples
+
+
+Final structure
+---------------
 
 
 After completing all of the abovementioned steps, we should have the following folder structure:
   * assisi
 
     - playground
-    - python
+    - examples
     - deps
 
-      + zeromq-3.2.4
-      + cppzmq
       + enki
 
-(Note: for Ubuntu 14.04 installation, ``cppzmq`` and ``zeromq-3.2.4`` use the 
-system installer, and so should not exist in the ``assisi/deps`` directory)
+(Note for older installation, e.g. Ubuntu 12.04, the ``assisi/deps`` directory
+should also contain sub-directories for ``cppzmq`` and ``zeromq-3.2.4``).
+
     
+
+
+
 Running and testing the software
 --------------------------------
 
@@ -177,14 +149,14 @@ To test the software, you will first need to start the simulator:
 
 Take note of the onscreen instructions for manipulating the camera view.
 
-Try running the demos in the ``python/examples`` folder.
+Try running the demos in the ``examples`` folder.
 
 The wandering bee example
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: console
 
-  cd ~/assisi/python/examples/wandering_bee
+  cd ~/assisi/examples/wandering_bee
   ./spawn_bee_in_maze.py
   ./bee_wander.py
   
@@ -196,7 +168,7 @@ If the simulator is running, restart it.
 
 .. code-block:: console
 
-  cd ~/assisi/python/examples/casu_proxy_led
+  cd ~/assisi/examples/casu_proxy_led
   ./spawn_casu_and_bee.py
   ./casu_proxy_led.py
 
@@ -207,7 +179,7 @@ If the simulator is running, restart it.
 
 .. code-block:: console
 
-  cd ~/assisi/python/examples/bees_in_casu_array
+  cd ~/assisi/examples/bees_in_casu_array
   ./spawn_bees_in_casu_array.py
   ./bees_wander.py
 

@@ -152,8 +152,22 @@ You should have enki and viewer folders in you ``/usr/local/include`` folder.
   sudo pip install assisipy
 
 
-
 The ``PATH`` export has to be done very time you open a new shell, so It's best to add it to the end of your ``~/.bashrc`` file. It's purpose is to enable the importing of the Assisi python API in Python programs.
+
+
+Examples (optional)
+-------------------
+
+A variety of code examples are provided, which illustrate how to use the API to run simulations and execute code on the physical CASUs.
+
+.. code-block:: console
+    
+    cd ~/assisi
+    git clone https://github.com/assisi/assisipy-examples.git examples
+
+
+Final structure
+---------------
 
 
 After completing all of the abovementioned steps, we should have the following folder structure:
@@ -172,36 +186,6 @@ should also contain sub-directories for ``cppzmq`` and ``zeromq-3.2.4``).
 
 
 
-Installing the Python API -- old version (pre v0.9.0)
------------------------------------------------------
-
-
-.. code-block:: console
-
-  git clone https://github.com/larics/assisi-python python
-  cd python
-  git submodule update --init
-  ./compile_msgs.sh
-  export PYTHONPATH=${PYTHONPATH}:~/assisi/python
-  cd ..
-
-The ``PATH`` and ``PYTHONPATH`` exports have to be done very time you open a new shell, so It's best to add it to the end of your ``~/.bashrc`` file. It's purpose is to enable the importing of the Assisi python API in Python programs.
-
-
-After completing all of the abovementioned steps, we should have the following folder structure:
-  * assisi
-
-    - playground
-    - python
-    - deps
-
-      + zeromq-3.2.4
-      + cppzmq
-      + enki
-
-(Note: for Ubuntu 14.04 installation, ``cppzmq`` and ``zeromq-3.2.4`` use the 
-system installer, and so should not exist in the ``assisi/deps`` directory)
-    
 Running and testing the software
 --------------------------------
 
@@ -214,14 +198,14 @@ To test the software, you will first need to start the simulator:
 
 Take note of the onscreen instructions for manipulating the camera view.
 
-Try running the demos in the ``python/examples`` folder.
+Try running the demos in the ``examples`` folder.
 
 The wandering bee example
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: console
 
-  cd ~/assisi/python/examples/wandering_bee
+  cd ~/assisi/examples/wandering_bee
   ./spawn_bee_in_maze.py
   ./bee_wander.py
   
@@ -233,7 +217,7 @@ If the simulator is running, restart it.
 
 .. code-block:: console
 
-  cd ~/assisi/python/examples/casu_proxy_led
+  cd ~/assisi/examples/casu_proxy_led
   ./spawn_casu_and_bee.py
   ./casu_proxy_led.py
 
@@ -244,7 +228,7 @@ If the simulator is running, restart it.
 
 .. code-block:: console
 
-  cd ~/assisi/python/examples/bees_in_casu_array
+  cd ~/assisi/examples/bees_in_casu_array
   ./spawn_bees_in_casu_array.py
   ./bees_wander.py
 

@@ -22,7 +22,7 @@ Contents:
 .. toctree::
    :hidden:
 
-   older-platform-install
+   other-platform-install
 
 Indices and tables
 ==================

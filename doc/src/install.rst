@@ -144,7 +144,8 @@ Get the examples from github
 
 .. code-block:: console
 
-  git clone https://github.com/assisi/assisipy-examples
+  cd ~/assisi
+  git clone https://github.com/assisi/assisipy-examples examples
 
 Try running the some of the examples.
 

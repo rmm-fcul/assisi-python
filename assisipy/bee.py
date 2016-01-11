@@ -65,7 +65,27 @@ Light sensor
 
 TEMP_SENSOR = 6
 """
-Temperature sensor 
+(Front) Temperature sensor
+"""
+
+TEMP_SENSOR_FRONT = 6
+"""
+Front temperature sensor
+"""
+
+TEMP_SENSOR_LEFT = 7
+"""
+Left temperature sensor
+"""
+
+TEMP_SENSOR_BACK = 8
+"""
+Back temperature sensor
+"""
+
+TEMP_SENSOR_RIGHT = 9
+"""
+Right temperature sensor
 """
 
 ARRAY = 10000
@@ -265,10 +285,15 @@ class Bee:
         """
         Returns the temperature reading of sensor id.
         """
+        obj = None
         with self.__lock:
-            return self.__temp_readings.temp[id - TEMP_SENSOR]
-        
+            if id == ARRAY:
+                obj = [val for val in self.__temp_readings.temp]
+            else:
+                obj = self.__temp_readings.temp[id - TEMP_SENSOR]
 
+        return obj
+        
     def get_vibration_frequency(self, id):
         """
         Returns the vibration frequency of sensor id.

@@ -14,7 +14,7 @@ import base_msgs_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='dev_msgs.proto',
   package='AssisiMsg',
-  serialized_pb='\n\x0e\x64\x65v_msgs.proto\x12\tAssisiMsg\x1a\x0f\x62\x61se_msgs.proto\"\xe8\x01\n\nRangeArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x32\n\x04type\x18\x02 \x01(\x0e\x32 .AssisiMsg.RangeArray.SensorType:\x02IR\x12\x1d\n\rfield_of_view\x18\x03 \x01(\x02:\x06\x30.5236\x12\x14\n\tmin_range\x18\x04 \x01(\x02:\x01\x30\x12\x16\n\tmax_range\x18\x05 \x01(\x02:\x03inf\x12\r\n\x05range\x18\x06 \x03(\x02\x12\x11\n\traw_value\x18\x07 \x03(\x02\"\x14\n\nSensorType\x12\x06\n\x02IR\x10\x00\">\n\x0bTemperature\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x02(\x02\"C\n\x10TemperatureArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x03(\x02\"W\n\x11VibrationSetpoint\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x02(\x01\x12\x11\n\tamplitude\x18\x03 \x01(\x01\"o\n\x10VibrationReading\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x03(\x02\x12\x11\n\tamplitude\x18\x03 \x03(\x02\x12\x17\n\x0f\x61mplitude_stdev\x18\x04 \x03(\x02\"h\n\x15VibrationReadingArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12,\n\x07reading\x18\x02 \x03(\x0b\x32\x1b.AssisiMsg.VibrationReading\"S\n\tDiffDrive\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x10\n\x08vel_left\x18\x02 \x02(\x01\x12\x11\n\tvel_right\x18\x03 \x02(\x01\"\x9a\x01\n\x0bObjectArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x1d\n\rfield_of_view\x18\x03 \x01(\x02:\x06\x30.5236\x12\x14\n\tmin_range\x18\x04 \x01(\x02:\x01\x30\x12\x16\n\tmax_range\x18\x05 \x01(\x02:\x03inf\x12\r\n\x05range\x18\x06 \x03(\x02\x12\x0c\n\x04type\x18\x07 \x03(\t\"?\n\x07\x41irflow\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x11\n\tintensity\x18\x02 \x02(\x02\"Y\n\x0e\x41irflowReading\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x11\n\tintensity\x18\x02 \x02(\x02\x12\x11\n\tdirection\x18\x03 \x02(\x02')
+  serialized_pb='\n\x0e\x64\x65v_msgs.proto\x12\tAssisiMsg\x1a\x0f\x62\x61se_msgs.proto\"\xe8\x01\n\nRangeArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x32\n\x04type\x18\x02 \x01(\x0e\x32 .AssisiMsg.RangeArray.SensorType:\x02IR\x12\x1d\n\rfield_of_view\x18\x03 \x01(\x02:\x06\x30.5236\x12\x14\n\tmin_range\x18\x04 \x01(\x02:\x01\x30\x12\x16\n\tmax_range\x18\x05 \x01(\x02:\x03inf\x12\r\n\x05range\x18\x06 \x03(\x02\x12\x11\n\traw_value\x18\x07 \x03(\x02\"\x14\n\nSensorType\x12\x06\n\x02IR\x10\x00\">\n\x0bTemperature\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x02(\x02\"C\n\x10TemperatureArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x03(\x02\"d\n\x17TemperatureWithGradient\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x02(\x02\x12\x0b\n\x03\x64tx\x18\x03 \x02(\x02\x12\x0b\n\x03\x64ty\x18\x04 \x02(\x02\"W\n\x11VibrationSetpoint\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x02(\x01\x12\x11\n\tamplitude\x18\x03 \x01(\x01\"o\n\x10VibrationReading\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x03(\x02\x12\x11\n\tamplitude\x18\x03 \x03(\x02\x12\x17\n\x0f\x61mplitude_stdev\x18\x04 \x03(\x02\"h\n\x15VibrationReadingArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12,\n\x07reading\x18\x02 \x03(\x0b\x32\x1b.AssisiMsg.VibrationReading\"S\n\tDiffDrive\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x10\n\x08vel_left\x18\x02 \x02(\x01\x12\x11\n\tvel_right\x18\x03 \x02(\x01\"\x9a\x01\n\x0bObjectArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x1d\n\rfield_of_view\x18\x03 \x01(\x02:\x06\x30.5236\x12\x14\n\tmin_range\x18\x04 \x01(\x02:\x01\x30\x12\x16\n\tmax_range\x18\x05 \x01(\x02:\x03inf\x12\r\n\x05range\x18\x06 \x03(\x02\x12\x0c\n\x04type\x18\x07 \x03(\t\"?\n\x07\x41irflow\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x11\n\tintensity\x18\x02 \x02(\x02\"Y\n\x0e\x41irflowReading\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x11\n\tintensity\x18\x02 \x02(\x02\x12\x11\n\tdirection\x18\x03 \x02(\x02')
 
 
 
@@ -177,6 +177,55 @@ _TEMPERATUREARRAY = _descriptor.Descriptor(
 )
 
 
+_TEMPERATUREWITHGRADIENT = _descriptor.Descriptor(
+  name='TemperatureWithGradient',
+  full_name='AssisiMsg.TemperatureWithGradient',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='header', full_name='AssisiMsg.TemperatureWithGradient.header', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='temp', full_name='AssisiMsg.TemperatureWithGradient.temp', index=1,
+      number=2, type=2, cpp_type=6, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='dtx', full_name='AssisiMsg.TemperatureWithGradient.dtx', index=2,
+      number=3, type=2, cpp_type=6, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='dty', full_name='AssisiMsg.TemperatureWithGradient.dty', index=3,
+      number=4, type=2, cpp_type=6, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=414,
+  serialized_end=514,
+)
+
+
 _VIBRATIONSETPOINT = _descriptor.Descriptor(
   name='VibrationSetpoint',
   full_name='AssisiMsg.VibrationSetpoint',
@@ -214,8 +263,8 @@ _VIBRATIONSETPOINT = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=414,
-  serialized_end=501,
+  serialized_start=516,
+  serialized_end=603,
 )
 
 
@@ -263,8 +312,8 @@ _VIBRATIONREADING = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=503,
-  serialized_end=614,
+  serialized_start=605,
+  serialized_end=716,
 )
 
 
@@ -298,8 +347,8 @@ _VIBRATIONREADINGARRAY = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=616,
-  serialized_end=720,
+  serialized_start=718,
+  serialized_end=822,
 )
 
 
@@ -340,8 +389,8 @@ _DIFFDRIVE = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=722,
-  serialized_end=805,
+  serialized_start=824,
+  serialized_end=907,
 )
 
 
@@ -403,8 +452,8 @@ _OBJECTARRAY = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=808,
-  serialized_end=962,
+  serialized_start=910,
+  serialized_end=1064,
 )
 
 
@@ -438,8 +487,8 @@ _AIRFLOW = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=964,
-  serialized_end=1027,
+  serialized_start=1066,
+  serialized_end=1129,
 )
 
 
@@ -480,8 +529,8 @@ _AIRFLOWREADING = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1029,
-  serialized_end=1118,
+  serialized_start=1131,
+  serialized_end=1220,
 )
 
 _RANGEARRAY.fields_by_name['header'].message_type = base_msgs_pb2._HEADER
@@ -489,6 +538,7 @@ _RANGEARRAY.fields_by_name['type'].enum_type = _RANGEARRAY_SENSORTYPE
 _RANGEARRAY_SENSORTYPE.containing_type = _RANGEARRAY;
 _TEMPERATURE.fields_by_name['header'].message_type = base_msgs_pb2._HEADER
 _TEMPERATUREARRAY.fields_by_name['header'].message_type = base_msgs_pb2._HEADER
+_TEMPERATUREWITHGRADIENT.fields_by_name['header'].message_type = base_msgs_pb2._HEADER
 _VIBRATIONSETPOINT.fields_by_name['header'].message_type = base_msgs_pb2._HEADER
 _VIBRATIONREADING.fields_by_name['header'].message_type = base_msgs_pb2._HEADER
 _VIBRATIONREADINGARRAY.fields_by_name['header'].message_type = base_msgs_pb2._HEADER
@@ -500,6 +550,7 @@ _AIRFLOWREADING.fields_by_name['header'].message_type = base_msgs_pb2._HEADER
 DESCRIPTOR.message_types_by_name['RangeArray'] = _RANGEARRAY
 DESCRIPTOR.message_types_by_name['Temperature'] = _TEMPERATURE
 DESCRIPTOR.message_types_by_name['TemperatureArray'] = _TEMPERATUREARRAY
+DESCRIPTOR.message_types_by_name['TemperatureWithGradient'] = _TEMPERATUREWITHGRADIENT
 DESCRIPTOR.message_types_by_name['VibrationSetpoint'] = _VIBRATIONSETPOINT
 DESCRIPTOR.message_types_by_name['VibrationReading'] = _VIBRATIONREADING
 DESCRIPTOR.message_types_by_name['VibrationReadingArray'] = _VIBRATIONREADINGARRAY
@@ -525,6 +576,12 @@ class TemperatureArray(_message.Message):
   DESCRIPTOR = _TEMPERATUREARRAY
 
   # @@protoc_insertion_point(class_scope:AssisiMsg.TemperatureArray)
+
+class TemperatureWithGradient(_message.Message):
+  __metaclass__ = _reflection.GeneratedProtocolMessageType
+  DESCRIPTOR = _TEMPERATUREWITHGRADIENT
+
+  # @@protoc_insertion_point(class_scope:AssisiMsg.TemperatureWithGradient)
 
 class VibrationSetpoint(_message.Message):
   __metaclass__ = _reflection.GeneratedProtocolMessageType

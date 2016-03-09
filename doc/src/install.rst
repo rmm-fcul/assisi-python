@@ -5,16 +5,21 @@ Below are instructions for installing the current version of the
 Bee-arena software. Once the software is finalized, automatic installer
 packages will be developed.
 
-Installling dependencies
-------------------------
-
-The installation procedure has been tested on the systems listed
-below, and is known to work on those systems. In principle,
-installation on other Posix-compliant systems should also be possible,
+Currently, Ubuntu 14.04 (Trusty Thar) 64-bit is the only officially
+spported platform. Unofficial guides for some other platforms are
+available :ref:`here <other-platforms-label>`.
+In principle, installation on other Posix-compliant systems should also be possible,
 but YMMV (Your Mileage May Vary :)
+
+
+
+
 
 Ubuntu 14.04 (Trusty) 64-bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Installling dependencies
+------------------------
 
 Ubuntu Trusty is the only officially supported platform for ASSISI
 software. Efforts are made to make the software as portable as
@@ -25,12 +30,12 @@ pre-build packages from official Ubuntu repositories:
 
 .. code-block:: console
   
-    sudo apt-get install build-essential git cmake qt4-dev-tools
+    sudo apt-get install build-essential git cmake qt4-dev-tools libsdl1.2-dev
     sudo apt-get install libboost-dev libboost-program-options-dev libboost-system-dev
     sudo apt-get install libboost-filesystem-dev libboost-python-dev
     sudo apt-get install libboost-thread-dev libboost-timer-dev
     sudo apt-get install libprotobuf-dev protobuf-compiler python-protobuf
-    sudo apt-get install python-dev python-sphinx python-yaml
+    sudo apt-get install python-pip python-dev python-sphinx python-yaml
     sudo apt-get install libzmq3-dev python-zmq
     sudo apt-get install python-pygraphviz fabric
 
@@ -39,20 +44,6 @@ will have to uninstall it manually. Go to the folder where you
 originally built it and run ``make uninstall``
 
 The next step is `Building the assisi software`_ 
-
-Ubuntu 12.04 (Precise) 64-bit
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-NOTE: we are no longer actively supporting 12.04 installations.  However, in case your platform requires dependencies that cannot be installed via the package manager, we retain the older instructions elsewhere.
-
-See the guide :ref:`Installation instructions for older distributions`_.
-
-
-MacOS X
-~~~~~~~
-
-TODO
-
 
 
 Building the assisi software
@@ -149,7 +140,14 @@ To test the software, you will first need to start the simulator:
 
 Take note of the onscreen instructions for manipulating the camera view.
 
-Try running the demos in the ``examples`` folder.
+Get the examples from github
+
+.. code-block:: console
+
+  cd ~/assisi
+  git clone https://github.com/assisi/assisipy-examples examples
+
+Try running the some of the examples.
 
 The wandering bee example
 ~~~~~~~~~~~~~~~~~~~~~~~~~

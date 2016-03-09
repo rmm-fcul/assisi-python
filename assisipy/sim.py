@@ -6,6 +6,8 @@
 import argparse
 import threading
 import time
+import os
+import warnings
 
 import yaml
 import zmq
@@ -175,10 +177,22 @@ class Control:
 
 def main():
     parser = argparse.ArgumentParser(description='Spawn an array of objects (casus or bees), from an .arena/.bees file.')
-    parser.add_argument('filename', help='an .arena or .bees file')
+    parser.add_argument('project', help='name of .assisi file specifying the project details.')
+    #parser.add_argument('filename', help='an .arena or .bees file')
     args = parser.parse_args()
 
-    with open(args.filename) as array_file:
+    # check for specification being correct file type
+    if args.project.endswith('.arena'):
+        warnings.warn("[W] expecting a .assisi project file, not a .arena file. (since >v0.9.0)", SyntaxWarning)
+    # find the specification arena file
+    with open(args.project) as project_file:
+        project = yaml.safe_load(project_file)
+
+    project_root = os.path.dirname(os.path.abspath(args.project))
+
+    if 'arena' not in project:
+        raise IOError, "[E] project file ({}) does not define an arena!\ndid you really supply an .assisi file?".format(args.project)
+    with open(os.path.join(project_root, project['arena'])) as array_file:
         arrays = yaml.safe_load(array_file)
         # Several arrays can be defined within one file
         for layer in arrays:

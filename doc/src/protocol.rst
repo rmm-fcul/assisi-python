@@ -26,7 +26,7 @@ Assisi communication protocol
     "...", "...", "Off", "ColorStamped"
     "...", "Light", "On", "ColorStamped"
     "...", "...", "Off", "ColorStamped"
-    "<Casu Name>", "Peltier", "temp", "Temperature"
+    "<Casu Name>", "Peltier", "On", "Temperature"
     "<Casu Name>", "Peltier", "Off", "Temperature"
     "...", "VibeMotor", "On", "Vibration"
     "...", "VibeMotor", "Off", "Vibration"

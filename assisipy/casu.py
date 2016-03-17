@@ -337,7 +337,7 @@ class Casu:
         temp_msg = dev_msgs_pb2.Temperature()
         temp_msg.temp = temp
         device = "Peltier"
-        self.__pub.send_multipart([self.__name, device, "temp",
+        self.__pub.send_multipart([self.__name, device, "On",
                                    temp_msg.SerializeToString()])
         self.__write_to_log([device + "_temp", time.time(), temp])
 

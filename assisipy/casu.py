@@ -128,14 +128,23 @@ class Casu:
 
         self.__stop = False
 
-        # TODO: Fill readings with fake data
+        # TODO: Fill readings/setpoints with fake data
         #       to prevent program crashes.
+
+        # Sensor reading buffers
         self.__ir_range_readings = dev_msgs_pb2.RangeArray()
         self.__temp_readings = dev_msgs_pb2.TemperatureArray()
-        self.__diagnostic_led = [0,0,0,0] # Not used!
         self.__acc_readings = dev_msgs_pb2.VibrationReadingArray()
+
+        # Actuator setpoint buffers
         self.__peltier_setpoint = dev_msgs_pb2.Temperature()
         self.__peltier_on = False
+        self.__airflow_setpoint = dev_msgs_pb2.Airflow()
+        self.__airflow_on = False
+        self.__diagnostic_led_setpoint = base_msgs_pb2.ColorStamped()
+        self.__diagnostic_led_on = False
+        self.__speaker_setpoint = dev_msgs_pb2.VibrationSetpoint()
+        self.__speaker_on = False
 
         # Create the data update thread
         self.__connected = False
@@ -188,6 +197,7 @@ class Casu:
         while not self.__stop:
             [name, dev, cmd, data] = self.__sub.recv_multipart()
             self.__connected = True
+            ### Sensor measurements ###
             if dev == 'IR':
                 if cmd == 'Ranges':
                     # Protect write with a lock
@@ -220,6 +230,7 @@ class Casu:
 
                         self.__write_to_log(['acc_freq', time.time()] + [f for f in acc_freqs])
                         self.__write_to_log(['acc_amp', time.time()] + [a for a in acc_amps])
+            ### Actuator setpoints ###
             elif dev == 'Peltier':
                 if cmd == 'Off':
                     self.__peltier_on = False
@@ -232,10 +243,60 @@ class Casu:
                         self.__peltier_setpoint.ParseFromString(data)
                     self.__write_to_log(['Peltier', time.time(), '1',  self.__peltier_setpoint.temp])
                 else:
-                    print('Unknown command {0} for {1}'.format(cmd, self.__name))
+                    print('Unknown command {0} for {1}'.format(cmd, dev))
+            elif dev == 'Airflow':
+                if cmd == 'Off':
+                    self.__airflow_on = False
+                    with self.__lock:
+                        self.__airflow_setpoint.ParseFromString(data)
+                    self.__write_to_log(['Airflow', time.time(), '0', self.__airflow_setpoint.intensity])
+                elif cmd == 'On':
+                    self.__airflow_on = True
+                    with self.__lock:
+                        self.__airflow_setpoint.ParseFromString(data)
+                    self.__write_to_log(['Airflow', time.time(), '1', self.__airflow_setpoint.intensity])
+                else:
+                    print('Unknown command {0} for {1}'.format(cmd, dev))                    
+            elif dev == 'DiagnosticLed':
+                if cmd == 'Off':
+                    self.__diagnostic_led_on = False
+                    with self.__lock:
+                        self.__diagnostic_led_setpoint.ParseFromString(data)
+                    self.__write_to_log(['DiagnosticLed', time.time(), '0'] + 
+                                        [self.__diagnostic_led_setpoint.color.red,
+                                         self.__diagnostic_led_setpoint.color.green,
+                                         self.__diagnostic_led_setpoint.color.blue])
+                elif cmd == 'On':
+                    self.__diagnostic_led_on = True
+                    with self.__lock:
+                        self.__diagnostic_led_setpoint.ParseFromString(data)
+                    self.__write_to_log(['DiagnosticLed', time.time(), '1'] + 
+                                        [self.__diagnostic_led_setpoint.color.red,
+                                         self.__diagnostic_led_setpoint.color.green,
+                                         self.__diagnostic_led_setpoint.color.blue])
+                else:
+                    print('Unknown command {0} for {1}'.format(cmd, dev))                    
+            elif dev == 'Speaker':
+                if cmd == 'Off':
+                    self.__speaker_on = False
+                    with self.__lock:
+                        self.__speaker_setpoint.ParseFromString(data)
+                    self.__write_to_log(['Speaker', time.time(), '0',
+                                         self.__speaker_setpoint.freq,
+                                         self.__speaker_setpoint.amplitude])
+                elif cmd == 'On':
+                    self.__speaker_on = True
+                    with self.__lock:
+                        self.__spaker_setpoint.ParseFromString(data)
+                    self.__write_to_log(['Speaker', time.time(), '1',
+                                         self.__speaker_setpoint.freq,
+                                         self.__speaker_setpoint.amplitude])
+                else:
+                    print('Unknown command {0} for {1}'.format(cmd, dev))                    
             else:
                 print('Unknown device {0} for {1}'.format(dev, self.__name))
 
+            ### Inter-CASU comms ###
             if self.__msg_sub:
                 try:
                     [name, msg, sender, data] = self.__msg_sub.recv_multipart(zmq.NOBLOCK)

@@ -58,14 +58,8 @@ TEMP_WAX = 14
 PELTIER_ACT = 15
 """ Peltier temperature actuator """
 
-ACC_F = 16
-""" Vibration sensor at 0° (FRONT) """
-ACC_R = 17
-""" Vibration sensors 90° (RIGHT) """
-ACC_B = 18
-""" Vibration sensors 180° (BACK) """
-ACC_L = 19
-""" Vibration sensors 270° (LEFT) """
+ACC = 16
+""" Vibration sensor """
 
 VIBE_ACT = 20
 """ Vibration actuator """
@@ -128,14 +122,23 @@ class Casu:
 
         self.__stop = False
 
-        # TODO: Fill readings with fake data
+        # TODO: Fill readings/setpoints with fake data
         #       to prevent program crashes.
+
+        # Sensor reading buffers
         self.__ir_range_readings = dev_msgs_pb2.RangeArray()
         self.__temp_readings = dev_msgs_pb2.TemperatureArray()
-        self.__diagnostic_led = [0,0,0,0] # Not used!
         self.__acc_readings = dev_msgs_pb2.VibrationReadingArray()
+
+        # Actuator setpoint buffers
         self.__peltier_setpoint = dev_msgs_pb2.Temperature()
         self.__peltier_on = False
+        self.__airflow_setpoint = dev_msgs_pb2.Airflow()
+        self.__airflow_on = False
+        self.__diagnostic_led_setpoint = base_msgs_pb2.ColorStamped()
+        self.__diagnostic_led_on = False
+        self.__speaker_setpoint = dev_msgs_pb2.VibrationSetpoint()
+        self.__speaker_on = False
 
         # Create the data update thread
         self.__connected = False
@@ -188,6 +191,7 @@ class Casu:
         while not self.__stop:
             [name, dev, cmd, data] = self.__sub.recv_multipart()
             self.__connected = True
+            ### Sensor measurements ###
             if dev == 'IR':
                 if cmd == 'Ranges':
                     # Protect write with a lock
@@ -220,6 +224,7 @@ class Casu:
 
                         self.__write_to_log(['acc_freq', time.time()] + [f for f in acc_freqs])
                         self.__write_to_log(['acc_amp', time.time()] + [a for a in acc_amps])
+            ### Actuator setpoints ###
             elif dev == 'Peltier':
                 if cmd == 'Off':
                     self.__peltier_on = False
@@ -232,10 +237,60 @@ class Casu:
                         self.__peltier_setpoint.ParseFromString(data)
                     self.__write_to_log(['Peltier', time.time(), '1',  self.__peltier_setpoint.temp])
                 else:
-                    print('Unknown command {0} for {1}'.format(cmd, self.__name))
+                    print('Unknown command {0} for {1}'.format(cmd, dev))
+            elif dev == 'Airflow':
+                if cmd == 'Off':
+                    self.__airflow_on = False
+                    with self.__lock:
+                        self.__airflow_setpoint.ParseFromString(data)
+                    self.__write_to_log(['Airflow', time.time(), '0', self.__airflow_setpoint.intensity])
+                elif cmd == 'On':
+                    self.__airflow_on = True
+                    with self.__lock:
+                        self.__airflow_setpoint.ParseFromString(data)
+                    self.__write_to_log(['Airflow', time.time(), '1', self.__airflow_setpoint.intensity])
+                else:
+                    print('Unknown command {0} for {1}'.format(cmd, dev))                    
+            elif dev == 'DiagnosticLed':
+                if cmd == 'Off':
+                    self.__diagnostic_led_on = False
+                    with self.__lock:
+                        self.__diagnostic_led_setpoint.ParseFromString(data)
+                    self.__write_to_log(['DiagnosticLed', time.time(), '0'] + 
+                                        [self.__diagnostic_led_setpoint.color.red,
+                                         self.__diagnostic_led_setpoint.color.green,
+                                         self.__diagnostic_led_setpoint.color.blue])
+                elif cmd == 'On':
+                    self.__diagnostic_led_on = True
+                    with self.__lock:
+                        self.__diagnostic_led_setpoint.ParseFromString(data)
+                    self.__write_to_log(['DiagnosticLed', time.time(), '1'] + 
+                                        [self.__diagnostic_led_setpoint.color.red,
+                                         self.__diagnostic_led_setpoint.color.green,
+                                         self.__diagnostic_led_setpoint.color.blue])
+                else:
+                    print('Unknown command {0} for {1}'.format(cmd, dev))                    
+            elif dev == 'Speaker':
+                if cmd == 'Off':
+                    self.__speaker_on = False
+                    with self.__lock:
+                        self.__speaker_setpoint.ParseFromString(data)
+                    self.__write_to_log(['Speaker', time.time(), '0',
+                                         self.__speaker_setpoint.freq,
+                                         self.__speaker_setpoint.amplitude])
+                elif cmd == 'On':
+                    self.__speaker_on = True
+                    with self.__lock:
+                        self.__speaker_setpoint.ParseFromString(data)
+                    self.__write_to_log(['Speaker', time.time(), '1',
+                                         self.__speaker_setpoint.freq,
+                                         self.__speaker_setpoint.amplitude])
+                else:
+                    print('Unknown command {0} for {1}'.format(cmd, dev))                    
             else:
                 print('Unknown device {0} for {1}'.format(dev, self.__name))
 
+            ### Inter-CASU comms ###
             if self.__msg_sub:
                 try:
                     [name, msg, sender, data] = self.__msg_sub.recv_multipart(zmq.NOBLOCK)
@@ -337,7 +392,7 @@ class Casu:
         temp_msg = dev_msgs_pb2.Temperature()
         temp_msg.temp = temp
         device = "Peltier"
-        self.__pub.send_multipart([self.__name, device, "temp",
+        self.__pub.send_multipart([self.__name, device, "On",
                                    temp_msg.SerializeToString()])
         self.__write_to_log([device + "_temp", time.time(), temp])
 
@@ -361,20 +416,6 @@ class Casu:
         and on is True if the actuator is switched on.
         """
         return(self.__peltier_setpoint.temp,self.__peltier_on)
-
-    #def set_vibration_freq(self, f, id = VIBE_ACT):
-        """
-        Sets the vibration frequency of the pwm motor.
-
-        :param float f: Vibration frequency, between 0 and 500 Hz.
-        """
-
-    #    vibration = dev_msgs_pb2.VibrationSetpoint()
-    #    vibration.freq = f
-    #    vibration.amplitude = 0
-    #    self.__pub.send_multipart([self.__name, "VibeMotor", "On",
-    #                               vibration.SerializeToString()])
-    #    self.__write_to_log(["vibe_ref", time.time(), f])
 
     def set_speaker_vibration(self, freq, intens,  id = VIBE_ACT):
         """
@@ -404,48 +445,29 @@ class Casu:
                                    vibration.SerializeToString()])
         self.__write_to_log(["speaker_freq_pwm", time.time(), freq, intens])
 
-
-    def set_motor_vibration(self, intens, id = VIBE_ACT):
+    def get_speaker_freq(self, id=VIBE_ACT):
         """
-        Sets intens value (0-100) to the vibration motor.
-
-        :param float : Motor intens value , between 0 and 100 %.
-        """
-        if intens < 0:
-            intens = 0
-            print('Motor intens value limited to {0}!'.format(intens))
-        elif intens > 100:
-            intens = 100
-            print('Motor intens value limited to {0}!'.format(intens))
-
-        vibration = dev_msgs_pb2.VibrationSetpoint()
-        vibration.freq = 0
-        vibration.amplitude = intens
-        self.__pub.send_multipart([self.__name, "VibeMotor", "On",
-                                   vibration.SerializeToString()])
-        self.__write_to_log(["vibe_intens", time.time(), intens])
-
-    def get_vibration_freq(self, id):
-        """
-        Returns the vibration frequency of actuator id.
+        Returns the vibration frequency setpoint of actuator id.
 
         .. note::
+        Not implemented!
 
-           NOT implemented!
         """
-        pass
+        return self.__speaker_setpoint.freq
 
-    def get_vibration_amplitude(self, id):
+    def get_speaker_amplitude(self, id=VIBE_ACT):
         """
-        Returns the vibration amplitude reported by sensor id.
-
-        .. note::
-
-           NOT implemented!
+        Returns the vibration amplitude setpoint of actuator id.
         """
-        pass
+        return self.__speaker_setpoint.amplitude
 
-    def vibration_standby(self, id  = VIBE_ACT):
+    def is_speaker_on(self, id=VIBE_ACT):
+        """
+        Returns the speaker state.
+        """
+        return self.__speaker_on
+
+    def speaker_standby(self, id  = VIBE_ACT):
         """
         Turn the vibration actuators (bot motor and speaker) off.
         """
@@ -453,46 +475,19 @@ class Casu:
         vibration = dev_msgs_pb2.VibrationSetpoint()
         vibration.freq = 0
         vibration.amplitude = 0
-        self.__pub.send_multipart([self.__name, "VibeMotor", "Off",
-                                   vibration.SerializeToString()])
         self.__pub.send_multipart([self.__name, "Speaker", "Off",
                                    vibration.SerializeToString()])
         self.__write_to_log(["vibe_ref", time.time(), 0])
         self.__write_to_log(["speaker_freq_intens", time.time(), 0, 0])
 
+    def get_vibration_readings(self, id=ACC):
+        """
+        Get vibration sensor (accelerometer readings).
 
-    def set_light_rgb(self, r = 0, g = 0, b = 0, id = LIGHT_ACT):
+        .. note::
+        TODO: Implement this!
         """
-        Set the color and intensity of the light actuator.
-        Automatically turns the actuator on.
-
-        :param float r: Red component intensity, between 0 and 1.
-        :param float g: Green component intensity, between 0 and 1.
-        :param float b: Blue component intensity, between 0 and 1.
-        """
-        # Limit values to [0,1] range
-        r = sorted([0, r, 1])[1]
-        g = sorted([0, g, 1])[1]
-        b = sorted([0, b, 1])[1]
-        light = base_msgs_pb2.ColorStamped()
-        light.color.red = r
-        light.color.green = g
-        light.color.blue = b
-        self.__pub.send_multipart([self.__name, "Light", "On",
-                                   light.SerializeToString()])
-        self.__write_to_log(["light_ref", time.time(), r, g, b])
-
-    def light_standby(self, id = LIGHT_ACT):
-        """
-        Turn the light actuator off.
-        """
-        light = base_msgs_pb2.ColorStamped()
-        light.color.red = 0
-        light.color.green = 0
-        light.color.blue = 0
-        self.__pub.send_multipart([self.__name, "Light", "Off",
-                                   light.SerializeToString()])
-        self.__write_to_log(["light_ref", time.time(), 0, 0, 0])
+        pass
 
     def set_diagnostic_led_rgb(self, r = 0, g = 0, b = 0, id = DLED_TOP):
         """
@@ -522,7 +517,17 @@ class Casu:
 
         :return: An (r,g,b) tuple (values between 0 and 1).
         """
-        pass
+        return (self.__diagnostic_led_setpoint.color.red,
+                self.__diagnostic_led_setpoint.color.green,
+                self.__diagnostic_led_setpoint.color.blue)
+
+    def is_diagnostic_led_on(self, id = DLED_TOP):
+        """
+        Get the diagnostic LED state.
+
+        :return: True/False
+        """
+        return self.__diagnostic_led_on
 
     def diagnostic_led_standby(self, id = DLED_TOP):
         """
@@ -547,6 +552,18 @@ class Casu:
         self.__pub.send_multipart([self.__name, "Airflow", "On",
                                    int_msg.SerializeToString()])
         self.__write_to_log(["airflow_ref", time.time(), intensity])
+
+    def get_airflow_intensity(self, id = AIRFLOW_ACT):
+        """
+        Get the intensity of the airflow actuator.
+        """
+        return self.__airflow_setpoint.intensity
+
+    def is_airflow_on(self, id=AIRFLOW_ACT):
+        """
+        Get the state of the airflow actuator.
+        """
+        return self.__airflow_on
 
     def airflow_standby(self, id  = AIRFLOW_ACT):
         """

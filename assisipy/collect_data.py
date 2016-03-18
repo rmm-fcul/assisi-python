@@ -27,7 +27,9 @@ class DataCollector:
         self.dep = {}
 
         self.project_root = os.path.dirname(os.path.abspath(project_file_name))
-        self.data_dir = 'data_' + project_file_name.split('.')[0]
+        self.proj_name = os.path.splitext(os.path.basename(project_file_name))[0]
+        self.data_dir = 'data_' + self.proj_name
+        #self.data_dir = 'data_' + project_file_name.split('.')[0]
 
         self.collected = False
 
@@ -46,7 +48,7 @@ class DataCollector:
         """
         Collect the data to the local machine.
         """
-        
+
         # Create data folder on local machine
         cwd = os.getcwd()
         if cwd != self.project_root:
@@ -59,7 +61,7 @@ class DataCollector:
             # The data directory already exists
             # that's ok
             pass
-       
+
         os.chdir(self.data_dir)
 
         # Download the data from deployment targets
@@ -83,7 +85,7 @@ class DataCollector:
             os.chdir('..')
 
         # Return to the original directory
-        os.chdir(self.project_root)
+        os.chdir(cwd)
 
 
 def main():

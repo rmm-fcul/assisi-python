@@ -157,7 +157,7 @@ def {task}():
 
         self.prepared = True
 
-    def deploy(self):
+    def deploy(self, layer_select='all'):
         """
         Perform deployment by copying files from the sandbox directory
         to their appropriate destinations.
@@ -169,7 +169,13 @@ def {task}():
         cwd = os.getcwd()
 
         os.chdir(os.path.join(self.project_root, self.sandbox_dir))
-        for layer in self.dep:
+
+        # Select particular layers
+        selected_layers = self.dep.keys()
+        if layer_select != 'all':
+            selected_layers = [layer_select]
+
+        for layer in selected_layers:
             print('Deploying layer {0} ...'.format(layer))
             os.chdir(layer)
             for casu in self.dep[layer]:
@@ -192,10 +198,12 @@ def {task}():
 def main():
     parser = argparse.ArgumentParser(description='Transfer controller code to CASUs (physical or simulated)')
     parser.add_argument('project', help='name of .assisi file specifying the project details.')
+    # TODO: This is fully implemented yet!
+    parser.add_argument('--layer', help='Name of single layer to deploy', default='all')
     args = parser.parse_args()
 
     project = Deploy(args.project)
-    project.deploy()
+    project.deploy(args.layer)
 
 if __name__ == '__main__':
     main()

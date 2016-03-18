@@ -13,8 +13,12 @@ Assisi communication protocol
     "<Casu Name>", "Acc", "Measurements", "VibrationArray", "(Data not valid!)"
     "<Casu Name>", "Peltier", "On", "Temperature", "Temperature setpoint"
     "<Casu Name>", "Peltier", "Off", "Temperature", "Temperaturesetpoint"
-    "<Casu Name>", "Airflow", "On", "Intensity", "Airflow intensity setpoint"
-    "<Casu Name>", "Airflow", "Off", "0", "Set airflow actuator into standby"
+    "<Casu Name>", "Airflow", "On", "Airflow", "Airflow intensity setpoint"
+    "<Casu Name>", "Airflow", "Off", "Airflow", "Airflow intensity setpoint"
+    "<Casu Name>", "DiagnosticLed", "On", "ColorStamped", "Color setpoint"
+    "<Casu Name>", "DiagnosticLed", "Off", "ColorStamped", "Color setpoint"
+    "<Casu Name>", "Speaker", "On", "VibrationSetpoint", "Vibration setpoint"
+    "<Casu Name>", "Speaker", "Off", "VibrationSetpoint", "Vibration setpoint"
     "<Target Name>", "CommEth", "<Casu Name>", "String", "(Comunication message, addressed directly to target!)"
 
 
@@ -24,12 +28,12 @@ Assisi communication protocol
 
     "<Casu Name>", "DiagnosticLed", "On", "ColorStamped"
     "...", "...", "Off", "ColorStamped"
-    "...", "Light", "On", "ColorStamped"
-    "...", "...", "Off", "ColorStamped"
     "<Casu Name>", "Peltier", "On", "Temperature"
     "<Casu Name>", "Peltier", "Off", "Temperature"
-    "...", "VibeMotor", "On", "Vibration"
-    "...", "VibeMotor", "Off", "Vibration"
+    "...", "Speaker", "On", "VibrationSetpoint"
+    "...", "Speaker", "Off", "VibrationSetpoint"
+    "...", "Airflow", "On", "Airflow"
+    "...", "Airflow", "Off", "Airflow"
     "<Casu Name>", "CommEth", "<Source Casu>", "String"
 
 .. csv-table:: Messages published by the Simulator

@@ -9,7 +9,21 @@ import yaml
 from fabric.api import get, run, settings
 
 import argparse
-import os
+import os, errno
+
+def mkdir_p(path):
+    '''
+    recursively create paths, and do not raise error if already exists
+
+    source: http://stackoverflow.com/a/600612
+    '''
+    try:
+        os.makedirs(path)
+    except OSError as exc:  # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise
 
 class DataCollector:
     """
@@ -29,7 +43,7 @@ class DataCollector:
         self.project_root = os.path.dirname(os.path.abspath(project_file_name))
         self.proj_name = os.path.splitext(os.path.basename(project_file_name))[0]
 
-        if logpath is None:
+        if logpath is None or logpath == 'None':
             self.custom_logpath = False
             self.data_dir = 'data_' + self.proj_name
         else:
@@ -63,8 +77,12 @@ class DataCollector:
         ##if cwd != self.project_root :
             print('Changing directory to {0}'.format(self.project_root))
             os.chdir(self.project_root)
+
+
         try:
-            os.mkdir(self.data_dir)
+            # attempt to create data directory (func is recursive if necessary)
+            mkdir_p(self.data_dir)
+            #os.mkdir(self.data_dir)
             print('Created folder {0}.'.format(self.data_dir))
         except OSError:
             # The data directory already exists
@@ -100,7 +118,7 @@ class DataCollector:
 def main():
     parser = argparse.ArgumentParser(description='Collect CASU logs. Currently assumes that the logs are located in the same folder as the controller.')
     parser.add_argument('project', help='Project file name (.assisi).')
-    parser.add_argument('--logpath', default=None, help="override for log path")
+    parser.add_argument('--logpath', default=None, help="override for path where logs will be written to")
     parser.add_argument('--clean', action='store_true', default=False,
                         help='Remove original log files after copying.')
     args = parser.parse_args()

@@ -16,7 +16,7 @@ class DataCollector:
     Class for automatically retrieving CASU logs.
     """
 
-    def __init__(self, project_file_name, clean=False):
+    def __init__(self, project_file_name, clean=False, logpath=None):
         """
         Parses the configuration file and initializes internal data structures.
         """
@@ -28,8 +28,16 @@ class DataCollector:
 
         self.project_root = os.path.dirname(os.path.abspath(project_file_name))
         self.proj_name = os.path.splitext(os.path.basename(project_file_name))[0]
-        self.data_dir = 'data_' + self.proj_name
-        #self.data_dir = 'data_' + project_file_name.split('.')[0]
+
+        if logpath is None:
+            self.custom_logpath = False
+            self.data_dir = 'data_' + self.proj_name
+        else:
+            self.custom_logpath = True
+            self.data_dir = os.path.join(
+                os.path.abspath(logpath),
+                'data_' + self.proj_name)
+
 
         self.collected = False
 
@@ -51,7 +59,8 @@ class DataCollector:
 
         # Create data folder on local machine
         cwd = os.getcwd()
-        if cwd != self.project_root:
+        if cwd != self.project_root and not self.custom_logpath:
+        ##if cwd != self.project_root :
             print('Changing directory to {0}'.format(self.project_root))
             os.chdir(self.project_root)
         try:
@@ -91,10 +100,11 @@ class DataCollector:
 def main():
     parser = argparse.ArgumentParser(description='Collect CASU logs. Currently assumes that the logs are located in the same folder as the controller.')
     parser.add_argument('project', help='Project file name (.assisi).')
+    parser.add_argument('--logpath', default=None, help="override for log path")
     parser.add_argument('--clean', action='store_true', default=False,
                         help='Remove original log files after copying.')
     args = parser.parse_args()
-    dc = DataCollector(args.project, args.clean)
+    dc = DataCollector(args.project, args.clean, args.logpath)
     dc.collect()
 
 if __name__ == '__main__':

@@ -21,13 +21,15 @@ class Deploy:
         """
         Parses the configuration files and initializes internal data structures.
         """
-        self.fabfile_name = project_file_name[:-7] + '.py'
+        self.proj_name = os.path.splitext(os.path.basename(project_file_name))[0]
+        self.fabfile_name = self.proj_name + '.py'
+        #self.fabfile_name = project_file_name[:-7] + '.py'
         self.arena = {}
         self.nbg = {}
         self.dep = {}
 
         self.project_root = os.path.dirname(os.path.abspath(project_file_name))
-        self.sandbox_dir = project_file_name.split('.')[0] + '_sandbox'
+        self.sandbox_dir = self.proj_name + '_sandbox'
 
         self.prepared = False
 
@@ -56,7 +58,10 @@ class Deploy:
         print('Preparing files for deployment!')
 
         # Remove old fabfile, if it exists
-        print('The file {0} will be overwritten!'.format(self.fabfile_name))
+        _msg = "written"
+        if os.path.exists(self.fabfile_name):
+            _msg = "overwritten!"
+        print('The file {0} will be {1}'.format(self.fabfile_name, _msg))
         try:
             os.remove(self.fabfile_name)
         except OSError:
@@ -74,7 +79,10 @@ def all():
 
         # Clean up and create new sandbox folder
         sandbox_path = os.path.join(self.project_root, self.sandbox_dir)
-        print('The folder {0} will be overwritten!'.format(sandbox_path))
+        _msg = "created"
+        if os.path.exists(sandbox_path):
+            _msg = "overwritten"
+        print('The folder {0} will be {1}'.format(sandbox_path, _msg))
         try:
             shutil.rmtree(sandbox_path)
         except OSError:
@@ -151,7 +159,7 @@ def {task}():
             fabfile.write(fabfile_tasks)
             fabfile.write(fabfile_all)
 
-        print('Preparaton done!')
+        print('Preparation done!')
         print('Returning to original directory {0}'.format(cwd))
         os.chdir(cwd)
 

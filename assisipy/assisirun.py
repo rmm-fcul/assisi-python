@@ -11,6 +11,7 @@ Tool for remotely running CASU controllers.
 import yaml
 
 #import os.path
+import os
 import argparse
 import subprocess
 
@@ -23,11 +24,13 @@ class AssisiRun:
         Constructor.
         """
 
-        self.fabfile_name = project_name[:-6] + 'py'
+        self.proj_name = os.path.splitext(os.path.basename(project_name))[0]
+        self.project_root = os.path.dirname(os.path.abspath(project_name))
+        self.fabfile_name = self.proj_name + '.py'
         self.depspec = {}
         with open(project_name) as project:
             project_spec = yaml.safe_load(project)
-            with open(project_spec['dep']) as depfile:
+            with open(os.path.join(self.project_root, project_spec['dep'])) as depfile:
                 self.depspec = yaml.safe_load(depfile)
 
         # Running controllers
@@ -38,6 +41,10 @@ class AssisiRun:
         Execute the controllers.
         """
         #env.parallel = True
+        cwd = os.getcwd()
+        print('Changing directory to {0}'.format(self.project_root))
+        os.chdir(self.project_root)
+        print('Preparing files for deployment!')
         counter = 0
         for layer in self.depspec:
             for casu in self.depspec[layer]:
@@ -48,6 +55,9 @@ class AssisiRun:
 
         for taskname in self.running:
             self.running[taskname].wait()
+
+        # back to original directory.
+        os.chdir(cwd)
 
 def main():
     parser = argparse.ArgumentParser(description='Run a set of CASU controllers.')

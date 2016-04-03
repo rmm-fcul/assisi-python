@@ -203,6 +203,11 @@ controllers in the terminal. To stop the execution of all controllers
 simultaneously, just interrupt the `assisirun.py` script by pressing
 `Ctrl-C`.
 
+If the console is garbled after terminating the `assisirun.py`
+process, just type `reset` at the prompt (don't worry if you don't see
+the characters as you type them), and press Enter. This will return
+the console to an usable state.
+
 To retreive the data logged by the casu controllers, run:
 ::
 

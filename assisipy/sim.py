@@ -7,7 +7,6 @@ import argparse
 import threading
 import time
 import os
-import warnings
 
 import yaml
 import zmq
@@ -176,23 +175,31 @@ class Control:
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Spawn an array of objects (casus or bees), from an .arena/.bees file.')
-    parser.add_argument('project', help='name of .assisi file specifying the project details.')
-    #parser.add_argument('filename', help='an .arena or .bees file')
+    parser = argparse.ArgumentParser(description='Spawn an array of objects (casus or bees), as defined in an .arena/.bees file.')
+    parser.add_argument('specfile', help= 'name of file specifying the objects to spawn. Accepts: .arena or .bees direct spec, or .assisi project spec')
     args = parser.parse_args()
 
-    # check for specification being correct file type
-    if args.project.endswith('.arena'):
-        warnings.warn("[W] expecting a .assisi project file, not a .arena file. (since >v0.9.0)", SyntaxWarning)
-    # find the specification arena file
-    with open(args.project) as project_file:
-        project = yaml.safe_load(project_file)
+    # process specification to identify where definitions are
+    if args.specfile.endswith('.arena'):
+        array_filename = args.specfile
+    elif args.specfile.endswith('.bees'):
+        array_filename = args.specfile
+    elif args.specfile.endswith('.assisi'):
+        # find the specification arena file
+        with open(args.specfile) as project_file:
+            project = yaml.safe_load(project_file)
 
-    project_root = os.path.dirname(os.path.abspath(args.project))
+        project_root = os.path.dirname(os.path.abspath(args.specfile))
+        if 'arena' not in project:
+            raise IOError, "[E] specification file ({}) does not define an arena!\ndid you really supply an .assisi file?".format(args.specfile)
+        array_filename = os.path.join(project_root, project['arena'])
+    else:
+        # since we now accept multiple filetypes, it isn't obvious what to
+        # assume except via extension. So halt here if does not conform
+        raise IOError, "[E] specification file ({}) is of unknown type.\n             Accepted forms are .assisi, .arena, .bees".format(args.specfile)
 
-    if 'arena' not in project:
-        raise IOError, "[E] project file ({}) does not define an arena!\ndid you really supply an .assisi file?".format(args.project)
-    with open(os.path.join(project_root, project['arena'])) as array_file:
+
+    with open(array_filename) as array_file:
         arrays = yaml.safe_load(array_file)
         # Several arrays can be defined within one file
         for layer in arrays:

@@ -173,32 +173,7 @@ class Control:
                     print('Unknown command {0} for sim control'.format(cmd))
 
 
-
-def main():
-    parser = argparse.ArgumentParser(description='Spawn an array of objects (casus or bees), as defined in an .arena/.bees file.')
-    parser.add_argument('specfile', help= 'name of file specifying the objects to spawn. Accepts: .arena or .bees direct spec, or .assisi project spec')
-    args = parser.parse_args()
-
-    # process specification to identify where definitions are
-    if args.specfile.endswith('.arena'):
-        array_filename = args.specfile
-    elif args.specfile.endswith('.bees'):
-        array_filename = args.specfile
-    elif args.specfile.endswith('.assisi'):
-        # find the specification arena file
-        with open(args.specfile) as project_file:
-            project = yaml.safe_load(project_file)
-
-        project_root = os.path.dirname(os.path.abspath(args.specfile))
-        if 'arena' not in project:
-            raise IOError, "[E] specification file ({}) does not define an arena!\ndid you really supply an .assisi file?".format(args.specfile)
-        array_filename = os.path.join(project_root, project['arena'])
-    else:
-        # since we now accept multiple filetypes, it isn't obvious what to
-        # assume except via extension. So halt here if does not conform
-        raise IOError, "[E] specification file ({}) is of unknown type.\n             Accepted forms are .assisi, .arena, .bees".format(args.specfile)
-
-
+def spawn_array_from_file(array_filename):
     with open(array_filename) as array_file:
         arrays = yaml.safe_load(array_file)
         # Several arrays can be defined within one file
@@ -212,6 +187,37 @@ def main():
                     obj_type = obj_name.split('-')[0].title()
                     sim_ctrl = Control(pub_addr = arrays[layer][obj_name]['pub_addr'])
                     sim_ctrl.spawn_array(obj_type, arrays[layer])
+    # no return value here
+
+def main():
+    parser = argparse.ArgumentParser(description='Spawn an array of objects (casus or bees), as defined in an .arena/.bees file.')
+    parser.add_argument('specfile', help= 'name of file specifying the objects to spawn. Accepts: .arena or .bees direct spec, or .assisi project spec')
+    args = parser.parse_args()
+
+    # process specification to identify where definitions are
+    if args.specfile.endswith(('.arena', '.bees')):
+        spawn_array_from_file(args.specfile)
+    elif args.specfile.endswith('.assisi'):
+        # find any contained specification files (arena, agents)
+        with open(args.specfile) as project_file:
+            project = yaml.safe_load(project_file)
+
+        project_root = os.path.dirname(os.path.abspath(args.specfile))
+        found = 0
+        keylist = ['arena', 'bees']
+        for key in keylist:
+            if key in project:
+                found += 1
+                array_filename = os.path.join(project_root, project[key])
+                spawn_array_from_file(array_filename)
+
+        if found == 0:
+            raise IOError, "[E] specification file ({}) does not define any spawnable subfiles ({})\ndid you really supply an .assisi file?".format(", ".join(keylist),  args.specfile)
+    else:
+        # since we now accept multiple filetypes, it isn't obvious what to
+        # assume except via extension. So halt here if does not conform
+        raise IOError, "[E] specification file ({}) is of unknown type.\n             Accepted forms are .assisi, .arena, .bees".format(args.specfile)
+
 
 if __name__ == '__main__':
     main()

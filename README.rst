@@ -35,3 +35,11 @@ To uninstall the development version:
 For more info see
 http://python-packaging-user-guide.readthedocs.org/en/latest/distributing
 
+
+
+============================================================
+This release was sourced from:
+	assisi-python git rev 30778f9b1d90298621f90f6eacd4850e78677257
+	assisi-msg    git rev ed6c974cbd47b3d24386c7bb3acf20ac2459c41b
+	assisi-python version 0.11.0
+============================================================

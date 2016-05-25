@@ -327,8 +327,7 @@ class Casu:
 
         # Stop all devices
         self.temp_standby()
-        self.vibration_standby()
-        self.light_standby()
+        self.speaker_standby()
         self.diagnostic_led_standby()
 
         self.__stop = True

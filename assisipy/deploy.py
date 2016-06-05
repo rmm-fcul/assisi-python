@@ -25,7 +25,7 @@ class Deploy:
         self.fabfile_name = self.proj_name + '.py'
         #self.fabfile_name = project_file_name[:-7] + '.py'
         self.arena = {}
-        self.nbg = {}
+        self.nbg = None
         self.dep = {}
 
         self.project_root = os.path.dirname(os.path.abspath(project_file_name))
@@ -40,8 +40,12 @@ class Deploy:
         with open(os.path.join(self.project_root, project['arena'])) as arena_file:
             self.arena = yaml.safe_load(arena_file)
 
-        # Read the neighborhood graph
-        self.nbg = pgv.AGraph(os.path.join(self.project_root, project['nbg']))
+        # Read the neighborhood graph, so long as one is defined.
+        nbg_fname = project.get('nbg', None)
+        if nbg_fname is not None and nbg_fname.lower() not in ['none', 'null']:
+            # if one was missed but not explicitly so, should emit warning?
+            self.nbg = pgv.AGraph(os.path.join(self.project_root, nbg_fname))
+
 
         # Read the deployment file
         with open(os.path.join(self.project_root, project['dep'])) as dep_file:
@@ -110,15 +114,25 @@ def all():
                     yaml.dump({'msg_addr': 'tcp://*:' + self.arena[layer][casu]['msg_addr'].split(':')[-1]},
                               rtc_file, default_flow_style=False)
                     neighbors = {'neighbors':{}}
-                    for nb in self.nbg.get_subgraph(layer).out_neighbors(casu):
-                        side = str(self.nbg.get_edge(casu,nb).attr['label'])
-                        nb_full_name = str(nb).split('/')
-                        nb_name = nb_full_name[-1]
-                        nb_layer = layer
-                        if len(nb_full_name) > 1:
-                            nb_layer = nb_full_name[0]
-                        neighbors['neighbors'][side] = {'name': nb_name,
-                                                        'address': self.arena[nb_layer][nb_name]['msg_addr']}
+                    if self.nbg is not None:
+                        sg = self.nbg.get_subgraph(layer)
+                        if sg is None:
+                            # no connectivity info for this layer - issue warning?
+                            pass
+                        elif sg.has_node(casu) is False:
+                            # no info for this casu -- issue warning?
+                            pass
+                        else:
+                            for nb in sg.out_neighbors(casu):
+                                side = str(self.nbg.get_edge(casu,nb).attr['label'])
+                                nb_full_name = str(nb).split('/')
+                                nb_name = nb_full_name[-1]
+                                nb_layer = layer
+                                if len(nb_full_name) > 1:
+                                    nb_layer = nb_full_name[0]
+                                neighbors['neighbors'][side] = {'name': nb_name,
+                                                                'address': self.arena[nb_layer][nb_name]['msg_addr']}
+
                     yaml.dump(neighbors, rtc_file, default_flow_style=False)
 
                 # Copy the controller

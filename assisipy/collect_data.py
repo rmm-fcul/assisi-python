@@ -101,6 +101,13 @@ class DataCollector:
                 pass
             os.chdir(layer)
             for casu in self.dep[layer]:
+                try:
+                    os.mkdir(casu)
+                    print('Created folder {0}.'.format(casu))
+                except OSError:
+                    # The directory already exists
+                    pass
+                os.chdir(casu)
                 with settings(host_string = self.dep[layer][casu]['hostname'],
                               user = self.dep[layer][casu]['user'],
                               warn_only = True):
@@ -113,6 +120,8 @@ class DataCollector:
                         get(targetfiles,'.')
                         if self.clean:
                             run('rm ' + targetfiles)
+
+                os.chdir('..')
 
             os.chdir('..')
 

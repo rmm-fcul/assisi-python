@@ -153,7 +153,7 @@ def all():
 def {task}():
     with settings(host_string='{host}', user='{username}'):
         with cd('{code_dir}'):
-                run('export PYTHONPATH=/home/assisi/python:$PYTHONPATH; ./{command} {rtc} {extra_args}')
+                run('./{command} {rtc} {extra_args}')
                                   '''.format(task=(layer+'_'+casu).replace('-','_'),
                                              host=self.dep[layer][casu]['hostname'],
                                              username=self.dep[layer][casu]['user'],

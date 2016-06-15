@@ -101,6 +101,14 @@ class PrepCalib(object):
                     v = depdata.get(k, []) # assign empty list by default
                     maindepinfo[k] = v
 
+                # files will need a bit more care: all in extra, & controller.
+                # because we will run in a different place.  So for each one, append a "../"
+                for i in xrange(len(maindepinfo['extra'])):
+                    maindepinfo['extra'][i] = os.path.join("..", maindepinfo['extra'][i])
+
+                maindepinfo['controller'] = os.path.join("..", maindepinfo['controller'])
+
+
                 # and more proc if there is present a non-empty calibration subdict,
                 calibdata = depdata.get('calibration')
                 #print casu, calibdata
@@ -116,7 +124,8 @@ class PrepCalib(object):
                 calibfile = calibdata['calibfile']
                 calib_data_dir = os.path.join(self.project_root,
                                               self.sandbox_dir,
-                                              'data_' + self.proj_name,
+                                              # TODO : make calib_ a class var
+                                              'data_' + 'calib_' + self.proj_name,
                                               layer,
                                               casu)
                 maindepinfo['extra'].append(os.path.join(calib_data_dir, calibfile))
@@ -202,8 +211,16 @@ class PrepCalib(object):
                 calibfile = calibdata['calibfile']
 
                 calibdepinfo['controller'] = calibdata['controller']
-                calibdepinfo['results']     = calibdata.get('results', []) + [calibfile]
-                calibdepinfo['extra']      = calibdata.get('extra', [])  + ["--output", calibfile]
+                calibdepinfo['results']    = calibdata.get('results', []) + [calibfile]
+                calibdepinfo['extra']      = calibdata.get('extra', [])
+                calibdepinfo['args']       = calibdata.get('args', [])  + ["--output", calibfile]
+
+                # files will need a bit more care: all in extra, & controller.
+                # because we will run in a different place.  So for each one, append a "../"
+                for i in xrange(len(calibdepinfo['extra'])):
+                    calibdepinfo['extra'][i] = os.path.join("..", calibdepinfo['extra'][i])
+
+                calibdepinfo['controller'] = os.path.join("..", calibdepinfo['controller'])
 
                 print "[I] constructed new deployment info for {}".format(casu)
                 print calibdepinfo

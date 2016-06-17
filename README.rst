@@ -3,6 +3,18 @@ assisi-python
 
 Python API for the ASSISI|bf project.
 
+The API can be used to interact with CASUs and other system components, whether
+in physical hardware or simulated in the `assisi-playground
+<https://github.com/larics/assisi-playground>`__.
+
+For a quick installation, use ``sudo pip install assisipy``.  
+
+To find more information regarding installation, usage, and examples, consult
+the `readthedocs instructions
+<http://assisipy.readthedocs.io/en/latest/install.html>`__. 
+
+
+
 Building the Python package and uploading it to PyPy
 ----------------------------------------------------
 

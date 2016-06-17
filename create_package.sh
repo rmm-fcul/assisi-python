@@ -18,7 +18,7 @@ else
     echo "[I] skipping cleanup"
 fi
 
-printf "\n\n" | tee ${VERSIONFILE}
+printf "\n" | tee ${VERSIONFILE}
 printf "======================================================================\n" | tee -a ${VERSIONFILE}
 printf "This release was sourced from:\n"               | tee -a ${VERSIONFILE}
 printf "\tassisi-python git rev %s\n" ${assisipy_rev}   | tee -a ${VERSIONFILE}

@@ -5,3 +5,4 @@
 # see, e.g., http://stackoverflow.com/a/1857436
 
 include DESCRIPTION.rst
+include VERSION

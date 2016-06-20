@@ -1,7 +1,18 @@
 assisi-python
 =============
 
-Python API for the ASSISI|bf project.
+Python API for the `ASSISI|bf <http://assisi-project.eu/>`__ project.
+
+The API can be used to interact with CASUs and other system components, whether
+in physical hardware or simulated in the `assisi-playground
+<https://github.com/larics/assisi-playground>`__.
+
+For a quick installation, use ``sudo pip install assisipy``.  
+To find more information regarding installation, usage, and examples, consult
+the `readthedocs instructions
+<http://assisipy.readthedocs.io/en/latest/install.html>`__. 
+
+
 
 Building the Python package and uploading it to PyPy
 ----------------------------------------------------
@@ -35,10 +46,3 @@ To uninstall the development version:
 For more info see
 http://python-packaging-user-guide.readthedocs.org/en/latest/distributing
 
-
-============================================================
-This release was sourced from:
-	assisi-python git rev 2e989ddd397cbd6e8b86cf64d64ab8b3af5a723f
-	assisi-msg    git rev ed6c974cbd47b3d24386c7bb3acf20ac2459c41b
-	assisi-python version 0.12.0
-============================================================

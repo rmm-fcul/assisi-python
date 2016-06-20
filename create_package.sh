@@ -9,15 +9,9 @@ assisipy_rev=`git rev-parse HEAD`
 assisi_msg_rev=`cd msg && git rev-parse HEAD`
 assisipy_ver=`python -c "import assisipy; print assisipy.__version__"`
 
-# but first, ensure we are working with the repo version
 VERSIONFILE=VERSION
-#VERSIONFILE=/dev/null
-if [ -f "${VERSIONFILE}" ] ; then
-    git checkout -- ${VERSIONFILE}
-else
-    echo "[I] skipping cleanup"
-fi
 
+# write all the revisions/version numbers to file and to screen (via tee)
 printf "\n" | tee ${VERSIONFILE}
 printf "======================================================================\n" | tee -a ${VERSIONFILE}
 printf "This release was sourced from:\n"               | tee -a ${VERSIONFILE}

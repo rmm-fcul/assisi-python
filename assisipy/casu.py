@@ -574,6 +574,19 @@ class Casu:
                                    int_msg.SerializeToString()])
         self.__write_to_log(["airflow_ref", time.time(), 0])
 
+    def ir_standby(self, state = "On"):
+	
+	validStates = ["On", "Off"]
+	
+	if (state in validStates):
+		self.__pub.send_multipart([self.__name, "Proxy", state, "0"])
+	else:
+		print "Invalid ir-standby state. Valid states: On, Off"
+		
+
+
+
+
     def send_message(self, direction, msg):
         """
         Send a simple string message to one of the neighbors.

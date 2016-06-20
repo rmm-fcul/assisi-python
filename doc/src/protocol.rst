@@ -26,6 +26,8 @@ Assisi communication protocol
    :header: "Name", "Device", "Command", "Data Message Type"
    :widths: 20, 20, 20, 40
 
+    "<Casu Name>", "IR", "Standby", "0"
+    "<Casu Name>", "IR", "Activate", "0"
     "<Casu Name>", "DiagnosticLed", "On", "ColorStamped"
     "...", "...", "Off", "ColorStamped"
     "<Casu Name>", "Peltier", "On", "Temperature"

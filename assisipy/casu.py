@@ -574,14 +574,14 @@ class Casu:
                                    int_msg.SerializeToString()])
         self.__write_to_log(["airflow_ref", time.time(), 0])
 
-    def ir_standby(self, state = "On"):
+    def ir_standby(self, command = "Standby"):
 	
-	validStates = ["On", "Off"]
+	validCommands = ["Standby", "Activate"]
 	
-	if (state in validStates):
-		self.__pub.send_multipart([self.__name, "Proxy", state, "0"])
+	if (command in validCommands):
+		self.__pub.send_multipart([self.__name, "IR", command, "0"])
 	else:
-		print "Invalid ir-standby state. Valid states: On, Off"
+		print "Invalid ir-standby command. Valid commands: Standby, Activate"
 		
 
 

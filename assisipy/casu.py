@@ -421,7 +421,7 @@ class Casu:
         Sets intensity value (0-100) and frequency to the speaker.
 
         :param float intens: Speaker intensity value , between 0 and 100 %.
-               float freq: Speaker frequency value, between 0 and 500
+               float freq: Speaker frequency value, between 0 and 2000
         """
         if intens < 0:
             intens = 0
@@ -433,8 +433,8 @@ class Casu:
         if freq < 0:
             freq = 0
             print('Frequency limited to {0}!'.format(freq))
-        elif freq > 500:
-            freq = 500
+        elif freq > 2000:
+            freq = 2000
             print('Frequency limited to {0}!'.format(freq))
 
         vibration = dev_msgs_pb2.VibrationSetpoint()

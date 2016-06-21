@@ -132,6 +132,8 @@ class Bee:
         self.__airflow_reading = dev_msgs_pb2.AirflowReading()
 
         # Connect the publisher socket
+        self.__connected = False
+        self.__context = zmq.Context(1)
         self.__pub = self.__context.socket(zmq.PUB)
         try:
             self.__pub.connect(self.__pub_addr)
@@ -140,8 +142,6 @@ class Bee:
             sys.exit(1)
 
         # Create the data update thread
-        self.__connected = False
-        self.__context = zmq.Context(1)
         self.__comm_thread = threading.Thread(target=self.__update_readings)
         self.__comm_thread.daemon = True
         self.__lock =threading.Lock()

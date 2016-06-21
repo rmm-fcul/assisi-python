@@ -169,7 +169,9 @@ wishes to perform:
 * A **neighborhood file**, recognized by the ``.nbg`` extension
   and written in `Graphviz dot syntax
   <http://www.graphviz.org/content/dot-language>`_ syntax,
-  which describes the inter-CASU data connection topology
+  which describes the inter-CASU data connection topology; You can
+  visualize the connection graph using the ``dot`` tool: ``dot -Tpdf
+  filename.nbg > filename.pdf`` 
 * A **deployment file**, recognized by the ``.dep`` extension and
   written in `yaml <http://yaml.org/>`_ syntax, which describes 
   the desired deployment strategy, i.e., for each CASU it specifies

@@ -5,6 +5,7 @@
 
 import threading
 import time
+import sys
 
 import zmq
 

@@ -7,6 +7,7 @@ import argparse
 import threading
 import time
 import os
+import sys
 
 import yaml
 import zmq
@@ -40,7 +41,11 @@ class Control:
             #self.__pub_addr = 'tcp://127.0.0.1:5556'
             self.__context = zmq.Context(1)
             self.__pub = self.__context.socket(zmq.PUB)
-            self.__pub.connect(self.__pub_addr)
+            try:
+                self.__pub.connect(self.__pub_addr)
+            except zmq.error.ZMQError:
+                print('CONNECTION ERROR: Failed to connect to {0}'.format(self.__pub_addr))
+                sys.exit(1)
             # TODO: Fill readings with fake data
             #       to prevent program crashes.
             self.__absolute_time = base_msgs_pb2.Time()
@@ -157,7 +162,11 @@ class Control:
         Get data from assisi playground and update local data.
         """
         self.__sub = self.__context.socket(zmq.SUB)
-        self.__sub.connect(self.__sub_addr)
+        try:
+            self.__sub.connect(self.__sub_addr)
+        except zmq.error.ZMQError:
+            print('CONNECTION ERROR: Failed to connect to {0}'.format(self.__sub_addr))
+            sys.exit(1) # TODO: This might have some issues, as we're within a thread
         self.__sub.setsockopt(zmq.SUBSCRIBE, 'Sim')
 
         while True:

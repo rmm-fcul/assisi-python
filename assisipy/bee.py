@@ -131,6 +131,14 @@ class Bee:
         self.__color_setpoint = base_msgs_pb2.ColorStamped()
         self.__airflow_reading = dev_msgs_pb2.AirflowReading()
 
+        # Connect the publisher socket
+        self.__pub = self.__context.socket(zmq.PUB)
+        try:
+            self.__pub.connect(self.__pub_addr)
+        except zmq.error.ZMQError:
+            print('CONNECTION ERROR: Failed to connect to {0}'.format(self.__pub_addr))
+            sys.exit(1)
+
         # Create the data update thread
         self.__connected = False
         self.__context = zmq.Context(1)
@@ -138,10 +146,6 @@ class Bee:
         self.__comm_thread.daemon = True
         self.__lock =threading.Lock()
         self.__comm_thread.start()
-
-        # Connect the publisher socket
-        self.__pub = self.__context.socket(zmq.PUB)
-        self.__pub.connect(self.__pub_addr)
 
         # Wait for the connection, check every second
         while not self.__connected:
@@ -156,8 +160,12 @@ class Bee:
         Get a message from Bee and update data. 
         """
         self.__sub = self.__context.socket(zmq.SUB)
-        self.__sub.connect(self.__sub_addr)
-        #self.__sub.setsockopt(zmq.HWM, 1)
+        try:
+            self.__sub.connect(self.__sub_addr)
+        except zmq.error.ZMQError:
+            print('CONNECTION ERROR: Failed to connect to {0}'.format(self.__sub_addr))
+            sys.exit(1) # TODO: This might have some issues, as we're within a thread
+
         self.__sub.setsockopt(zmq.SUBSCRIBE, self.__name)
                     
         while True:

@@ -162,15 +162,27 @@ class Casu:
         self.__msg_queue = []
         if self.__msg_pub_addr and self.__neighbors:
             self.__msg_pub = self.__context.socket(zmq.PUB)
-            self.__msg_pub.bind(self.__msg_pub_addr)
+            try:
+                self.__msg_pub.bind(self.__msg_pub_addr)
+            except zmq.error.ZMQError:
+                print('CONNECTION ERROR: Failed to connect to {0}'.format(self.__msg_pub_addr))
+                sys.exit(1)
             self.__msg_sub = self.__context.socket(zmq.SUB)
             for direction in self.__neighbors:
-                self.__msg_sub.connect(self.__neighbors[direction]['address'])
+                try:
+                    self.__msg_sub.connect(self.__neighbors[direction]['address'])
+                except zmq.error.ZMQError:
+                    print('CONNECTION ERROR: Failed to connect to {0}'.format(self.__neighbors[direction]['address']))
+                    sys.exit(1)
             self.__msg_sub.setsockopt(zmq.SUBSCRIBE, self.__name)
 
         # Connect the control publisher socket
         self.__pub = self.__context.socket(zmq.PUB)
-        self.__pub.connect(self.__pub_addr)
+        try:
+            self.__pub.connect(self.__pub_addr)
+        except zmq.error.ZMQError:
+            print('CONNECTION ERROR: Failed to connect to {0}'.format(self.__pub_addr))
+            sys.exit(1)
 
         # Connect to the device and start receiving data
         self.__comm_thread.start()
@@ -185,7 +197,11 @@ class Casu:
         Get data from Casu and update local data.
         """
         self.__sub = self.__context.socket(zmq.SUB)
-        self.__sub.connect(self.__sub_addr)
+        try:
+            self.__sub.connect(self.__sub_addr)
+        except zmq.error.ZMQError:
+            print('CONNECTION ERROR: Failed to connect to {0}'.format(self.__sub_addr))
+            sys.exit(1) # TODO: This might have some issues, as we're within a thread
         self.__sub.setsockopt(zmq.SUBSCRIBE, self.__name)
 
         while not self.__stop:

@@ -113,18 +113,25 @@ def all():
                               rtc_file, default_flow_style=False)
                     yaml.dump({'msg_addr': 'tcp://*:' + self.arena[layer][casu]['msg_addr'].split(':')[-1]},
                               rtc_file, default_flow_style=False)
-                    neighbors = {'neighbors':{}}
+                    neighbors = {'neighbors':{}} # Data to be written to the .rtc
                     if self.nbg is not None:
                         sg = self.nbg.get_subgraph(layer)
+                        out_neighbors = [] # Data read from the .nbg file
+                        name_prefix = ''
                         if sg is None:
-                            # no connectivity info for this layer - issue warning?
-                            pass
-                        elif sg.has_node(casu) is False:
-                            # no info for this casu -- issue warning?
-                            pass
+                            print('WARNING: No connectivity info for layer {0}'.format(layer))
                         else:
-                            for nb in sg.out_neighbors(casu):
-                                side = str(self.nbg.get_edge(casu,nb).attr['label'])
+                            if sg.has_node(casu):
+                                out_neighbors = sg.out_neighbors(casu)
+                            elif sg.has_node(layer + '/' + casu):
+                                # The CASU name is prefixed with layer name
+                                name_prefix = layer + '/'
+                                out_neighbors = sg.out_neighbors(name_prefix + casu)
+                            else:
+                                print('WARNING: No connectivity infor for CASU {0}'.format(casu))
+                            # Read all the neighbors and populate the .rtc
+                            for nb in out_neighbors:
+                                side = str(self.nbg.get_edge(name_prefix+casu,nb).attr['label'])
                                 nb_full_name = str(nb).split('/')
                                 nb_name = nb_full_name[-1]
                                 nb_layer = layer

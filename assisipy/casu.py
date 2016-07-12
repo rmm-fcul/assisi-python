@@ -83,6 +83,11 @@ Special value to get all sensor values from an array of sensors
 (e.g. all proximity sensors)
 """
 
+# Value limits
+VIBE_FREQ = 2000
+VIBE_PERIOD_MIN = 100
+VIBE_IDLE_PERIOD_MIN = 100
+
 class Casu:
     """
     The low-level interface to Casu devices.
@@ -140,6 +145,8 @@ class Casu:
         self.__diagnostic_led_on = False
         self.__speaker_setpoint = dev_msgs_pb2.VibrationSetpoint()
         self.__speaker_on = False
+        self.__vibration_pattern = dev_msgs_pb2.VibrationPattern()
+        self.__vibration_pattern_on = False
 
         # Create the data update thread
         self.__connected = False
@@ -302,6 +309,21 @@ class Casu:
                     self.__write_to_log(['Speaker', time.time(), '1',
                                          self.__speaker_setpoint.freq,
                                          self.__speaker_setpoint.amplitude])
+                else:
+                    print('Unknown command {0} for {1}'.format(cmd, dev))                    
+            elif dev == 'VibrationPattern':
+                if cmd == 'On':
+                    self.__vibration_pattern_on = True
+                    with self.__lock:
+                        self.__vibration_pattern.ParseFromString(data)
+                    self.__write_to_log(['VibrationPattern', time.time(), '1']
+                                        + [v for v in self.__vibration_pattern.vibe_periods]
+                                        + [i for i in self.__vibration_pattern.idle_periods]
+                                        + [f for f in self.__vibration_pattern.vibe_freqs]
+                                        + [a for a in self.__vibration_pattern.vibe_amps])
+                elif cmd == 'Off':
+                    self.__vibration_pattern_on = False
+                    self.__write_to_log(['VibratoinPattern',time.time(),'0'])
                 else:
                     print('Unknown command {0} for {1}'.format(cmd, dev))                    
             else:
@@ -483,6 +505,81 @@ class Casu:
         Returns the speaker state.
         """
         return self.__speaker_on
+
+    def set_vibration_pattern(self, vibe_periods, idle_periods,
+                              vibe_freqs, vibe_amps, id = VIBE_ACT):
+        """
+        Sets a vibration pattern. The pattern is repeated cyclically,
+        until a new vibration setpoint (or standby command) is received.
+
+        Parameters
+        ----------
+        vibe_periods : list
+            List of vibration period durations, in milliseconds.
+            Lowest supported value is 100.
+        idle_periods : list
+            List of idle period durations, in milliseconds.
+            Lowest supported value is 100.
+        vibe_freqs : list
+            List of vibration frequencies, in Hertz. 
+            All values must be between 1 and 2000.
+        vibe_amps : list
+            List of vibration amplitudes, in percentage of maximum PWM value.
+            All values must be between 0 and 100.
+        id        : int
+            Actuator id. Default (and only supported) value is VIBE_ACT
+        All lists must be of same length.
+        """
+        success = true
+        error_msg = ""
+
+        # Check input argument length
+        if not (len(vibe_periods) == len(idle_periods) 
+                == len(vibe_freqs) == len(vibe_amps)):
+            success = false
+            error_msg += "Input parameter length mismatch. "
+
+        if any([v < VIBE_PERIOD_MIN for v in vibe_periods]):
+            success = false
+            error_msg += "Some vibration periods are below lower limit."
+
+        if any([i < VIBE_IDLE_PERIOD_MIN for i in idle_periods]):
+            success = false
+            error_msg += "Some idle periods are below lower limit."
+
+        if any([f < 0 or f > VIBE_FREQ_MAX for v in vibe_freqs]):
+            success = false
+            error_msg += "Some vibration frequencies are outside allowed range."
+
+        if any([a < 0 or a > 100 for v in vibe_amps]):
+            success = false
+            error_msg += "Some vibration amplitudes are outside allowed range."
+
+        if success:
+            pattern = dev_msgs_pb2.VibrationPattern()
+            pattern.vibe_periods.extend(vibe_periods) 
+            pattern.idle_periods.extend(idle_periods)
+            pattern.vibe_freqs.extend(vibe_freqs)
+            pattern.vibe_amps.extend(vibe_amps)
+            self.__pub.send_multipart([self.__name, "VibrationPattern", "On",
+                                   pattern.SerializeToString()])
+            self.__write_to_log(["Setting Vibration Pattern", time.time()]
+                                + vibe_periods + idle_periods
+                                + vibe_freqs + vibe_amps)
+
+        return (success, error_msg)
+
+    def get_vibration_pattern(self, id = VIBE_ACT):
+        """
+        Returns
+        -------
+        tuple of lists
+            (vibe_periods, idle_periods, vibe_freqs, vibe_amps)
+        """
+        return (self.__vibration_pattern.vibe_periods,
+                self.__vibration_pattern.idle_periods,
+                self.__vibration_pattern.vibe_freqs,
+                self.__vibration_pattern.vibe_amps)
 
     def speaker_standby(self, id  = VIBE_ACT):
         """

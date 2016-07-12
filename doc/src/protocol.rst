@@ -19,6 +19,8 @@ Assisi communication protocol
     "<Casu Name>", "DiagnosticLed", "Off", "ColorStamped", "Color setpoint"
     "<Casu Name>", "Speaker", "On", "VibrationSetpoint", "Vibration setpoint"
     "<Casu Name>", "Speaker", "Off", "VibrationSetpoint", "Vibration setpoint"
+    "<Casu Name>", "VibrationPattern", "On", "VibrationPattern", "Vibration pattern setpoint"
+    "<Casu Name>", "VibrationPattern", "Off", "VibrationPattern", "Vibration pattern setpoint"
     "<Target Name>", "CommEth", "<Casu Name>", "String", "(Comunication message, addressed directly to target!)"
 
 
@@ -34,6 +36,7 @@ Assisi communication protocol
     "<Casu Name>", "Peltier", "Off", "Temperature"
     "...", "Speaker", "On", "VibrationSetpoint"
     "...", "Speaker", "Off", "VibrationSetpoint"
+    "<Casu Name>", "VibrationPattern", "On", "VibrationPattern"
     "...", "Airflow", "On", "Airflow"
     "...", "Airflow", "Off", "Airflow"
     "<Casu Name>", "CommEth", "<Source Casu>", "String"

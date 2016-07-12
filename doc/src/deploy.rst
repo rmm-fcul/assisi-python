@@ -57,22 +57,17 @@ For local deployment and simulation, it usually suffices that
 code is deployed locally, but controls remote devices (real or
 simulated), appropriate ``/etc/hosts`` entires are necessary. All
 CASUs are connected to a local TCP/IP network with IP adresses on the
-192.168.12.xxx subnet. Casu adresses start at 101, the adress space
+10.42.0.xxx subnet. Casu adresses start at 101, the adress space
 below is reserved for development hosts. The relevant section of
 ``/etc/hosts`` from the Master Workstation are given below:[#fmultip]_
 ::
 
    # Casus
-   192.168.12.1   control-workstation
-   192.168.12.101 casu-001
-   192.168.12.101 casu-002
-   192.168.12.102 casu-003
-   192.168.12.103 casu-004
-   192.168.12.103 casu-005
-   192.168.12.102 casu-006
-   192.168.12.104 casu-007
-   192.168.12.104 casu-008
-   192.168.12.105 casu-009
+   10.42.0.1   control-workstation
+   10.42.0.101 bbg-001
+   10.42.0.102 bbg-002
+   10.42.0.103 bbg-003
+   10.42.0.104 bbg-004
 
 .. _ssh_nopass:
 
@@ -83,7 +78,7 @@ below is reserved for development hosts. The relevant section of
      your host IP and machine name.  (i.e. beaglebone->your PC, the reverse 
      direction to above)
    - This is already set up for the CASU Master Workstation at the Artificial
-     Life Lab in Graz (192.168.12.1).
+     Life Lab in Graz (10.42.0.1).
 
 
 Paswordless ssh login

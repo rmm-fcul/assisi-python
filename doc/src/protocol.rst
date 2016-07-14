@@ -18,9 +18,8 @@ Assisi communication protocol
     "<Casu Name>", "DiagnosticLed", "On", "ColorStamped", "Color setpoint"
     "<Casu Name>", "DiagnosticLed", "Off", "ColorStamped", "Color setpoint"
     "<Casu Name>", "Speaker", "On", "VibrationSetpoint", "Vibration setpoint"
-    "<Casu Name>", "Speaker", "Off", "VibrationSetpoint", "Vibration setpoint"
+    "<Casu Name>", "Speaker", "Off", "VibrationSetpoint", "Data ignored"
     "<Casu Name>", "VibrationPattern", "On", "VibrationPattern", "Vibration pattern setpoint"
-    "<Casu Name>", "VibrationPattern", "Off", "VibrationPattern", "Vibration pattern setpoint"
     "<Target Name>", "CommEth", "<Casu Name>", "String", "(Comunication message, addressed directly to target!)"
 
 

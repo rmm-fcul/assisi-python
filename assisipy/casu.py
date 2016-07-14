@@ -512,6 +512,8 @@ class Casu:
         Sets a vibration pattern. The pattern is repeated cyclically,
         until a new vibration setpoint (or standby command) is received.
 
+        To stop a vibration pattern, call the speaker_standby() function.
+
         Parameters
         ----------
         vibe_periods : list
@@ -531,8 +533,7 @@ class Casu:
         error_msg = ""
 
         # Check input argument length
-        if not (len(vibe_periods) == len(idle_periods) 
-                == len(vibe_freqs) == len(vibe_amps)):
+        if not (len(vibe_periods) == len(vibe_freqs) == len(vibe_amps)):
             success = False
             error_msg += "Input parameter length mismatch. "
 

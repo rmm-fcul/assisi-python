@@ -14,7 +14,7 @@ import base_msgs_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='dev_msgs.proto',
   package='AssisiMsg',
-  serialized_pb='\n\x0e\x64\x65v_msgs.proto\x12\tAssisiMsg\x1a\x0f\x62\x61se_msgs.proto\"\xe8\x01\n\nRangeArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x32\n\x04type\x18\x02 \x01(\x0e\x32 .AssisiMsg.RangeArray.SensorType:\x02IR\x12\x1d\n\rfield_of_view\x18\x03 \x01(\x02:\x06\x30.5236\x12\x14\n\tmin_range\x18\x04 \x01(\x02:\x01\x30\x12\x16\n\tmax_range\x18\x05 \x01(\x02:\x03inf\x12\r\n\x05range\x18\x06 \x03(\x02\x12\x11\n\traw_value\x18\x07 \x03(\x02\"\x14\n\nSensorType\x12\x06\n\x02IR\x10\x00\">\n\x0bTemperature\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x02(\x02\"C\n\x10TemperatureArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x03(\x02\"d\n\x17TemperatureWithGradient\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x02(\x02\x12\x0b\n\x03\x64tx\x18\x03 \x02(\x02\x12\x0b\n\x03\x64ty\x18\x04 \x02(\x02\"W\n\x11VibrationSetpoint\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x02(\x01\x12\x11\n\tamplitude\x18\x03 \x01(\x01\"\x88\x01\n\x10VibrationPattern\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x14\n\x0cvibe_periods\x18\x02 \x03(\r\x12\x14\n\x0cidle_periods\x18\x03 \x03(\r\x12\x12\n\nvibe_freqs\x18\x04 \x03(\x01\x12\x11\n\tvibe_amps\x18\x05 \x03(\r\"o\n\x10VibrationReading\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x03(\x02\x12\x11\n\tamplitude\x18\x03 \x03(\x02\x12\x17\n\x0f\x61mplitude_stdev\x18\x04 \x03(\x02\"h\n\x15VibrationReadingArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12,\n\x07reading\x18\x02 \x03(\x0b\x32\x1b.AssisiMsg.VibrationReading\"S\n\tDiffDrive\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x10\n\x08vel_left\x18\x02 \x02(\x01\x12\x11\n\tvel_right\x18\x03 \x02(\x01\"\x9a\x01\n\x0bObjectArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x1d\n\rfield_of_view\x18\x03 \x01(\x02:\x06\x30.5236\x12\x14\n\tmin_range\x18\x04 \x01(\x02:\x01\x30\x12\x16\n\tmax_range\x18\x05 \x01(\x02:\x03inf\x12\r\n\x05range\x18\x06 \x03(\x02\x12\x0c\n\x04type\x18\x07 \x03(\t\"?\n\x07\x41irflow\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x11\n\tintensity\x18\x02 \x02(\x02\"Y\n\x0e\x41irflowReading\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x11\n\tintensity\x18\x02 \x02(\x02\x12\x11\n\tdirection\x18\x03 \x02(\x02')
+  serialized_pb='\n\x0e\x64\x65v_msgs.proto\x12\tAssisiMsg\x1a\x0f\x62\x61se_msgs.proto\"\xe8\x01\n\nRangeArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x32\n\x04type\x18\x02 \x01(\x0e\x32 .AssisiMsg.RangeArray.SensorType:\x02IR\x12\x1d\n\rfield_of_view\x18\x03 \x01(\x02:\x06\x30.5236\x12\x14\n\tmin_range\x18\x04 \x01(\x02:\x01\x30\x12\x16\n\tmax_range\x18\x05 \x01(\x02:\x03inf\x12\r\n\x05range\x18\x06 \x03(\x02\x12\x11\n\traw_value\x18\x07 \x03(\x02\"\x14\n\nSensorType\x12\x06\n\x02IR\x10\x00\">\n\x0bTemperature\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x02(\x02\"C\n\x10TemperatureArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x03(\x02\"d\n\x17TemperatureWithGradient\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04temp\x18\x02 \x02(\x02\x12\x0b\n\x03\x64tx\x18\x03 \x02(\x02\x12\x0b\n\x03\x64ty\x18\x04 \x02(\x02\"W\n\x11VibrationSetpoint\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x02(\x01\x12\x11\n\tamplitude\x18\x03 \x01(\x01\"r\n\x10VibrationPattern\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x14\n\x0cvibe_periods\x18\x02 \x03(\r\x12\x12\n\nvibe_freqs\x18\x03 \x03(\x01\x12\x11\n\tvibe_amps\x18\x04 \x03(\r\"o\n\x10VibrationReading\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x0c\n\x04\x66req\x18\x02 \x03(\x02\x12\x11\n\tamplitude\x18\x03 \x03(\x02\x12\x17\n\x0f\x61mplitude_stdev\x18\x04 \x03(\x02\"h\n\x15VibrationReadingArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12,\n\x07reading\x18\x02 \x03(\x0b\x32\x1b.AssisiMsg.VibrationReading\"S\n\tDiffDrive\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x10\n\x08vel_left\x18\x02 \x02(\x01\x12\x11\n\tvel_right\x18\x03 \x02(\x01\"\x9a\x01\n\x0bObjectArray\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x1d\n\rfield_of_view\x18\x03 \x01(\x02:\x06\x30.5236\x12\x14\n\tmin_range\x18\x04 \x01(\x02:\x01\x30\x12\x16\n\tmax_range\x18\x05 \x01(\x02:\x03inf\x12\r\n\x05range\x18\x06 \x03(\x02\x12\x0c\n\x04type\x18\x07 \x03(\t\"?\n\x07\x41irflow\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x11\n\tintensity\x18\x02 \x02(\x02\"Y\n\x0e\x41irflowReading\x12!\n\x06header\x18\x01 \x01(\x0b\x32\x11.AssisiMsg.Header\x12\x11\n\tintensity\x18\x02 \x02(\x02\x12\x11\n\tdirection\x18\x03 \x02(\x02')
 
 
 
@@ -290,22 +290,15 @@ _VIBRATIONPATTERN = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='idle_periods', full_name='AssisiMsg.VibrationPattern.idle_periods', index=2,
-      number=3, type=13, cpp_type=3, label=3,
+      name='vibe_freqs', full_name='AssisiMsg.VibrationPattern.vibe_freqs', index=2,
+      number=3, type=1, cpp_type=5, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='vibe_freqs', full_name='AssisiMsg.VibrationPattern.vibe_freqs', index=3,
-      number=4, type=1, cpp_type=5, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='vibe_amps', full_name='AssisiMsg.VibrationPattern.vibe_amps', index=4,
-      number=5, type=13, cpp_type=3, label=3,
+      name='vibe_amps', full_name='AssisiMsg.VibrationPattern.vibe_amps', index=3,
+      number=4, type=13, cpp_type=3, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -319,8 +312,8 @@ _VIBRATIONPATTERN = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=606,
-  serialized_end=742,
+  serialized_start=605,
+  serialized_end=719,
 )
 
 
@@ -368,8 +361,8 @@ _VIBRATIONREADING = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=744,
-  serialized_end=855,
+  serialized_start=721,
+  serialized_end=832,
 )
 
 
@@ -403,8 +396,8 @@ _VIBRATIONREADINGARRAY = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=857,
-  serialized_end=961,
+  serialized_start=834,
+  serialized_end=938,
 )
 
 
@@ -445,8 +438,8 @@ _DIFFDRIVE = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=963,
-  serialized_end=1046,
+  serialized_start=940,
+  serialized_end=1023,
 )
 
 
@@ -508,8 +501,8 @@ _OBJECTARRAY = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1049,
-  serialized_end=1203,
+  serialized_start=1026,
+  serialized_end=1180,
 )
 
 
@@ -543,8 +536,8 @@ _AIRFLOW = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1205,
-  serialized_end=1268,
+  serialized_start=1182,
+  serialized_end=1245,
 )
 
 
@@ -585,8 +578,8 @@ _AIRFLOWREADING = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1270,
-  serialized_end=1359,
+  serialized_start=1247,
+  serialized_end=1336,
 )
 
 _RANGEARRAY.fields_by_name['header'].message_type = base_msgs_pb2._HEADER

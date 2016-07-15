@@ -86,7 +86,7 @@ Special value to get all sensor values from an array of sensors
 # Value limits
 VIBE_FREQ_MAX = 2000
 VIBE_PERIOD_MIN = 100
-VIBE_AMP_MAX = 100
+VIBE_AMP_MAX = 50
 
 class Casu:
     """
@@ -458,11 +458,11 @@ class Casu:
 
     def set_speaker_vibration(self, freq, intens,  id = VIBE_ACT):
         """
-        Sets intensity value (0-100) and frequency to the speaker.
+        Sets intensity value (0-50) and frequency to the speaker.
 
         :param 
             float freq: Speaker frequency value, between 0 and 1500
-            float intens: Speaker intensity value , between 0 and 100 %.
+            float intens: Speaker intensity value , between 0 and 50 %.
         """
         if intens < 0:
             intens = 0
@@ -524,7 +524,7 @@ class Casu:
             All values must be between 1 and 2000.
         vibe_amps : list
             List of vibration amplitudes, in percentage of maximum PWM value.
-            All values must be between 0 and 100.
+            All values must be between 0 and 50.
         id        : int
             Actuator id. Default (and only supported) value is VIBE_ACT
         All lists must be of same length.

@@ -26,7 +26,8 @@ class AssisiRun:
 
         self.proj_name = os.path.splitext(os.path.basename(project_name))[0]
         self.project_root = os.path.dirname(os.path.abspath(project_name))
-        self.fabfile_name = self.proj_name + '.py'
+        self.sandbox_dir = self.proj_name + '_sandbox'
+        self.fabfile_name = os.path.join(self.sandbox_dir, self.proj_name + '.py')
         self.depspec = {}
         with open(project_name) as project:
             project_spec = yaml.safe_load(project)

@@ -51,7 +51,7 @@ class Deploy:
         with open(os.path.join(self.project_root, project['dep'])) as dep_file:
             self.dep = yaml.safe_load(dep_file)
 
-    def prepare(self):
+    def prepare(self, layer_select='all'):
         """
         Prepare deployment in local folder.
         """
@@ -98,7 +98,18 @@ def all():
         # with subfolders for each casu
         os.mkdir(self.sandbox_dir)
         os.chdir(self.sandbox_dir)
-        for layer in self.arena:
+
+        # Select particular layers
+        selected_layers = self.dep.keys()
+        if layer_select != 'all':
+            selected_layers = [layer_select]
+            if layer_select not in self.dep.keys():
+                raise ValueError (
+                    "[F] {} is not a layer in this deployment! aborting.".format(
+                        layer_select))
+
+
+        for layer in selected_layers:
             os.mkdir(layer)
             os.chdir(layer)
             for casu in self.arena[layer]:
@@ -193,7 +204,7 @@ def {task}():
         """
 
         if not self.prepared:
-            self.prepare()
+            self.prepare(layer_select=layer_select)
 
         cwd = os.getcwd()
 
@@ -203,6 +214,10 @@ def {task}():
         selected_layers = self.dep.keys()
         if layer_select != 'all':
             selected_layers = [layer_select]
+            if layer_select not in self.dep.keys():
+                raise ValueError (
+                    "[F] {} is not a layer in this deployment! aborting.".format(
+                        layer_select))
 
         for layer in selected_layers:
             print('Deploying layer {0} ...'.format(layer))

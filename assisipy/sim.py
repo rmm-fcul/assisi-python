@@ -182,11 +182,20 @@ class Control:
                     print('Unknown command {0} for sim control'.format(cmd))
 
 
-def spawn_array_from_file(array_filename):
+def spawn_array_from_file(array_filename, layer_select='all'):
     with open(array_filename) as array_file:
         arrays = yaml.safe_load(array_file)
         # Several arrays can be defined within one file
-        for layer in arrays:
+        # Select particular layers
+        selected_layers = arrays.keys()
+        if layer_select != 'all':
+            selected_layers = [layer_select]
+            if layer_select not in arrays.keys():
+                raise ValueError (
+                    "[F] {} is not a layer in this specification! aborting.".format(
+                        layer_select))
+
+        for layer in selected_layers:
             # Spawn only simulated arrays
             if layer[:3].lower() == 'sim':
                 print('Spawning objects in layer {0}...'.format(layer))
@@ -201,11 +210,12 @@ def spawn_array_from_file(array_filename):
 def main():
     parser = argparse.ArgumentParser(description='Spawn an array of objects (casus or bees), as defined in an .arena/.bees file.')
     parser.add_argument('specfile', help= 'name of file specifying the objects to spawn. Accepts: .arena or .bees direct spec, or .assisi project spec')
+    parser.add_argument('--layer', help='Name of single layer to spawn.', default='all')
     args = parser.parse_args()
 
     # process specification to identify where definitions are
     if args.specfile.endswith(('.arena', '.bees')):
-        spawn_array_from_file(args.specfile)
+        spawn_array_from_file(args.specfile, args.layer)
     elif args.specfile.endswith('.assisi'):
         # find any contained specification files (arena, agents)
         with open(args.specfile) as project_file:
@@ -218,7 +228,7 @@ def main():
             if key in project:
                 found += 1
                 array_filename = os.path.join(project_root, project[key])
-                spawn_array_from_file(array_filename)
+                spawn_array_from_file(array_filename, args.layer)
 
         if found == 0:
             raise IOError, "[E] specification file ({}) does not define any spawnable subfiles ({})\ndid you really supply an .assisi file?".format(", ".join(keylist),  args.specfile)

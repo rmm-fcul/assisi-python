@@ -66,7 +66,7 @@ class DataCollector:
         with open(os.path.join(self.project_root, project['dep'])) as dep_file:
             self.dep = yaml.safe_load(dep_file)
 
-    def collect(self):
+    def collect(self, layer_select='all'):
         """
         Collect the data to the local machine.
         """
@@ -91,8 +91,18 @@ class DataCollector:
 
         os.chdir(self.data_dir)
 
+        # Select particular layers
+        selected_layers = self.dep.keys()
+        if layer_select != 'all':
+            selected_layers = [layer_select]
+            if layer_select not in self.dep.keys():
+                raise ValueError (
+                    "[F] {} is not a layer in this deployment! aborting.".format(
+                        layer_select))
+
         # Download the data from deployment targets
-        for layer in self.dep:
+        for layer in selected_layers:
+        #for layer in self.dep:
             try:
                 os.mkdir(layer)
                 print('Created folder {0}.'.format(layer))
@@ -130,14 +140,19 @@ class DataCollector:
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Collect CASU logs. Currently assumes that the logs are located in the same folder as the controller.')
+    parser = argparse.ArgumentParser(
+        description='Collect CASU logs. Currently assumes that the logs are' +
+        'located in the same folder as the controller.')
     parser.add_argument('project', help='Project file name (.assisi).')
-    parser.add_argument('--logpath', default=None, help="override for path where logs will be written to")
+    parser.add_argument('--logpath', default=None,
+                        help="override for path where logs will be written to")
     parser.add_argument('--clean', action='store_true', default=False,
                         help='Remove original log files after copying.')
+    parser.add_argument('--layer', default='all',
+                        help='Name of single layer to collect data for')
     args = parser.parse_args()
     dc = DataCollector(args.project, args.clean, args.logpath)
-    dc.collect()
+    dc.collect(args.layer)
 
 if __name__ == '__main__':
     main()

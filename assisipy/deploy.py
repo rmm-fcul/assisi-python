@@ -23,12 +23,13 @@ class Deploy:
         """
         self.proj_name = os.path.splitext(os.path.basename(project_file_name))[0]
         self.fabfile_name = self.proj_name + '.py'
+        self.project_root = os.path.dirname(os.path.abspath(project_file_name))
+        self.sandbox_dir = self.proj_name + '_sandbox'
+        self.fabfile_name = os.path.join(self.sandbox_dir, self.proj_name + '.py')
         self.arena = {}
         self.nbg = None
         self.dep = {}
 
-        self.project_root = os.path.dirname(os.path.abspath(project_file_name))
-        self.sandbox_dir = self.proj_name + '_sandbox'
 
         self.prepared = False
 

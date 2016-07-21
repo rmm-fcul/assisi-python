@@ -194,6 +194,7 @@ def spawn_array_from_file(array_filename, layer_select='all'):
                 raise ValueError (
                     "[F] {} is not a layer in this specification! aborting.".format(
                         layer_select))
+
         for layer in selected_layers:
             # Spawn only simulated arrays
             if layer[:3].lower() == 'sim':

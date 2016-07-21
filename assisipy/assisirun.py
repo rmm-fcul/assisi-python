@@ -36,7 +36,7 @@ class AssisiRun:
         # Running controllers
         self.running = {}
 
-    def run(self):
+    def run(self, layer_select='all'):
         """
         Execute the controllers.
         """
@@ -45,8 +45,18 @@ class AssisiRun:
         print('Changing directory to {0}'.format(self.project_root))
         os.chdir(self.project_root)
         print('Preparing files for deployment!')
-        counter = 0
-        for layer in self.depspec:
+        # counter = 0 NOTE: var not used
+
+        # Select particular layers
+        selected_layers = self.depspec.keys()
+        if layer_select != 'all':
+            selected_layers = [layer_select]
+            if layer_select not in self.depspec.keys():
+                raise ValueError (
+                    "[F] {} is not a layer in this deployment! aborting.".format(
+                        layer_select))
+
+        for layer in selected_layers:
             for casu in self.depspec[layer]:
                 taskname = layer.replace('-','_') + '_' + casu.replace('-','_')
                 cmd = 'fab -f {0} {1}'.format(self.fabfile_name, taskname)
@@ -61,11 +71,14 @@ class AssisiRun:
 
 def main():
     parser = argparse.ArgumentParser(description='Run a set of CASU controllers.')
-    parser.add_argument('project', help='name of .assisi file specifying the project details.')
+    parser.add_argument('project',
+                        help='name of .assisi file specifying the project details.')
+    parser.add_argument('--layer', default='all',
+                        help='Name of single layer to run controllers for')
     args = parser.parse_args()
 
     project = AssisiRun(args.project)
-    project.run()
+    project.run(args.layer)
 
 if __name__ == '__main__':
     main()

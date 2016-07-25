@@ -51,7 +51,7 @@ class Deploy:
         with open(os.path.join(self.project_root, project['dep'])) as dep_file:
             self.dep = yaml.safe_load(dep_file)
 
-    def prepare(self, layer_select='all'):
+    def prepare(self, layer_select='all', allow_partial=False):
         """
         Prepare deployment in local folder.
         """
@@ -113,6 +113,17 @@ def all():
             os.mkdir(layer)
             os.chdir(layer)
             for casu in self.arena[layer]:
+                if layer not in self.dep or casu not in self.dep[layer]:
+                    # we cannot continue with this casu since incomplete info.
+                    if allow_partial is True:
+                        print "[W] skipping casu {} {} since no deployment spec".format(
+                            layer, casu)
+                        continue
+                    else:
+                        # user is probably not aware of the mismatch (typo in
+                        # names between files, perhaps?) Raise error.
+                        raise ValueError("[F] incomplete info for casu {} (in layer {}): not specified in .dep file. Did you mean to use --allow-partial option?".format(casu, layer))
+
                 os.mkdir(casu)
                 os.chdir(casu)
                 # Create the .rtc file
@@ -197,14 +208,14 @@ def {task}():
 
         self.prepared = True
 
-    def deploy(self, layer_select='all'):
+    def deploy(self, layer_select='all', allow_partial=False):
         """
         Perform deployment by copying files from the sandbox directory
         to their appropriate destinations.
         """
 
         if not self.prepared:
-            self.prepare(layer_select=layer_select)
+            self.prepare(layer_select=layer_select, allow_partial=allow_partial)
 
         cwd = os.getcwd()
 
@@ -245,15 +256,15 @@ def main():
     # TODO: This is fully implemented yet!
     parser.add_argument('--layer', help='Name of single layer to deploy', default='all')
     parser.add_argument('--prepare', help='Generate rtc files, but skip transfer to target CASUs', action="store_true")
+    parser.add_argument('--allow-partial',
+                        help='Allow a partially specified deployment to be generated:'
+                        'with a complete arena file, if only a subset of casus are '
+                        'declared in the dep file, this will be permitted',
+                        action='store_true')
     args = parser.parse_args()
 
     project = Deploy(args.project)
-    if args.prepare is True:
-        # ONLY prepare -- don't attempt any transfer
-        project.prepare()
-    else:
-        # the deployment stage does preparation if not already done
-        project.deploy(args.layer)
+    project.deploy(args.layer, args.allow_partial)
 
 if __name__ == '__main__':
     main()

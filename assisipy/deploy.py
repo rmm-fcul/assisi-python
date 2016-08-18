@@ -229,10 +229,16 @@ def main():
     parser.add_argument('project', help='name of .assisi file specifying the project details.')
     # TODO: This is fully implemented yet!
     parser.add_argument('--layer', help='Name of single layer to deploy', default='all')
+    parser.add_argument('--prepare', help='Generate rtc files, but skip transfer to target CASUs', action="store_true")
     args = parser.parse_args()
 
     project = Deploy(args.project)
-    project.deploy(args.layer)
+    if args.prepare is True:
+        # ONLY prepare -- don't attempt any transfer
+        project.prepare()
+    else:
+        # the deployment stage does preparation if not already done
+        project.deploy(args.layer)
 
 if __name__ == '__main__':
     main()

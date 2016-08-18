@@ -128,7 +128,7 @@ def all():
                                 name_prefix = layer + '/'
                                 out_neighbors = sg.out_neighbors(name_prefix + casu)
                             else:
-                                print('WARNING: No connectivity infor for CASU {0}'.format(casu))
+                                print('WARNING: No connectivity info for CASU {0}'.format(casu))
                             # Read all the neighbors and populate the .rtc
                             for nb in out_neighbors:
                                 side = str(self.nbg.get_edge(name_prefix+casu,nb).attr['label'])

@@ -182,7 +182,7 @@ class Control:
                     print('Unknown command {0} for sim control'.format(cmd))
 
 
-def spawn_array_from_file(array_filename):
+def spawn_array_from_file(obj_type, array_filename):
     with open(array_filename) as array_file:
         arrays = yaml.safe_load(array_file)
         # Several arrays can be defined within one file
@@ -193,7 +193,6 @@ def spawn_array_from_file(array_filename):
                 if arrays[layer]:
                     # The array is non-empty, get the first element
                     obj_name = arrays[layer].keys()[0]
-                    obj_type = obj_name.split('-')[0].title()
                     sim_ctrl = Control(pub_addr = arrays[layer][obj_name]['pub_addr'])
                     sim_ctrl.spawn_array(obj_type, arrays[layer])
     # no return value here
@@ -218,7 +217,12 @@ def main():
             if key in project:
                 found += 1
                 array_filename = os.path.join(project_root, project[key])
-                spawn_array_from_file(array_filename)
+                obj_type = 'unknown'
+                if key == 'arena':
+                    obj_type = 'Casu'
+                elif key == 'bees':
+                    obj_type = 'Bee'
+                spawn_array_from_file(obj_type, array_filename)
 
         if found == 0:
             raise IOError, "[E] specification file ({}) does not define any spawnable subfiles ({})\ndid you really supply an .assisi file?".format(", ".join(keylist),  args.specfile)

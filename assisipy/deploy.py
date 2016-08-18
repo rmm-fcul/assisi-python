@@ -272,7 +272,7 @@ def main():
     project = Deploy(args.project)
     if args.prepare is True:
         # ONLY prepare -- don't attempt any transfer
-        project.prepare()
+        project.prepare(args.layer, args.allow_partial)
     else:
         # the deployment stage does preparation if not already done
         project.deploy(args.layer, args.allow_partial)

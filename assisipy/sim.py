@@ -32,7 +32,7 @@ class Control:
             # Parse the rtc file
             raise NotImplementedError(
                 "RTC file parsing for Simulator control is not implemented yet. "
-                "Please call the constructor with the name=beename argument.")
+            )
             pass
         else:
             # parse any keywords provided, otherwise take default values
@@ -182,7 +182,7 @@ class Control:
                     print('Unknown command {0} for sim control'.format(cmd))
 
 
-def spawn_array_from_file(obj_type, array_filename, layer_select='all'):
+def spawn_array_from_file(obj_type, array_filename, address, layer_select='all'):
     with open(array_filename) as array_file:
         arrays = yaml.safe_load(array_file)
         # Several arrays can be defined within one file
@@ -197,24 +197,26 @@ def spawn_array_from_file(obj_type, array_filename, layer_select='all'):
 
         for layer in selected_layers:
             # Spawn only simulated arrays
-            if layer[:3].lower() == 'sim':
-                print('Spawning objects in layer {0}...'.format(layer))
-                if arrays[layer]:
-                    # The array is non-empty, get the first element
-                    obj_name = arrays[layer].keys()[0]
-                    sim_ctrl = Control(pub_addr = arrays[layer][obj_name]['pub_addr'])
-                    sim_ctrl.spawn_array(obj_type, arrays[layer])
+            print('Spawning objects in layer {0}...'.format(layer))
+            if arrays[layer]:
+                # The array is non-empty, get the first element
+                obj_name = arrays[layer].keys()[0]
+                sim_ctrl = Control(pub_addr = address)
+                sim_ctrl.spawn_array(obj_type, arrays[layer])
     # no return value here
 
 def main():
     parser = argparse.ArgumentParser(description='Spawn an array of objects (casus or bees), as defined in an .arena/.bees file.')
     parser.add_argument('specfile', help= 'name of file specifying the objects to spawn. Accepts: .arena or .bees direct spec, or .assisi project spec')
     parser.add_argument('--layer', help='Name of single layer to spawn.', default='all')
+    parser.add_argument('--address', help='ZMQ address of the simulator.', default='tcp://localhost:5556')
     args = parser.parse_args()
 
     # process specification to identify where definitions are
-    if args.specfile.endswith(('.arena', '.bees')):
-        spawn_array_from_file(args.specfile, args.layer)
+    if args.specfile.endswith('.arena'):
+        spawn_array_from_file('Casu', args.specfile, args.address, args.layer)
+    elif args.specfile.endswith('.bees'):
+        spawn_array_from_file('Bee', args.specfile, args.address, args.layer)
     elif args.specfile.endswith('.assisi'):
         # find any contained specification files (arena, agents)
         with open(args.specfile) as project_file:
@@ -233,7 +235,7 @@ def main():
                     obj_type = 'Casu'
                 elif key == 'bees':
                     obj_type = 'Bee'
-                spawn_array_from_file(obj_type, array_filename, args.layer)
+                spawn_array_from_file(obj_type, array_filename, args.address, args.layer)
 
         if found == 0:
             raise IOError, "[E] specification file ({}) does not define any spawnable subfiles ({})\ndid you really supply an .assisi file?".format(", ".join(keylist),  args.specfile)
@@ -245,3 +247,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

@@ -22,48 +22,50 @@ from msg import base_msgs_pb2
 
 """ IR range sensors """
 
-IR_F = 0 
+IR_F = 101 
 """ Range sensor pointing to 0° (FRONT) """
-IR_FR = 1
-""" Range sensor pointing to 45° (FRONT-RIGHT) """
-IR_BR = 2
-""" Range sensor pointing to 135° (BACK-RIGHT)"""
-IR_B = 3
+IR_FL = 102
+""" Range sensor pointing to 45° (FRONT-LEFT) """
+IR_BL = 103
+""" Range sensor pointing to 135° (BACK-LEFT)"""
+IR_B = 104
 """ Range sensor pointing to 180° (BACK) """
-IR_BL = 4
-""" Range sensor pointing to 225° (BACK-LEFT) """
-IR_FL = 5
-""" Range sensor pointing to 270° (FRONT-LEFT) """
+IR_BR = 105
+""" Range sensor pointing to 225° (BACK-RIGHT) """
+IR_FR = 106
+""" Range sensor pointing to 270° (FRONT-RIGHT) """
 
-LIGHT_ACT = 6
-""" Light stimulus actuator """
-
-DLED_TOP = 7
-""" Top diagnostic LED """
-
-TEMP_F = 8 
+TEMP_F = 201
 """ Temperature sensor at 0° (FRONT) """
-TEMP_R = 9
-""" Temperature sensor at 90° (RIGHT) """
-TEMP_B = 10
+TEMP_L = 202
+""" Temperature sensor at 90° (LEFT) """
+TEMP_B = 203
 """ Temperature sensor at 180° (BACK) """
-TEMP_L = 11
-""" Temperature sensor at 270° (LEFT) """
-TEMP_TOP = 12
-""" Top temperature sensor (Casu top) """
-TEMP_CASU = 13
-""" Estimated casu-body temperature """
-TEMP_WAX = 14
-""" Estimated casu-wax temperature """
+TEMP_R = 204
+""" Temperature sensor at 270° (RIGHT) """
+TEMP_TOP = 205
+""" Top temperature sensor (on flex PCB) """
+TEMP_PCB = 206
+"""  Temperature sensor on main PCB """
+TEMP_RING = 207
+""" Estimated CASU-ring temperature """
+TEMP_WAX = 208
+""" Estimated wax temperature above the CASU-ring"""
 
-PELTIER_ACT = 15
-""" Peltier temperature actuator """
-
-ACC = 16
+ACC = 301
 """ Vibration sensor """
 
-VIBE_ACT = 20
+DLED_TOP = 501
+""" Top diagnostic LED """
+
+PELTIER_ACT = 601
+""" Peltier temperature actuator """
+
+VIBE_ACT = 701
 """ Vibration actuator """
+
+AIRFLOW_ACT = 801
+""" Airflow actuator """
 
 TEMP_MIN = 10
 """
@@ -74,9 +76,6 @@ TEMP_MAX = 50
 Maximum allowed setpoint for the peltier heater, in °C.
 """
 
-AIRFLOW_ACT = 21
-""" Airflow actuator """
-
 ARRAY = 10000
 """
 Special value to get all sensor values from an array of sensors
@@ -84,7 +83,7 @@ Special value to get all sensor values from an array of sensors
 """
 
 # Value limits
-VIBE_FREQ_MAX = 2000
+VIBE_FREQ_MAX = 1500
 VIBE_PERIOD_MIN = 100
 VIBE_AMP_MAX = 50
 
@@ -385,7 +384,7 @@ class Casu:
         """
         with self.__lock:
             if self.__ir_range_readings.range:
-                return self.__ir_range_readings.range[id]
+                return self.__ir_range_readings.range[id-IR_F]
             else:
                 return -1
 
@@ -399,7 +398,7 @@ class Casu:
                 if id == ARRAY:
                     return [raw for raw in self.__ir_range_readings.raw_value]
                 else:
-                    return self.__ir_range_readings.raw_value[id]
+                    return self.__ir_range_readings.raw_value[id-IR_F]
             else:
                 return -1
 
@@ -521,7 +520,7 @@ class Casu:
             Lowest supported value is 100.
         vibe_freqs : list
             List of vibration frequencies, in Hertz. 
-            All values must be between 1 and 2000.
+            All values must be between 1 and 1500.
         vibe_amps : list
             List of vibration amplitudes, in percentage of maximum PWM value.
             All values must be between 0 and 50.

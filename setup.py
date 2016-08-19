@@ -50,6 +50,7 @@ console_scripts = [
             ['assisirun.py = assisipy.assisirun:main'],
             ['deploy.py = assisipy.deploy:main'],
             ['collect_data.py = assisipy.collect_data:main'],
+            ['aggregate_data.py = assisipy.aggregate_data:main']
 ]
 
 
@@ -82,7 +83,7 @@ setup(
     keywords='assisi, assisibf, collective systems',
 
     # Run-time dependencies (will be installed by pip)
-    install_requires = ['pyzmq','protobuf','pyyaml', 'pygraphviz', 'Fabric'],
+    install_requires = ['pyzmq','protobuf','pyyaml', 'pygraphviz', 'Fabric', 'scipy'],
 
     entry_points     = {
         'console_scripts': console_scripts,

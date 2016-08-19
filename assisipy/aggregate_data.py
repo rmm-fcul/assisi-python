@@ -68,9 +68,9 @@ def process_folder(foldername):
     return data
 
 def main():
-   """
-   Main script entry point.
-   """
+    """
+    Main script entry point.
+    """
     # TODO: Use argparse and add reasonable options
     # Document usage
     # Consider if the program should take an .assisi file as input?

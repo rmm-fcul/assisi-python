@@ -65,6 +65,18 @@ def process_folder(foldername):
     """
     data = {}
 
+    dirs = os.walk(foldername)
+    for (dirpath, dirnames, filenames) in dirs:
+        for filename in filenames:
+            if filename[-4:] == '.csv':
+                new_data = load_from_csv(os.path.join(dirpath,filename))
+                if new_data.keys():
+                    casu = new_data.keys()[0]
+                    if casu in data.keys():
+                        print('WARNING: Found more than one logfile for {0}!'.format(casu))
+                        print('The output file will contain data from only one logfile!')
+                data = dict(data, **new_data)
+
     return data
 
 def main():
@@ -79,11 +91,13 @@ def main():
     
     # The first argument is the name
     # of the file/folder to process
+    outname = ''
     if len(sys.argv) < 2:
         sys.exit('Please provide a file or folder to process.')
     elif sys.argv[1][-4:] == '.csv':
         # We are assuming that we need to process a single .csv file
         data = load_from_csv(sys.argv[1])
+        outname = sys.argv[1][:-4]
     else:
         # We are assuming that the argument is a folder
         # to be processed. It is assumed that it contains
@@ -91,8 +105,9 @@ def main():
         # Each subfolder is assumed to contain one or more
         # .csv files.
         data = process_folder(sys.argv[1])
+        outname = sys.argv[1].rstrip(os.sep)
 
-    sio.savemat(sys.argv[1][:-4],data,oned_as='column')
+    sio.savemat(outname,data,oned_as='column')
 
 
 if __name__ == '__main__':

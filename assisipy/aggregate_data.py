@@ -34,15 +34,22 @@ def load_from_csv(filepath):
                 # (e.g. interrupted program)
                 dataid = row[0].replace('-','_')
                 t_id = 't_' + dataid
-                ts = float(row[1]) # timestamp
+                if not dataid:
+                    # Empty data ids appear in some datasets
+                    # This actually should not happen
+                    # This is a quick fix until we figure out 
+                    # the real cause of the problem
+                    continue
                 if dataid not in data[casu]:
                     # New row id
                     data[casu][dataid] = []
                     data[casu][t_id] = []
-                data[casu][t_id].append(ts)
                 try:
+                    ts = float(row[1]) # timestamp
+                    data[casu][t_id].append(ts)
                     data[casu][dataid].append([float(x) for x in row[2:]])
                 except ValueError:
+                    print('ValueError in row {0}: {1}'.format(datareader.line_num,row))
                     #print('No data for {0}'.format(dataid))
                     # Accelerometers are currently not providing any data
                     # We don't want to bother users with that

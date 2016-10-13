@@ -49,8 +49,7 @@ def load_from_csv(filepath):
                     data[casu][t_id].append(ts)
                     data[casu][dataid].append([float(x) for x in row[2:]])
                 except ValueError:
-                    print('ValueError in row {0}: {1}'.format(datareader.line_num,row))
-                    #print('No data for {0}'.format(dataid))
+                    #print('ValueError in row {0}: {1}'.format(datareader.line_num,row))
                     # Accelerometers are currently not providing any data
                     # We don't want to bother users with that
                     pass

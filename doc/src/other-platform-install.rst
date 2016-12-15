@@ -143,7 +143,7 @@ playground:
 python-simulator-stuff:
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 - switch to ~/assisi
-- git clone https://github.com/larics/assisi-python python
+- git clone https://github.com/assisi/assisipy python
 - cd python
 - git submodule update --init
 - ./compile_msgs.sh
@@ -161,6 +161,14 @@ build the documentation of assisi-py:
 
 Now the doc is in ./docs/html/index.html
 
+Ubuntu 14.04 (Trusty) 64-bit
+----------------------------
+
+Trusty was the officially supported platform up until
+December 2016. At the time of writing (December 2016), the official
+(Xenial) installation instructions are known to work for
+Trusty. However, as Trusty is not actively maintained any more, you
+are encouraged to move to Xenial at your earliest convenience.
 
 Ubuntu 12.04 Precise Pangolin
 -----------------------------
@@ -220,3 +228,15 @@ Now install python-zmq using pip (if you install using apt-get it will install a
     sudo pip install pyzmq
 
 
+.. _upgrading-label:
+Upgrading from a previous installation
+======================================
+
+When upgrading your assisi system (e.g. after an OS upgrade), it is
+necessary to reinstall both Enki and the Playground.
+
+If you have a manually installed version of libzmq on your system, you
+will have to uninstall it manually. Go to the folder where you
+originally built it and run ``make uninstall``
+
+TODO: provide better instructions here...

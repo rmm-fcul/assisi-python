@@ -5,43 +5,50 @@ Below are instructions for installing the current version of the
 Bee-arena software. Once the software is finalized, automatic installer
 packages will be developed.
 
-Currently, Ubuntu 14.04 (Trusty Thar) 64-bit is the only officially
+Currently, Ubuntu 16.04 (Xenial Xerus) 64-bit is the only officially
 spported platform. Unofficial guides for some other platforms are
 available :ref:`here <other-platforms-label>`.
 In principle, installation on other Posix-compliant systems should also be possible,
 but YMMV (Your Mileage May Vary :)
 
+Check out the :ref:`upgrading notes <_upgrading-label>` if you are
+upgrading from a previous installation.
 
-
-
-
-Ubuntu 14.04 (Trusty) 64-bit
+Ubuntu 16.04 (Xenial) 64-bit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Installling dependencies
 ------------------------
 
-Ubuntu Trusty is the only officially supported platform for ASSISI
+Ubuntu Xenial is the only officially supported platform for ASSISI
 software. Efforts are made to make the software as portable as
 possible, but we can not guarantee correct operation on other systems.
 
-On Ubuntu Trusty, all of the required dependencies are available as
-pre-build packages from official Ubuntu repositories:
+On Ubuntu Xenial, all of the required dependencies are available as
+pre-build packages from official Ubuntu repositories.
+
+Enki dependencies:
 
 .. code-block:: console
   
     sudo apt-get install build-essential git cmake qt4-dev-tools libsdl1.2-dev
     sudo apt-get install libboost-dev libboost-program-options-dev libboost-system-dev
-    sudo apt-get install libboost-filesystem-dev libboost-python-dev
-    sudo apt-get install libboost-thread-dev libboost-timer-dev
-    sudo apt-get install libprotobuf-dev protobuf-compiler python-protobuf
-    sudo apt-get install python-pip python-dev python-sphinx python-yaml
-    sudo apt-get install libzmq3-dev python-zmq
-    sudo apt-get install python-pygraphviz fabric
+    sudo apt-get install libboost-python-dev
 
-If you have a manually installed version of libzmq on your system, you
-will have to uninstall it manually. Go to the folder where you
-originally built it and run ``make uninstall``
+Playground dependencies:
+                
+.. code-block:: console
+                
+    sudo apt-get install libboost-filesystem-dev libboost-thread-dev
+    sudo apt-get install libboost-timer-dev libprotobuf-dev protobuf-compiler
+    sudo apt-get install libzmq3-dev libzmqpp-dev
+
+Assisipy dependencies:
+
+.. code-block:: console
+                
+    sudo apt-get install python-protobuf python-pip python-dev python-sphinx python-yaml
+    sudo apt-get install python-zmq python-pygraphviz fabric
 
 The next step is `Building the assisi software`_ 
 
@@ -59,7 +66,7 @@ needs to be installed first:
     mkdir -p ~/assisi/deps
     cd ~/assisi/deps
     
-    git clone https://github.com/larics/enki
+    git clone https://github.com/assisi/enki
     cd enki
     mkdir build
     cd build
@@ -75,7 +82,7 @@ You should have enki and viewer folders in you ``/usr/local/include`` folder.
 
 .. code-block:: console
 
-  git clone https://github.com/larics/assisi-playground playground
+  git clone https://github.com/assisi/playground playground
   cd playground
   git submodule update --init
   mkdir build
@@ -86,8 +93,6 @@ You should have enki and viewer folders in you ``/usr/local/include`` folder.
   cd ../..
   
 3. The **python API**:
-
-(These instructions are valid from December 2015 onwards, using >=v0.9.0)
 
 .. code-block:: console
 

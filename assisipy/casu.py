@@ -22,7 +22,7 @@ from msg import base_msgs_pb2
 
 """ IR range sensors """
 
-IR_F = 101 
+IR_F = 101
 """ Range sensor pointing to 0° (FRONT) """
 IR_FL = 102
 """ Range sensor pointing to 45° (FRONT-LEFT) """
@@ -52,7 +52,7 @@ TEMP_RING = 207
 TEMP_WAX = 208
 """ Estimated wax temperature above the CASU-ring"""
 
-ACC = 301
+FFT = 301
 """ Vibration sensor """
 
 DLED_TOP = 501
@@ -133,7 +133,7 @@ class Casu:
         # Sensor reading buffers
         self.__ir_range_readings = dev_msgs_pb2.RangeArray()
         self.__temp_readings = dev_msgs_pb2.TemperatureArray()
-        self.__acc_readings = dev_msgs_pb2.VibrationReadingArray()
+        self.__vibe_readings = dev_msgs_pb2.VibrationReadingArray()
 
         # Actuator setpoint buffers
         self.__peltier_setpoint = dev_msgs_pb2.Temperature()
@@ -232,21 +232,18 @@ class Casu:
                     self.__write_to_log(['temp', time.time()] + [t for t in self.__temp_readings.temp])
                 else:
                     print('Unknown command {0} for {1}'.format(cmd, self.__name))
-            elif dev == 'Acc':
+            elif dev == 'Fft':
                 if cmd == 'Measurements':
                     with self.__lock:
-                        self.__acc_readings.ParseFromString(data)
+                        self.__vibe_readings.ParseFromString(data)
+                    # Assuming there is only one FFT reading (one accelerometer)
+                    reading = self.__vibe_readings.reading[0]
+                    self.__write_to_log(['fft_freq', time.time()] + [f for f in reading.freq])
+                    self.__write_to_log(['fft_amp', time.time()] + [a for a in reading.amplitude])
+            elif dev == "Acc":
+                # TODO: remove this as soon as simulator is updated
+                pass
 
-                    if self.__acc_readings.reading:
-                        acc_freqs = [0, 0, 0, 0]
-                        acc_amps = [0, 0, 0, 0]
-
-                        for i in range(0, 4):
-                            acc_freqs[i] = self.__acc_readings.reading[i].freq
-                            acc_amps[i] = self.__acc_readings.reading[i].amplitude
-
-                        self.__write_to_log(['acc_freq', time.time()] + [f for f in acc_freqs])
-                        self.__write_to_log(['acc_amp', time.time()] + [a for a in acc_amps])
             ### Actuator setpoints ###
             elif dev == 'Peltier':
                 if cmd == 'Off':
@@ -273,13 +270,13 @@ class Casu:
                         self.__airflow_setpoint.ParseFromString(data)
                     self.__write_to_log(['Airflow', time.time(), '1', self.__airflow_setpoint.intensity])
                 else:
-                    print('Unknown command {0} for {1}'.format(cmd, dev))                    
+                    print('Unknown command {0} for {1}'.format(cmd, dev))
             elif dev == 'DiagnosticLed':
                 if cmd == 'Off':
                     self.__diagnostic_led_on = False
                     with self.__lock:
                         self.__diagnostic_led_setpoint.ParseFromString(data)
-                    self.__write_to_log(['DiagnosticLed', time.time(), '0'] + 
+                    self.__write_to_log(['DiagnosticLed', time.time(), '0'] +
                                         [self.__diagnostic_led_setpoint.color.red,
                                          self.__diagnostic_led_setpoint.color.green,
                                          self.__diagnostic_led_setpoint.color.blue])
@@ -287,12 +284,12 @@ class Casu:
                     self.__diagnostic_led_on = True
                     with self.__lock:
                         self.__diagnostic_led_setpoint.ParseFromString(data)
-                    self.__write_to_log(['DiagnosticLed', time.time(), '1'] + 
+                    self.__write_to_log(['DiagnosticLed', time.time(), '1'] +
                                         [self.__diagnostic_led_setpoint.color.red,
                                          self.__diagnostic_led_setpoint.color.green,
                                          self.__diagnostic_led_setpoint.color.blue])
                 else:
-                    print('Unknown command {0} for {1}'.format(cmd, dev))                    
+                    print('Unknown command {0} for {1}'.format(cmd, dev))
             elif dev == 'Speaker':
                 if cmd == 'Off':
                     self.__speaker_on = False
@@ -309,7 +306,7 @@ class Casu:
                                          self.__speaker_setpoint.freq,
                                          self.__speaker_setpoint.amplitude])
                 else:
-                    print('Unknown command {0} for {1}'.format(cmd, dev))                    
+                    print('Unknown command {0} for {1}'.format(cmd, dev))
             elif dev == 'VibrationPattern':
                 if cmd == 'On':
                     self.__vibration_pattern_on = True
@@ -325,7 +322,7 @@ class Casu:
                         self.__vibration_pattern.ParseFromString(data)
                     self.__write_to_log(['VibrationPattern',time.time(),'0'])
                 else:
-                    print('Unknown command {0} for {1}'.format(cmd, dev))                    
+                    print('Unknown command {0} for {1}'.format(cmd, dev))
             else:
                 print('Unknown device {0} for {1}'.format(dev, self.__name))
 
@@ -459,7 +456,7 @@ class Casu:
         """
         Sets intensity value (0-50) and frequency to the speaker.
 
-        :param 
+        :param
             float freq: Speaker frequency value, between 0 and 1500
             float intens: Speaker intensity value , between 0 and 50 %.
         """
@@ -519,7 +516,7 @@ class Casu:
             List of vibration period durations, in milliseconds.
             Lowest supported value is 100.
         vibe_freqs : list
-            List of vibration frequencies, in Hertz. 
+            List of vibration frequencies, in Hertz.
             All values must be between 1 and 1500.
         vibe_amps : list
             List of vibration amplitudes, in percentage of maximum PWM value.
@@ -550,7 +547,7 @@ class Casu:
 
         if success:
             pattern = dev_msgs_pb2.VibrationPattern()
-            pattern.vibe_periods.extend(vibe_periods) 
+            pattern.vibe_periods.extend(vibe_periods)
             pattern.vibe_freqs.extend(vibe_freqs)
             pattern.vibe_amps.extend(vibe_amps)
             self.__pub.send_multipart([self.__name, "VibrationPattern", "On",
@@ -584,14 +581,18 @@ class Casu:
         self.__write_to_log(["vibe_ref", time.time(), 0])
         self.__write_to_log(["speaker_freq_intens", time.time(), 0, 0])
 
-    def get_vibration_readings(self, id=ACC):
+    def get_vibration_readings(self, id=FFT):
         """
-        Get vibration sensor (accelerometer readings).
+        Get vibration sensor (FFT processed accelerometer readings).
 
-        .. note::
-        TODO: Implement this!
+        Returns
+        -------
+        tuple of lists: frequencies and amplitudes of 4 dominant FFT spectrum components
+            (freqs, amps)
         """
-        pass
+
+        return (self.__vibe_readings.reading[0].freq,
+                self.__vibe_readings.reading[0].amplitude)
 
     def set_diagnostic_led_rgb(self, r = 0, g = 0, b = 0, id = DLED_TOP):
         """
@@ -680,14 +681,14 @@ class Casu:
         self.__write_to_log(["airflow_ref", time.time(), 0])
 
     def ir_standby(self, command = "Standby"):
-	
+
 	validCommands = ["Standby", "Activate"]
-	
+
 	if (command in validCommands):
 		self.__pub.send_multipart([self.__name, "IR", command, "0"])
 	else:
 		print "Invalid ir-standby command. Valid commands: Standby, Activate"
-		
+
 
 
 

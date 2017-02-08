@@ -413,9 +413,12 @@ class Casu:
             else:
                 return -1
 
-    def set_temp(self, temp, id = PELTIER_ACT):
+    def set_temp(self, temp, id = PELTIER_ACT, slope = 0.025):
         """
         Sets the temperature reference of actuator id to temp.
+
+        Slope limits the velocity of the temperature reference rise.
+        0.025 deg/s is an experimentally determined appropriate value.
 
         """
         if temp < TEMP_MIN:
@@ -426,6 +429,7 @@ class Casu:
             print('Temperature reference limited to {0}!'.format(temp))
         temp_msg = dev_msgs_pb2.Temperature()
         temp_msg.temp = temp
+        temp_msg.slope = slope
         device = "Peltier"
         self.__pub.send_multipart([self.__name, device, "On",
                                    temp_msg.SerializeToString()])

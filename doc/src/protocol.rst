@@ -10,7 +10,7 @@ Assisi communication protocol
    
     "<Casu Name>", "Temp", "Temperatures", "TemperatureArray",  "bla"
     "<Casu Name>", "IR", "Ranges", "RangeArray", "(Change naming)"
-    "<Casu Name>", "Fft", "Measurements", "VibrationArray", "Single reading only, containing an array of frequencies and a corresponding array of amplitudes of the main spectrum components."
+    "<Casu Name>", "Fft", "Measurements", "VibrationReadingArray", "Single reading only, containing an array of frequencies and a corresponding array of amplitudes of the main spectrum components."
     "<Casu Name>", "Peltier", "On", "Temperature", "Temperature setpoint"
     "<Casu Name>", "Peltier", "Off", "Temperature", "Temperaturesetpoint"
     "<Casu Name>", "Airflow", "On", "Airflow", "Airflow intensity setpoint"

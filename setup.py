@@ -83,7 +83,7 @@ setup(
     keywords='assisi, assisibf, collective systems',
 
     # Run-time dependencies (will be installed by pip)
-    install_requires = ['pyzmq','protobuf','pyyaml', 'pygraphviz', 'Fabric', 'scipy'],
+    install_requires = ['pyzmq','protobuf','pyyaml', 'pygraphviz', 'Fabric'],
 
     entry_points     = {
         'console_scripts': console_scripts,

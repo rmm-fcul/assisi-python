@@ -10,6 +10,8 @@ import time
 import threading
 import zmq
 
+from msg import dev_msgs_pb2
+
 class FakeFw:
 
     def __init__(self):
@@ -37,7 +39,11 @@ class FakeFw:
     def run(self):
         # Keep sending dummy data
         while(True):
-            self.pub.send_multipart(['casu-016','Acc','GetOut','Dummy'])
+            pattern = dev_msgs_pb2.VibrationPattern()
+            pattern.vibe_periods.extend([1000,100,500])
+            pattern.vibe_freqs.extend([440,1,220])
+            pattern.vibe_amps.extend([50,0,30])
+            self.pub.send_multipart(['casu-016','VibrationPattern','On',pattern.SerializeToString()])
             time.sleep(1)
         
 if __name__ == "__main__":

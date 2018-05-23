@@ -79,7 +79,13 @@ def main():
     args = parser.parse_args()
 
     project = AssisiRun(args.project)
-    project.run(args.layer)
+    try:
+        project.run(args.layer)
+
+    finally:
+        # cleanup the terminal (tty loses the "echo" flag)
+        subprocess.call(["stty", "sane"])
+
 
 if __name__ == '__main__':
     main()

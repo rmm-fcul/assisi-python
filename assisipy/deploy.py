@@ -4,6 +4,7 @@
 import yaml
 import pygraphviz as pgv
 from fabric.api import run, put, settings
+import warnings
 
 import argparse
 import os
@@ -76,6 +77,7 @@ class Deploy:
         # Collect fabric tasks
         fabfile_tasks = '''
 from fabric.api import cd, run, settings, parallel
+import warnings
 '''
         fabfile_all = '''
 def all():
@@ -180,7 +182,9 @@ def all():
                 fabfile_tasks += '''
 @parallel
 def {task}():
-    with settings(host_string='{host}', user='{username}'):
+    with warnings.catch_warnings():
+      warnings.simplefilter("ignore", FutureWarning) # ignore the CTR warning in paramiko/fabric
+      with settings(host_string='{host}', user='{username}'):
         with cd('{code_dir}'):
                 run('./{command} {rtc} {extra_args}')
                                   '''.format(task=(layer+'_'+casu).replace('-','_'),
@@ -270,12 +274,14 @@ def main():
     args = parser.parse_args()
 
     project = Deploy(args.project)
-    if args.prepare is True:
-        # ONLY prepare -- don't attempt any transfer
-        project.prepare(args.layer, args.allow_partial)
-    else:
-        # the deployment stage does preparation if not already done
-        project.deploy(args.layer, args.allow_partial)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", FutureWarning) # ignore the CTR warning in paramiko/fabric
+        if args.prepare is True:
+            # ONLY prepare -- don't attempt any transfer
+            project.prepare(args.layer, args.allow_partial)
+        else:
+            # the deployment stage does preparation if not already done
+            project.deploy(args.layer, args.allow_partial)
 
 if __name__ == '__main__':
     main()

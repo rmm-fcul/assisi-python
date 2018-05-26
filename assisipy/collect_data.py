@@ -7,7 +7,7 @@ Tool for collecting data logged by CASUs after an experiment.
 
 import yaml
 from fabric.api import get, run, settings
-
+import warnings
 import argparse
 import os, errno
 
@@ -152,7 +152,10 @@ def main():
                         help='Name of single layer to collect data for')
     args = parser.parse_args()
     dc = DataCollector(args.project, args.clean, args.logpath)
-    dc.collect(args.layer)
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            action="ignore", category=FutureWarning, module="Crypto", lineno=141)
+        dc.collect(args.layer)
 
 if __name__ == '__main__':
     main()

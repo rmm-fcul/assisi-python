@@ -4,6 +4,7 @@
 import yaml
 import pygraphviz as pgv
 from fabric.api import run, put, settings
+import warnings
 
 import argparse
 import os
@@ -11,6 +12,35 @@ import shutil
 
 
 """ Tools for automatically deploying CASU controllers. """
+
+'''
+Note on handling warnings:
+
+There is a known bug in an upstream library, Crypto/blockalg. It is used by
+the paramiko library, which is used in fabric.
+
+The warnings are filtered out in this tool, using high specificity; if the
+version of paramiko or Crypto change (within aptitude repos for ubuntu 16.04 at
+the time of writing) or are used differently, this might not catch the warning.
+
+
+The strategy here uses a `catch_warnings` context manager [1], and filters for
+FutureWarnings only in a specific library on a specific line. See [2] for how
+to update.
+
+A more basic filtering can drop ALL FutureWarnings from all packages
+    warnings.simplefilter("ignore", FutureWarning)
+but instead we here define the module and line to ensure new warnings are not
+blindly hidden.
+
+    warnings.filterwarnings(
+        action="ignore", category=FutureWarning, module="Crypto", lineno=141)
+
+
+[1] https://docs.python.org/2/library/warnings.html#available-context-managers
+[2] https://docs.python.org/2/library/warnings.html#the-warnings-filter
+
+'''
 
 class Deploy:
     """
@@ -76,6 +106,7 @@ class Deploy:
         # Collect fabric tasks
         fabfile_tasks = '''
 from fabric.api import cd, run, settings, parallel
+import warnings
 '''
         fabfile_all = '''
 def all():
@@ -180,8 +211,11 @@ def all():
                 fabfile_tasks += '''
 @parallel
 def {task}():
-    with settings(host_string='{host}', user='{username}'):
-        with cd('{code_dir}'):
+    with warnings.catch_warnings():
+        # ignore the CTR crypto IV warning
+        warnings.filterwarnings(action="ignore", category=FutureWarning, module="Crypto", lineno=141)
+        with settings(host_string='{host}', user='{username}'):
+            with cd('{code_dir}'):
                 run('./{command} {rtc} {extra_args}')
                                   '''.format(task=(layer+'_'+casu).replace('-','_'),
                                              host=self.dep[layer][casu]['hostname'],
@@ -270,12 +304,17 @@ def main():
     args = parser.parse_args()
 
     project = Deploy(args.project)
-    if args.prepare is True:
-        # ONLY prepare -- don't attempt any transfer
-        project.prepare(args.layer, args.allow_partial)
-    else:
-        # the deployment stage does preparation if not already done
-        project.deploy(args.layer, args.allow_partial)
+    with warnings.catch_warnings():
+        # ignore the CTR warning in paramiko/fabric
+        warnings.filterwarnings(
+            action="ignore", category=FutureWarning, module="Crypto", lineno=141)
+
+        if args.prepare is True:
+            # ONLY prepare -- don't attempt any transfer
+            project.prepare(args.layer, args.allow_partial)
+        else:
+            # the deployment stage does preparation if not already done
+            project.deploy(args.layer, args.allow_partial)
 
 if __name__ == '__main__':
     main()
